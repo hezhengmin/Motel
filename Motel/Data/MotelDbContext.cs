@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Motel.Models;
+using Motel.ViewModels;
 
 #nullable disable
 
@@ -310,5 +311,7 @@ namespace Motel.Data
         }
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+
+        public DbSet<Motel.ViewModels.CustomerViewModel> CustomerViewModel { get; set; }
     }
 }
