@@ -24,7 +24,7 @@ namespace Motel.Controllers
         // GET: Customer
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Customers.ToListAsync());
+            return View(await _context.Customer.ToListAsync());
         }
 
         // GET: Customer/Details/5
@@ -35,7 +35,7 @@ namespace Motel.Controllers
                 return NotFound();
             }
 
-            var customer = await _context.Customers
+            var customer = await _context.Customer
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (customer == null)
             {
@@ -76,7 +76,7 @@ namespace Motel.Controllers
                 return NotFound();
             }
 
-            var customer = await _context.Customers.FindAsync(id);
+            var customer = await _context.Customer.FindAsync(id);
             if (customer == null)
             {
                 return NotFound();
@@ -127,7 +127,7 @@ namespace Motel.Controllers
                 return NotFound();
             }
 
-            var customer = await _context.Customers
+            var customer = await _context.Customer
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (customer == null)
             {
@@ -142,15 +142,15 @@ namespace Motel.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            var customer = await _context.Customers.FindAsync(id);
-            _context.Customers.Remove(customer);
+            var customer = await _context.Customer.FindAsync(id);
+            _context.Customer.Remove(customer);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool CustomerExists(Guid id)
         {
-            return _context.Customers.Any(e => e.Id == id);
+            return _context.Customer.Any(e => e.Id == id);
         }
     }
 }

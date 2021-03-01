@@ -27,7 +27,7 @@ namespace Motel.Controllers
 
         public IActionResult Index()
         {
-            return View(_context.Customers.ToListAsync());
+            return View();
         }
 
         public IActionResult Privacy()

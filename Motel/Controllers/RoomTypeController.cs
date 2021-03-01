@@ -24,7 +24,7 @@ namespace Motel.Controllers
         // GET: RoomType
         public async Task<IActionResult> Index()
         {
-            return View(await _context.RoomTypes.ToListAsync());
+            return View(await _context.RoomType.ToListAsync());
         }
 
         // GET: RoomType/Details/5
@@ -35,7 +35,7 @@ namespace Motel.Controllers
                 return NotFound();
             }
 
-            var roomType = await _context.RoomTypes
+            var roomType = await _context.RoomType
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (roomType == null)
             {
@@ -76,7 +76,7 @@ namespace Motel.Controllers
                 return NotFound();
             }
 
-            var roomType = await _context.RoomTypes.FindAsync(id);
+            var roomType = await _context.RoomType.FindAsync(id);
             if (roomType == null)
             {
                 return NotFound();
@@ -127,7 +127,7 @@ namespace Motel.Controllers
                 return NotFound();
             }
 
-            var roomType = await _context.RoomTypes
+            var roomType = await _context.RoomType
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (roomType == null)
             {
@@ -142,15 +142,15 @@ namespace Motel.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            var roomType = await _context.RoomTypes.FindAsync(id);
-            _context.RoomTypes.Remove(roomType);
+            var roomType = await _context.RoomType.FindAsync(id);
+            _context.RoomType.Remove(roomType);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool RoomTypeExists(Guid id)
         {
-            return _context.RoomTypes.Any(e => e.Id == id);
+            return _context.RoomType.Any(e => e.Id == id);
         }
     }
 }

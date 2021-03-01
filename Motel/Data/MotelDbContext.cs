@@ -3,6 +3,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Motel.Models;
 
+// Code scaffolded by EF Core assumes nullable reference types (NRTs) are not used or disabled.
+// If you have enabled NRTs for your project, then un-comment the following line:
+// #nullable disable
+
 namespace Motel.Data
 {
     public partial class MotelDbContext : DbContext
@@ -16,13 +20,13 @@ namespace Motel.Data
         {
         }
 
-        public virtual DbSet<Customer> Customers { get; set; }
-        public virtual DbSet<GuestRoom> GuestRooms { get; set; }
-        public virtual DbSet<Occupy> Occupies { get; set; }
-        public virtual DbSet<Reservation> Reservations { get; set; }
-        public virtual DbSet<RoomState> RoomStates { get; set; }
-        public virtual DbSet<RoomType> RoomTypes { get; set; }
-        public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<Customer> Customer { get; set; }
+        public virtual DbSet<GuestRoom> GuestRoom { get; set; }
+        public virtual DbSet<Occupy> Occupy { get; set; }
+        public virtual DbSet<Reservation> Reservation { get; set; }
+        public virtual DbSet<RoomState> RoomState { get; set; }
+        public virtual DbSet<RoomType> RoomType { get; set; }
+        public virtual DbSet<User> User { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -34,12 +38,8 @@ namespace Motel.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasAnnotation("Relational:Collation", "Chinese_Taiwan_Stroke_CI_AS");
-
             modelBuilder.Entity<Customer>(entity =>
             {
-                entity.ToTable("Customer");
-
                 entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
 
                 entity.Property(e => e.Address)
@@ -79,8 +79,6 @@ namespace Motel.Data
 
             modelBuilder.Entity<GuestRoom>(entity =>
             {
-                entity.ToTable("GuestRoom");
-
                 entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
 
                 entity.Property(e => e.Describe)
@@ -108,7 +106,7 @@ namespace Motel.Data
                     .HasConstraintName("FK_GuestRoom_RoomState");
 
                 entity.HasOne(d => d.RoomType)
-                    .WithMany(p => p.GuestRooms)
+                    .WithMany(p => p.GuestRoom)
                     .HasForeignKey(d => d.RoomTypeId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_GuestRoom_RoomType");
@@ -116,8 +114,6 @@ namespace Motel.Data
 
             modelBuilder.Entity<Occupy>(entity =>
             {
-                entity.ToTable("Occupy");
-
                 entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
 
                 entity.Property(e => e.BeginDate)
@@ -155,13 +151,13 @@ namespace Motel.Data
                     .HasComment("房間價格");
 
                 entity.HasOne(d => d.Customer)
-                    .WithMany(p => p.Occupies)
+                    .WithMany(p => p.Occupy)
                     .HasForeignKey(d => d.CustomerId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Occupy_Customer");
 
                 entity.HasOne(d => d.GusetRoom)
-                    .WithMany(p => p.Occupies)
+                    .WithMany(p => p.Occupy)
                     .HasForeignKey(d => d.GusetRoomId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Occupy_GuestRoom");
@@ -169,8 +165,6 @@ namespace Motel.Data
 
             modelBuilder.Entity<Reservation>(entity =>
             {
-                entity.ToTable("Reservation");
-
                 entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
 
                 entity.Property(e => e.BeginDate)
@@ -181,8 +175,7 @@ namespace Motel.Data
 
                 entity.Property(e => e.Name)
                     .IsRequired()
-                    .HasMaxLength(10)
-                    .IsUnicode(false)
+                    .HasMaxLength(50)
                     .HasComment("預訂者姓名");
 
                 entity.Property(e => e.RoomNumber)
@@ -200,7 +193,7 @@ namespace Motel.Data
                     .HasComment("預訂者電話");
 
                 entity.HasOne(d => d.RoomType)
-                    .WithMany(p => p.Reservations)
+                    .WithMany(p => p.Reservation)
                     .HasForeignKey(d => d.RoomTypeId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Reservation_RoomType");
@@ -208,8 +201,6 @@ namespace Motel.Data
 
             modelBuilder.Entity<RoomState>(entity =>
             {
-                entity.ToTable("RoomState");
-
                 entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
 
                 entity.Property(e => e.State).HasComment("狀態");
@@ -219,8 +210,6 @@ namespace Motel.Data
 
             modelBuilder.Entity<RoomType>(entity =>
             {
-                entity.ToTable("RoomType");
-
                 entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
 
                 entity.Property(e => e.AirCondition).HasComment("是否有空調");
@@ -230,8 +219,8 @@ namespace Motel.Data
                 entity.Property(e => e.BedQuantity).HasComment("配備床數");
 
                 entity.Property(e => e.Hprice)
-                    .HasColumnType("money")
                     .HasColumnName("HPrice")
+                    .HasColumnType("money")
                     .HasComment("假日價");
 
                 entity.Property(e => e.Name)
@@ -244,13 +233,13 @@ namespace Motel.Data
                     .HasComment("平日價");
 
                 entity.Property(e => e.Qk2price)
-                    .HasColumnType("money")
                     .HasColumnName("QK2Price")
+                    .HasColumnType("money")
                     .HasComment("休息價(元/2hr)");
 
                 entity.Property(e => e.Qkprice)
-                    .HasColumnType("money")
                     .HasColumnName("QKPrice")
+                    .HasColumnType("money")
                     .HasComment("休息價(元/3hr)");
 
                 entity.Property(e => e.Tv)
@@ -260,8 +249,6 @@ namespace Motel.Data
 
             modelBuilder.Entity<User>(entity =>
             {
-                entity.ToTable("User");
-
                 entity.Property(e => e.UserId)
                     .HasMaxLength(10)
                     .IsUnicode(false)
