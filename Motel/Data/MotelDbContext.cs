@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Motel.Models;
+using Motel.ViewModel;
 
 // Code scaffolded by EF Core assumes nullable reference types (NRTs) are not used or disabled.
 // If you have enabled NRTs for your project, then un-comment the following line:
@@ -18,6 +20,11 @@ namespace Motel.Data
         public MotelDbContext(DbContextOptions<MotelDbContext> options)
             : base(options)
         {
+        }
+
+        internal Task<Task<RoomType>> FirstOrDefaultAsync(Func<object, bool> p)
+        {
+            throw new NotImplementedException();
         }
 
         public virtual DbSet<Customer> Customer { get; set; }
@@ -295,5 +302,7 @@ namespace Motel.Data
         }
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+
+        public DbSet<Motel.ViewModel.RoomTypeViewModel> RoomTypeViewModel { get; set; }
     }
 }
