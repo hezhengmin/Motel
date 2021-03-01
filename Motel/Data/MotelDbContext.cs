@@ -175,7 +175,7 @@ namespace Motel.Data
 
                 entity.Property(e => e.Name)
                     .IsRequired()
-                    .HasMaxLength(50)
+                    .HasMaxLength(20)
                     .HasComment("預訂者姓名");
 
                 entity.Property(e => e.RoomNumber)
