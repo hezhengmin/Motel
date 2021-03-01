@@ -79,21 +79,34 @@ namespace Motel.Controllers
         {
             if (ModelState.IsValid)
             {
-                var roomType = new RoomType();
-                roomType.Name = roomTypeVM.Name;
-                roomType.Area = roomTypeVM.Area;
-                roomType.BedQuantity = roomTypeVM.BedQuantity;
-                roomType.Price = roomTypeVM.Price;
-                roomType.Hprice = roomTypeVM.Hprice;
-                roomType.Qkprice = roomTypeVM.Qkprice;
-                roomType.Qk2price = roomTypeVM.Qk2price;
-                roomType.AirCondition = roomTypeVM.AirCondition;
-                roomType.Tv = roomTypeVM.Tv;
-
                 if (roomTypeVM.Id == null)
+                {
+                    var roomType = new RoomType();
+                    roomType.Name = roomTypeVM.Name;
+                    roomType.Area = roomTypeVM.Area;
+                    roomType.BedQuantity = roomTypeVM.BedQuantity;
+                    roomType.Price = roomTypeVM.Price;
+                    roomType.Hprice = roomTypeVM.Hprice;
+                    roomType.Qkprice = roomTypeVM.Qkprice;
+                    roomType.Qk2price = roomTypeVM.Qk2price;
+                    roomType.AirCondition = roomTypeVM.AirCondition;
+                    roomType.Tv = roomTypeVM.Tv;
                     await _roomTypeRepository.AddRoomType(roomType);
+                }
                 else
+                {
+                    var roomType = await _roomTypeRepository.GetRoomType(roomTypeVM.Id);
+                    roomType.Name = roomTypeVM.Name;
+                    roomType.Area = roomTypeVM.Area;
+                    roomType.BedQuantity = roomTypeVM.BedQuantity;
+                    roomType.Price = roomTypeVM.Price;
+                    roomType.Hprice = roomTypeVM.Hprice;
+                    roomType.Qkprice = roomTypeVM.Qkprice;
+                    roomType.Qk2price = roomTypeVM.Qk2price;
+                    roomType.AirCondition = roomTypeVM.AirCondition;
+                    roomType.Tv = roomTypeVM.Tv;
                     await _roomTypeRepository.UpdateRoomType(roomType);
+                }
 
                 return RedirectToAction(nameof(Index));
             }
