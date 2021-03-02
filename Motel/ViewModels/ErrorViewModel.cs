@@ -1,6 +1,6 @@
 using System;
 
-namespace Motel.ViewModel
+namespace Motel.ViewModels
 {
     public class ErrorViewModel
     {

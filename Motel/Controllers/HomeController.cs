@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Motel.Data;
 using Motel.Models;
-using Motel.ViewModel;
+using Motel.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;

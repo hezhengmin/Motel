@@ -4,45 +4,25 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using Motel.Data;
-using Motel.Models;
-using Motel.Repository;
-using Motel.ViewModel;
+using Motel.Services;
+using Motel.ViewModels;
 
 namespace Motel.Controllers
 {
     [Authorize]
     public class RoomTypeController : Controller
     {
-        private readonly MotelDbContext _context;
-        private IRoomTypeRepository _roomTypeRepository;
-        public RoomTypeController(IRoomTypeRepository roomTypeRepository)
+        private readonly IRoomTypeService _roomTypeService;
+      
+        public RoomTypeController(IRoomTypeService roomTypeService)
         {
-            _roomTypeRepository = roomTypeRepository;
+            _roomTypeService = roomTypeService;
         }
 
         // GET: RoomType
         public async Task<IActionResult> Index()
         {
-            //var list = await _context.RoomType.ToListAsync();
-            var list = await _roomTypeRepository.GetRoomTypeList();
-            var roomTypeListVM = new List<RoomTypeViewModel>();
-            roomTypeListVM = list.Select(m => new RoomTypeViewModel()
-            {
-                Id = m.Id,
-                Name = m.Name,
-                Area = m.Area,
-                BedQuantity = m.BedQuantity,
-                Price = m.Price,
-                Hprice = m.Hprice,
-                Qkprice = m.Qkprice,
-                Qk2price = m.Qk2price,
-                AirCondition = m.AirCondition,
-                Tv = m.Tv
-            }).ToList();
-
+            var roomTypeListVM = await _roomTypeService.GetRoomTypeList();
             return View(roomTypeListVM);
         }
 
@@ -53,18 +33,7 @@ namespace Motel.Controllers
                 return View(new RoomTypeViewModel());
             else
             {
-                var roomType = await _roomTypeRepository.GetRoomType(id.Value);
-                var roomTypeVM = new RoomTypeViewModel();
-                roomTypeVM.Id = roomType.Id;
-                roomTypeVM.Name = roomType.Name;
-                roomTypeVM.Area = roomType.Area;
-                roomTypeVM.BedQuantity = roomType.BedQuantity;
-                roomTypeVM.Price = roomType.Price;
-                roomTypeVM.Hprice = roomType.Hprice;
-                roomTypeVM.Qkprice = roomType.Qkprice;
-                roomTypeVM.Qk2price = roomType.Qk2price;
-                roomTypeVM.AirCondition = roomType.AirCondition;
-                roomTypeVM.Tv = roomType.Tv;
+                var roomTypeVM = await _roomTypeService.GetRoomType(id.Value);
                 return View(roomTypeVM);
             }
 
@@ -81,31 +50,11 @@ namespace Motel.Controllers
             {
                 if (roomTypeVM.Id == null)
                 {
-                    var roomType = new RoomType();
-                    roomType.Name = roomTypeVM.Name;
-                    roomType.Area = roomTypeVM.Area;
-                    roomType.BedQuantity = roomTypeVM.BedQuantity;
-                    roomType.Price = roomTypeVM.Price;
-                    roomType.Hprice = roomTypeVM.Hprice;
-                    roomType.Qkprice = roomTypeVM.Qkprice;
-                    roomType.Qk2price = roomTypeVM.Qk2price;
-                    roomType.AirCondition = roomTypeVM.AirCondition;
-                    roomType.Tv = roomTypeVM.Tv;
-                    await _roomTypeRepository.AddRoomType(roomType);
+                    await _roomTypeService.AddRoomType(roomTypeVM);
                 }
                 else
                 {
-                    var roomType = await _roomTypeRepository.GetRoomType(roomTypeVM.Id);
-                    roomType.Name = roomTypeVM.Name;
-                    roomType.Area = roomTypeVM.Area;
-                    roomType.BedQuantity = roomTypeVM.BedQuantity;
-                    roomType.Price = roomTypeVM.Price;
-                    roomType.Hprice = roomTypeVM.Hprice;
-                    roomType.Qkprice = roomTypeVM.Qkprice;
-                    roomType.Qk2price = roomTypeVM.Qk2price;
-                    roomType.AirCondition = roomTypeVM.AirCondition;
-                    roomType.Tv = roomTypeVM.Tv;
-                    await _roomTypeRepository.UpdateRoomType(roomType);
+                    await _roomTypeService.UpdateRoomType(roomTypeVM);
                 }
 
                 return RedirectToAction(nameof(Index));
@@ -116,11 +65,9 @@ namespace Motel.Controllers
         // GET: RoomType/Remove/5
         public async Task<IActionResult> Remove(Guid? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-            await _roomTypeRepository.RemoveRoomType(id.Value);
+            if (id == null) return NotFound();
+            await _roomTypeService.RemoveRoomType(id.Value);
+
             return RedirectToAction(nameof(Index));
         }
     }
