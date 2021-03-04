@@ -64,5 +64,14 @@ namespace Motel.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
+
+        //-------------------------------------------  return Json 
+        //url: RoomType/GetAllDataApiJson
+        [HttpGet]
+        public async Task<IActionResult> GetAllDataApiJson()
+        {
+            return Json(new { data = await _roomTypeService.GetRoomTypeList() }) ;
+        }
     }
 }
