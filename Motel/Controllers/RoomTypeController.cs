@@ -40,8 +40,6 @@ namespace Motel.Controllers
         }
 
         // POST: RoomType/AddOrEdit
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddOrEdit(RoomTypeViewModel roomTypeVM)
@@ -49,13 +47,9 @@ namespace Motel.Controllers
             if (ModelState.IsValid)
             {
                 if (roomTypeVM.Id == null)
-                {
                     await _roomTypeService.AddRoomType(roomTypeVM);
-                }
                 else
-                {
                     await _roomTypeService.UpdateRoomType(roomTypeVM);
-                }
 
                 return RedirectToAction(nameof(Index));
             }

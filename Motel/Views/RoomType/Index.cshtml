@@ -10,7 +10,7 @@
 <p>
     <a asp-action="AddOrEdit">Create New</a>
 </p>
-<table class="table">
+<table id="example" class="table table-striped table-bordered">
     <thead>
         <tr>
             <th>
@@ -40,7 +40,7 @@
             <th>
                 @Html.DisplayNameFor(model => model.Tv)
             </th>
-            <th></th>
+            <th class="no-sort"></th>
         </tr>
     </thead>
     <tbody>
@@ -75,10 +75,29 @@
                     @Html.DisplayFor(modelItem => item.Tv)
                 </td>
                 <td>
-                    <a asp-action="AddOrEdit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Remove" asp-route-id="@item.Id">Delete</a>
+                    <a asp-action="AddOrEdit" asp-route-id="@item.Id">
+                        <i class="fas fa-edit"></i>
+                    </a> |
+                    <a asp-action="Remove" asp-route-id="@item.Id">
+                        <i class="fas fa-trash-alt"></i>
+                    </a>
                 </td>
             </tr>
         }
     </tbody>
 </table>
+
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#example').DataTable({
+                "columnDefs": [{
+                    "targets": 'no-sort',
+                    "orderable": false,
+                }]
+            });
+        });
+    </script>
+}
+
