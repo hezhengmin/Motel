@@ -35,6 +35,8 @@ namespace Motel
             services.AddAutoMapper(typeof(Startup));
             services.AddTransient<IRoomTypeRepository, RoomTypeRepository>();
             services.AddTransient<IRoomTypeService, RoomTypeService>();
+            services.AddTransient<ICustomerRepository, CustomerRepository>();
+            services.AddTransient<ICustomerService, CustomerService>();
 
             services.AddControllersWithViews();
             services.AddRazorPages();

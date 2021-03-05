@@ -1,18 +1,19 @@
-﻿@model Motel.Models.Customer
+﻿@model Motel.ViewModels.CustomerViewModel
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "AddOrEdit";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Create</h1>
+<h1>AddOrEdit</h1>
 
-<h4>Customer</h4>
+<h4>CustomerViewModel</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="AddOrEdit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
             <div class="form-group">
                 <label asp-for="IdentityNum" class="control-label"></label>
                 <input asp-for="IdentityNum" class="form-control" />

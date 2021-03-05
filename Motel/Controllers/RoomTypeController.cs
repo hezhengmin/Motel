@@ -13,7 +13,7 @@ namespace Motel.Controllers
     public class RoomTypeController : Controller
     {
         private readonly IRoomTypeService _roomTypeService;
-      
+
         public RoomTypeController(IRoomTypeService roomTypeService)
         {
             _roomTypeService = roomTypeService;
@@ -65,13 +65,26 @@ namespace Motel.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        //-------------------------------------------  return Json
 
-        //-------------------------------------------  return Json 
         //url: RoomType/GetAllDataApiJson
         [HttpGet]
         public async Task<IActionResult> GetAllDataApiJson()
         {
-            return Json(new { data = await _roomTypeService.GetRoomTypeList() }) ;
+            return Json(new { data = await _roomTypeService.GetRoomTypeList() });
+        }
+
+        //url: RoomType/DeleteByDataApiJson
+        [HttpDelete]
+        public async Task<IActionResult> DeleteByDataApiJson(Guid id)
+        {
+            if (!_roomTypeService.GetRoomTypeExists(id))
+            {
+                return Json(new { success = false, message = "找不到資料!" });
+            }
+
+            await _roomTypeService.RemoveRoomType(id);
+            return Json(new { success = true, message = "成功刪除!" });
         }
     }
 }

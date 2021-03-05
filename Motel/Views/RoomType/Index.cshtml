@@ -92,14 +92,14 @@
     <script>
         let $dataTable = $("#dataTable");
         $(document).ready(function () {
-            $dataTable = $('#dataTable').DataTable({
+            $dataTable = $("#dataTable").DataTable({
                 "ajax": {
                     "url": "/RoomType/GetAllDataApiJson",
                     "type": "GET",
                     "datatype": "json"
                 },
                 "columnDefs": [{
-                    "targets": 'nosort',
+                    "targets": "nosort",
                     "orderable": false,
                 }],
                 "columns": [
@@ -136,7 +136,7 @@
                         "width": "12%",
                         className: "text-center",
                         "render": function (data, type, row, meta) {
-                            return data === true ? `<i class="fas fa-check text-success"></i>` : `<i class="fas fa-times text-danger"></i>`;
+                            return data === true ? `<i class="fas fa-check fa-lg text-success"></i>` : `<i class="fas fa-times fa-lg text-danger"></i>`;
                         }
                     },
                     {
@@ -144,7 +144,7 @@
                         "width": "12%",
                         className: "text-center",
                         "render": function (data, type, row, meta) {
-                            return data === true ? `<i class="fas fa-check text-success"></i>` :`<i class="fas fa-times text-danger"></i>`;
+                            return data === true ? `<i class="fas fa-check fa-lg text-success"></i>` : `<i class="fas fa-times fa-lg text-danger"></i>`;
                         }
                     },
                     {
@@ -153,16 +153,49 @@
                         className: "text-center",
                         "render": function (data, type, row, meta) {
                             return `<a href="/RoomType/AddOrEdit/${data}">
-                                       <i class="fas fa-edit"></i>
-                                    </a> |
-                                    <a href="/RoomType/Remove/${data}">
-                                       <i class="fas fa-trash-alt"></i>
-                                    </a>`;
+                                           <i class="fas fa-edit fa-lg"></i>
+                                        </a> |
+                                        <a href="javascript:void(0)" onclick=deleteData("/RoomType/DeleteByDataApiJson/${data}")>
+                                           <i class="fas fa-trash-alt fa-lg"></i>
+                                        </a>`;
                         }
                     }
                 ],
             });
         });
+
+        function deleteData(url) {
+            Swal.fire({
+                title: "Are you sure?",
+                text: 'You won"t be able to revert this!',
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, delete it!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: url,
+                        type: "DELETE"
+                    }).done(function (data) {
+                        if (data.success) {
+                            Swal.fire(
+                                "Deleted!",
+                                "Your file has been deleted.",
+                                "success"
+                            )
+                            $dataTable.ajax.reload();
+                        } else {
+
+                        }
+                    }).fail(function (jqXHR, textStatus, errorThrown) {
+                        console.log(errorThrown);
+                    });
+                    
+                }
+            })
+        }
     </script>
 }
 

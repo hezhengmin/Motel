@@ -304,5 +304,7 @@ namespace Motel.Data
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
 
         public DbSet<Motel.ViewModels.RoomTypeViewModel> RoomTypeViewModel { get; set; }
+
+        public DbSet<Motel.ViewModels.CustomerViewModel> CustomerViewModel { get; set; }
     }
 }

@@ -8,149 +8,87 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Motel.Data;
 using Motel.Models;
+using Motel.Services;
+using Motel.ViewModels;
 
 namespace Motel.Controllers
 {
     [Authorize]
     public class CustomerController : Controller
     {
-        private readonly MotelDbContext _context;
+        private readonly ICustomerService _CustomerService;
 
-        public CustomerController(MotelDbContext context)
+        public CustomerController(ICustomerService CustomerService)
         {
-            _context = context;
+            _CustomerService = CustomerService;
         }
 
         // GET: Customer
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Customer.ToListAsync());
+            var CustomerListVM = await _CustomerService.GetCustomerList();
+            return View(CustomerListVM);
         }
 
-        // GET: Customer/Details/5
-        public async Task<IActionResult> Details(Guid? id)
+        // GET: Customer/AddOrEdit
+        public async Task<IActionResult> AddOrEdit(Guid? id)
         {
             if (id == null)
+                return View(new CustomerViewModel());
+            else
             {
-                return NotFound();
+                var CustomerVM = await _CustomerService.GetCustomer(id.Value);
+                return View(CustomerVM);
             }
 
-            var customer = await _context.Customer
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (customer == null)
-            {
-                return NotFound();
-            }
-
-            return View(customer);
         }
 
-        // GET: Customer/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: Customer/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: Customer/AddOrEdit
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,IdentityNum,Gender,Name,Address,Tel,Birthday,Email")] Customer customer)
+        public async Task<IActionResult> AddOrEdit(CustomerViewModel CustomerVM)
         {
             if (ModelState.IsValid)
             {
-                customer.Id = Guid.NewGuid();
-                _context.Add(customer);
-                await _context.SaveChangesAsync();
+                if (CustomerVM.Id == null)
+                    await _CustomerService.AddCustomer(CustomerVM);
+                else
+                    await _CustomerService.UpdateCustomer(CustomerVM);
+
                 return RedirectToAction(nameof(Index));
             }
-            return View(customer);
+            return View(CustomerVM);
         }
 
-        // GET: Customer/Edit/5
-        public async Task<IActionResult> Edit(Guid? id)
+        // GET: Customer/Remove/5
+        public async Task<IActionResult> Remove(Guid? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
+            await _CustomerService.RemoveCustomer(id.Value);
 
-            var customer = await _context.Customer.FindAsync(id);
-            if (customer == null)
-            {
-                return NotFound();
-            }
-            return View(customer);
-        }
-
-        // POST: Customer/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Id,IdentityNum,Gender,Name,Address,Tel,Birthday,Email")] Customer customer)
-        {
-            if (id != customer.Id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(customer);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!CustomerExists(customer.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(customer);
-        }
-
-        // GET: Customer/Delete/5
-        public async Task<IActionResult> Delete(Guid? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var customer = await _context.Customer
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (customer == null)
-            {
-                return NotFound();
-            }
-
-            return View(customer);
-        }
-
-        // POST: Customer/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(Guid id)
-        {
-            var customer = await _context.Customer.FindAsync(id);
-            _context.Customer.Remove(customer);
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool CustomerExists(Guid id)
+        //-------------------------------------------  return Json
+
+        //url: Customer/GetAllDataApiJson
+        [HttpGet]
+        public async Task<IActionResult> GetAllDataApiJson()
         {
-            return _context.Customer.Any(e => e.Id == id);
+            return Json(new { data = await _CustomerService.GetCustomerList() });
+        }
+
+        //url: Customer/DeleteByDataApiJson
+        [HttpDelete]
+        public async Task<IActionResult> DeleteByDataApiJson(Guid id)
+        {
+            if (!_CustomerService.GetCustomerExists(id))
+            {
+                return Json(new { success = false, message = "找不到資料!" });
+            }
+
+            await _CustomerService.RemoveCustomer(id);
+            return Json(new { success = true, message = "成功刪除!" });
         }
     }
 }
