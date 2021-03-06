@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Motel.Models;
-using Motel.ViewModels;
 
 // Code scaffolded by EF Core assumes nullable reference types (NRTs) are not used or disabled.
 // If you have enabled NRTs for your project, then un-comment the following line:
@@ -182,6 +181,7 @@ namespace Motel.Data
                     .IsRequired()
                     .HasMaxLength(10)
                     .IsUnicode(false)
+                    .HasDefaultValueSql("('0000')")
                     .HasComment("房間號碼");
 
                 entity.Property(e => e.RoomTypeId).HasComment("指定房屋類別");
@@ -295,7 +295,5 @@ namespace Motel.Data
         }
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
-
-        public DbSet<Motel.ViewModels.CustomerViewModel> CustomerViewModel { get; set; }
     }
 }
