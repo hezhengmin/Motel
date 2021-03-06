@@ -47,11 +47,10 @@ namespace Motel.Data
                     .HasComment("客戶住址");
 
                 entity.Property(e => e.Birthday)
-                    .HasColumnType("datetime")
+                    .HasColumnType("date")
                     .HasComment("客戶生日");
 
                 entity.Property(e => e.Email)
-                    .IsRequired()
                     .HasMaxLength(256)
                     .IsUnicode(false)
                     .HasComment("電子郵件");

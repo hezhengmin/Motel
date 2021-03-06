@@ -28,8 +28,8 @@ namespace Motel.ViewModels
 
         [Required]
         [Display(Name = "假日價")]
-
         public decimal Hprice { get; set; }
+
         [Required]
         [Display(Name = "休息價(元/3hr)")]
         public decimal Qkprice { get; set; }

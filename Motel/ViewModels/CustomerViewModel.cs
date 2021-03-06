@@ -12,25 +12,33 @@ namespace Motel.ViewModels
         public Guid Id { get; set; }
 
         [Required]
+        [Display(Name = "客戶身份證字號")]
+        [StringLength(10)]
+        [RegularExpression(@"^[A-Z]{1}[1-2]{1}[0-9]{8}$")]
         public string IdentityNum { get; set; }
 
         [Required]
+        [Display(Name = "性別")]
         public bool Gender { get; set; }
 
         [Required]
+        [Display(Name = "客戶姓名")]
+        [StringLength(10)]
         public string Name { get; set; }
 
+        [Display(Name = "客戶住址")]
         public string Address { get; set; }
 
         [Required]
+        [Display(Name = "客戶電話")]
         public string Tel { get; set; }
 
         [DataType(DataType.Date)]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy/MM/dd}")]
         [Required]
+        [Display(Name = "客戶生日")]
         public DateTime Birthday { get; set; }
 
-        [Required]
+        [Display(Name = "電子郵件")]
         public string Email { get; set; }
     }
 }
