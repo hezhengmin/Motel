@@ -2,12 +2,14 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Motel.Data;
 using Motel.Repository;
 using Motel.Services;
+using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,7 +30,8 @@ namespace Motel
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddDbContext<MotelDbContext>(options=> {
+            services.AddDbContext<MotelDbContext>(options =>
+            {
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
 
@@ -38,7 +41,8 @@ namespace Motel
             services.AddTransient<ICustomerRepository, CustomerRepository>();
             services.AddTransient<ICustomerService, CustomerService>();
 
-            services.AddControllersWithViews();
+            services.AddControllersWithViews()
+                    .AddNewtonsoftJson(options => options.SerializerSettings.Converters.Add(new StringEnumConverter()));
             services.AddRazorPages();
         }
 

@@ -16,7 +16,7 @@ namespace Motel.Models
 
         public Guid Id { get; set; }
         public string IdentityNum { get; set; }
-        public bool Gender { get; set; }
+        public int Gender { get; set; }
         public string Name { get; set; }
         public string Address { get; set; }
         public string Tel { get; set; }

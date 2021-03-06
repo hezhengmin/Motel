@@ -1,8 +1,11 @@
-﻿using System;
+﻿using Motel.ViewModels.Enums;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace Motel.ViewModels
 {
@@ -19,7 +22,8 @@ namespace Motel.ViewModels
 
         [Required]
         [Display(Name = "性別")]
-        public bool Gender { get; set; }
+        [JsonConverter(typeof(StringEnumConverter))]
+        public GenderType Gender { get; set; }
 
         [Required]
         [Display(Name = "客戶姓名")]
@@ -38,6 +42,7 @@ namespace Motel.ViewModels
         [Display(Name = "客戶生日")]
         public DateTime Birthday { get; set; }
 
+        [EmailAddress]
         [Display(Name = "電子郵件")]
         public string Email { get; set; }
     }
