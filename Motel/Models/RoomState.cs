@@ -13,6 +13,6 @@ namespace Motel.Models
         public byte State { get; set; }
         public bool Type { get; set; }
 
-        public virtual Room Room { get; set; }
+        public virtual Room IdNavigation { get; set; }
     }
 }

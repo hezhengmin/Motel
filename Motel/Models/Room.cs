@@ -21,8 +21,8 @@ namespace Motel.Models
         public string Describe { get; set; }
         public string Position { get; set; }
 
-        public virtual RoomState IdNavigation { get; set; }
         public virtual RoomType RoomType { get; set; }
+        public virtual RoomState RoomState { get; set; }
         public virtual ICollection<OccupiedRoom> OccupiedRoom { get; set; }
         public virtual ICollection<Reservation> Reservation { get; set; }
     }

@@ -11,7 +11,7 @@ namespace Motel.Models
     {
         public Guid Id { get; set; }
         public Guid CustomerId { get; set; }
-        public Guid GusetRoomId { get; set; }
+        public Guid RoomId { get; set; }
         public string Number { get; set; }
         public DateTime BeginDate { get; set; }
         public DateTime? EndDate { get; set; }
@@ -23,6 +23,6 @@ namespace Motel.Models
         public bool OccupyType { get; set; }
 
         public virtual Customer Customer { get; set; }
-        public virtual Room GusetRoom { get; set; }
+        public virtual Room Room { get; set; }
     }
 }

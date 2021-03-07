@@ -111,11 +111,11 @@ namespace Motel.Data
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Occupy_Customer");
 
-                entity.HasOne(d => d.GusetRoom)
+                entity.HasOne(d => d.Room)
                     .WithMany(p => p.OccupiedRoom)
-                    .HasForeignKey(d => d.GusetRoomId)
+                    .HasForeignKey(d => d.RoomId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Occupy_GuestRoom");
+                    .HasConstraintName("FK_OccupiedRoom_Room");
             });
 
             modelBuilder.Entity<Reservation>(entity =>
@@ -178,17 +178,11 @@ namespace Motel.Data
 
                 entity.Property(e => e.RoomTypeId).HasComment("指定房屋類別");
 
-                entity.HasOne(d => d.IdNavigation)
-                    .WithOne(p => p.Room)
-                    .HasForeignKey<Room>(d => d.Id)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_GuestRoom_RoomState");
-
                 entity.HasOne(d => d.RoomType)
                     .WithMany(p => p.Room)
                     .HasForeignKey(d => d.RoomTypeId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_GuestRoom_RoomType");
+                    .HasConstraintName("FK_Room_RoomType");
             });
 
             modelBuilder.Entity<RoomState>(entity =>
@@ -198,6 +192,12 @@ namespace Motel.Data
                 entity.Property(e => e.State).HasComment("狀態");
 
                 entity.Property(e => e.Type).HasComment("種類");
+
+                entity.HasOne(d => d.IdNavigation)
+                    .WithOne(p => p.RoomState)
+                    .HasForeignKey<RoomState>(d => d.Id)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_RoomState_Room");
             });
 
             modelBuilder.Entity<RoomType>(entity =>
