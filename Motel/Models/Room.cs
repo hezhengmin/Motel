@@ -7,11 +7,12 @@ using System.Collections.Generic;
 
 namespace Motel.Models
 {
-    public partial class GuestRoom
+    public partial class Room
     {
-        public GuestRoom()
+        public Room()
         {
-            Occupy = new HashSet<Occupy>();
+            OccupiedRoom = new HashSet<OccupiedRoom>();
+            Reservation = new HashSet<Reservation>();
         }
 
         public Guid Id { get; set; }
@@ -22,6 +23,7 @@ namespace Motel.Models
 
         public virtual RoomState IdNavigation { get; set; }
         public virtual RoomType RoomType { get; set; }
-        public virtual ICollection<Occupy> Occupy { get; set; }
+        public virtual ICollection<OccupiedRoom> OccupiedRoom { get; set; }
+        public virtual ICollection<Reservation> Reservation { get; set; }
     }
 }

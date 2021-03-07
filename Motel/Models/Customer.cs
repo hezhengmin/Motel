@@ -11,7 +11,8 @@ namespace Motel.Models
     {
         public Customer()
         {
-            Occupy = new HashSet<Occupy>();
+            OccupiedRoom = new HashSet<OccupiedRoom>();
+            Reservation = new HashSet<Reservation>();
         }
 
         public Guid Id { get; set; }
@@ -20,9 +21,8 @@ namespace Motel.Models
         public string Name { get; set; }
         public string Address { get; set; }
         public string Tel { get; set; }
-        public DateTime Birthday { get; set; }
-        public string Email { get; set; }
 
-        public virtual ICollection<Occupy> Occupy { get; set; }
+        public virtual ICollection<OccupiedRoom> OccupiedRoom { get; set; }
+        public virtual ICollection<Reservation> Reservation { get; set; }
     }
 }

@@ -11,8 +11,7 @@ namespace Motel.Models
     {
         public RoomType()
         {
-            GuestRoom = new HashSet<GuestRoom>();
-            Reservation = new HashSet<Reservation>();
+            Room = new HashSet<Room>();
         }
 
         public Guid Id { get; set; }
@@ -26,7 +25,6 @@ namespace Motel.Models
         public bool AirCondition { get; set; }
         public bool Tv { get; set; }
 
-        public virtual ICollection<GuestRoom> GuestRoom { get; set; }
-        public virtual ICollection<Reservation> Reservation { get; set; }
+        public virtual ICollection<Room> Room { get; set; }
     }
 }

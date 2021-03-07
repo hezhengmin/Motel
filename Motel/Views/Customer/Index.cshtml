@@ -7,6 +7,10 @@
 
 <h1>Index</h1>
 
+@if (User.Identity.IsAuthenticated)
+{
+    <div>Hello, @User.Identity.Name</div>
+}
 <p>
     <a asp-action="AddOrEdit">Create New</a>
 </p>
@@ -28,47 +32,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.Tel)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Birthday)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Email)
-            </th>
-            <th></th>
+            <th class="nosort"></th>
         </tr>
     </thead>
-    @*<tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.IdentityNum)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Gender)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Address)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Tel)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Birthday)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Email)
-                    </td>
-                    <td>
-                        <a asp-action="AddOrEdit" asp-route-id="@item.Id">Edit</a> |
-                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                    </td>
-                </tr>
-            }
-        </tbody>*@
 </table>
 
 
@@ -93,7 +59,7 @@
                     },
                     {
                         "data": "gender",
-                        "width": "8%"
+                        "width": "10%"
                     },
                     {
                         "data": "name",
@@ -101,31 +67,23 @@
                     },
                     {
                         "data": "address",
-                        "width": "28%"
+                        "width": "40%"
                     },
                     {
                         "data": "tel",
-                        "width": "10%"
-                    },
-                    {
-                        "data": "birthday",
-                        "width": "10%"
-                    },
-                    {
-                        "data": "email",
-                        "width": "10%"
+                        "width": "15%"
                     },
                     {
                         "data": "id",
-                        "width": "8%",
+                        "width": "10%",
                         className: "text-center",
                         "render": function (data, type, row, meta) {
                             return `<a href="/Customer/AddOrEdit/${data}">
-                                           <i class="fas fa-edit fa-lg"></i>
-                                        </a> |
-                                        <a href="javascript:void(0)" onclick=deleteData("/Customer/DeleteByDataApiJson/${data}")>
-                                           <i class="fas fa-trash-alt fa-lg"></i>
-                                        </a>`;
+                                               <i class="fas fa-edit fa-lg"></i>
+                                            </a> |
+                                            <a href="javascript:void(0)" onclick=deleteData("/Customer/DeleteByDataApiJson/${data}")>
+                                               <i class="fas fa-trash-alt fa-lg"></i>
+                                            </a>`;
                         }
                     }
                 ],

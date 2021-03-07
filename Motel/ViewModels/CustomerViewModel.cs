@@ -36,14 +36,5 @@ namespace Motel.ViewModels
         [Required]
         [Display(Name = "客戶電話")]
         public string Tel { get; set; }
-
-        [DataType(DataType.Date)]
-        [Required]
-        [Display(Name = "客戶生日")]
-        public DateTime Birthday { get; set; }
-
-        [EmailAddress]
-        [Display(Name = "電子郵件")]
-        public string Email { get; set; }
     }
 }

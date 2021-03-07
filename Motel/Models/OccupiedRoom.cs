@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace Motel.Models
 {
-    public partial class Occupy
+    public partial class OccupiedRoom
     {
         public Guid Id { get; set; }
         public Guid CustomerId { get; set; }
@@ -23,6 +23,6 @@ namespace Motel.Models
         public bool OccupyType { get; set; }
 
         public virtual Customer Customer { get; set; }
-        public virtual GuestRoom GusetRoom { get; set; }
+        public virtual Room GusetRoom { get; set; }
     }
 }

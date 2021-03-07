@@ -21,9 +21,9 @@ namespace Motel.Data
         }
 
         public virtual DbSet<Customer> Customer { get; set; }
-        public virtual DbSet<GuestRoom> GuestRoom { get; set; }
-        public virtual DbSet<Occupy> Occupy { get; set; }
+        public virtual DbSet<OccupiedRoom> OccupiedRoom { get; set; }
         public virtual DbSet<Reservation> Reservation { get; set; }
+        public virtual DbSet<Room> Room { get; set; }
         public virtual DbSet<RoomState> RoomState { get; set; }
         public virtual DbSet<RoomType> RoomType { get; set; }
         public virtual DbSet<User> User { get; set; }
@@ -46,15 +46,6 @@ namespace Motel.Data
                     .HasMaxLength(256)
                     .HasComment("客戶住址");
 
-                entity.Property(e => e.Birthday)
-                    .HasColumnType("date")
-                    .HasComment("客戶生日");
-
-                entity.Property(e => e.Email)
-                    .HasMaxLength(256)
-                    .IsUnicode(false)
-                    .HasComment("電子郵件");
-
                 entity.Property(e => e.Gender).HasComment("性別");
 
                 entity.Property(e => e.IdentityNum)
@@ -76,42 +67,7 @@ namespace Motel.Data
                     .HasComment("客戶電話");
             });
 
-            modelBuilder.Entity<GuestRoom>(entity =>
-            {
-                entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
-
-                entity.Property(e => e.Describe)
-                    .HasMaxLength(50)
-                    .IsUnicode(false)
-                    .HasComment("房間位置");
-
-                entity.Property(e => e.Position)
-                    .HasMaxLength(10)
-                    .IsUnicode(false)
-                    .HasComment("房間描述");
-
-                entity.Property(e => e.RoomNumber)
-                    .IsRequired()
-                    .HasMaxLength(10)
-                    .IsUnicode(false)
-                    .HasComment("房間號碼");
-
-                entity.Property(e => e.RoomTypeId).HasComment("指定房屋類別");
-
-                entity.HasOne(d => d.IdNavigation)
-                    .WithOne(p => p.GuestRoom)
-                    .HasForeignKey<GuestRoom>(d => d.Id)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_GuestRoom_RoomState");
-
-                entity.HasOne(d => d.RoomType)
-                    .WithMany(p => p.GuestRoom)
-                    .HasForeignKey(d => d.RoomTypeId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_GuestRoom_RoomType");
-            });
-
-            modelBuilder.Entity<Occupy>(entity =>
+            modelBuilder.Entity<OccupiedRoom>(entity =>
             {
                 entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
 
@@ -150,13 +106,13 @@ namespace Motel.Data
                     .HasComment("房間價格");
 
                 entity.HasOne(d => d.Customer)
-                    .WithMany(p => p.Occupy)
+                    .WithMany(p => p.OccupiedRoom)
                     .HasForeignKey(d => d.CustomerId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Occupy_Customer");
 
                 entity.HasOne(d => d.GusetRoom)
-                    .WithMany(p => p.Occupy)
+                    .WithMany(p => p.OccupiedRoom)
                     .HasForeignKey(d => d.GusetRoomId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Occupy_GuestRoom");
@@ -170,6 +126,8 @@ namespace Motel.Data
                     .HasColumnType("datetime")
                     .HasComment("預訂日期");
 
+                entity.Property(e => e.CheckIn).HasComment("");
+
                 entity.Property(e => e.Days).HasComment("天數/小時");
 
                 entity.Property(e => e.Name)
@@ -177,14 +135,7 @@ namespace Motel.Data
                     .HasMaxLength(20)
                     .HasComment("預訂者姓名");
 
-                entity.Property(e => e.RoomNumber)
-                    .IsRequired()
-                    .HasMaxLength(10)
-                    .IsUnicode(false)
-                    .HasDefaultValueSql("('0000')")
-                    .HasComment("房間號碼");
-
-                entity.Property(e => e.RoomTypeId).HasComment("指定房屋類別");
+                entity.Property(e => e.RoomId).HasComment("");
 
                 entity.Property(e => e.Tel)
                     .IsRequired()
@@ -192,11 +143,52 @@ namespace Motel.Data
                     .IsUnicode(false)
                     .HasComment("預訂者電話");
 
-                entity.HasOne(d => d.RoomType)
+                entity.HasOne(d => d.Customer)
                     .WithMany(p => p.Reservation)
+                    .HasForeignKey(d => d.CustomerId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Reservation_Customer");
+
+                entity.HasOne(d => d.Room)
+                    .WithMany(p => p.Reservation)
+                    .HasForeignKey(d => d.RoomId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Reservation_Room");
+            });
+
+            modelBuilder.Entity<Room>(entity =>
+            {
+                entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
+
+                entity.Property(e => e.Describe)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasComment("房間位置");
+
+                entity.Property(e => e.Position)
+                    .HasMaxLength(10)
+                    .IsUnicode(false)
+                    .HasComment("房間描述");
+
+                entity.Property(e => e.RoomNumber)
+                    .IsRequired()
+                    .HasMaxLength(10)
+                    .IsUnicode(false)
+                    .HasComment("房間號碼");
+
+                entity.Property(e => e.RoomTypeId).HasComment("指定房屋類別");
+
+                entity.HasOne(d => d.IdNavigation)
+                    .WithOne(p => p.Room)
+                    .HasForeignKey<Room>(d => d.Id)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_GuestRoom_RoomState");
+
+                entity.HasOne(d => d.RoomType)
+                    .WithMany(p => p.Room)
                     .HasForeignKey(d => d.RoomTypeId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Reservation_RoomType");
+                    .HasConstraintName("FK_GuestRoom_RoomType");
             });
 
             modelBuilder.Entity<RoomState>(entity =>
