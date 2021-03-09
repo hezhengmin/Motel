@@ -30,27 +30,28 @@ namespace Motel.Repository
         public async Task<PaginatedList<Customer>> GetCustomerList(int pageNumber, int pageSize)
         {
             var customers = _dbContext.Set<Customer>().AsQueryable();
-            return await PaginatedList<Customer>.CreateAsync(customers, pageNumber, pageSize);
+            var list =  await PaginatedList<Customer>.CreateAsync(customers, pageNumber, pageSize);
+            return list;
         }
 
-        public async Task AddCustomer(Customer Customer)
+        public async Task AddCustomer(Customer customer)
         {
-            _dbContext.Add(Customer);
+            _dbContext.Add(customer);
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task UpdateCustomer(Customer Customer)
+        public async Task UpdateCustomer(Customer customer)
         {
-            _dbContext.Update(Customer);
+            _dbContext.Update(customer);
             await _dbContext.SaveChangesAsync();
         }
 
         public async Task RemoveCustomer(Guid id)
         {
-            var Customer = await GetCustomer(id);
-            if (Customer != null)
+            var customer = await GetCustomer(id);
+            if (customer != null)
             {
-                _dbContext.Customer.Remove(Customer);
+                _dbContext.Customer.Remove(customer);
                 await _dbContext.SaveChangesAsync();
             }
         }

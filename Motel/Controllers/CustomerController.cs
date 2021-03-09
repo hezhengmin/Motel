@@ -27,8 +27,9 @@ namespace Motel.Controllers
         // GET: Customer
         public async Task<IActionResult> Index(int? pageNumber)
         {
-            var CustomerListVM = await _CustomerService.GetCustomerList(pageNumber ?? 1, pageSize);
-            return View(CustomerListVM);
+            var customerIndexVM = await _CustomerService.GetCustomerList(pageNumber ?? 1, pageSize);
+
+            return View(customerIndexVM);
         }
 
         // GET: Customer/AddOrEdit

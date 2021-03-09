@@ -30,9 +30,10 @@ namespace Motel.Services
             return _mapper.Map<List<CustomerViewModel>>(await _CustomerRepository.GetCustomerList());
         }
 
-        public async Task<PaginatedList<CustomerViewModel>> GetCustomerList(int pageNumber, int pageSize)
+        public async Task<CustomerIndexViewModel> GetCustomerList(int pageNumber, int pageSize)
         {
-            return _mapper.Map<PaginatedList<CustomerViewModel>>(await _CustomerRepository.GetCustomerList(pageNumber, pageSize));
+            var customerIndexVM = _mapper.Map<CustomerIndexViewModel>(await _CustomerRepository.GetCustomerList(pageNumber, pageSize));
+            return customerIndexVM;
         }
 
         public async Task AddCustomer(CustomerViewModel customerVM)
