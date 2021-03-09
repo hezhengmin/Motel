@@ -32,8 +32,15 @@ namespace Motel.Services
 
         public async Task<CustomerIndexViewModel> GetCustomerList(int pageNumber, int pageSize)
         {
-            var customerIndexVM = _mapper.Map<CustomerIndexViewModel>(await _CustomerRepository.GetCustomerList(pageNumber, pageSize));
-            return customerIndexVM;
+            var query = _mapper.Map<CustomerIndexViewModel>(await _CustomerRepository.GetCustomerList(pageNumber, pageSize));
+            return query;
+        }
+
+        public async Task<CustomerIndexViewModel> GetCustomerList(CustomerIndexViewModel customerIndexVM, int pageSize)
+        {
+            var pageNumber = customerIndexVM.PageNumber == 0 ? 1 : customerIndexVM.PageNumber;
+            var query = _mapper.Map<CustomerIndexViewModel>(await _CustomerRepository.GetCustomerList(customerIndexVM.SearchString, pageNumber, pageSize));
+            return query;
         }
 
         public async Task AddCustomer(CustomerViewModel customerVM)
@@ -56,7 +63,5 @@ namespace Motel.Services
         {
             return _CustomerRepository.GetCustomerExists(id);
         }
-
-
     }
 }

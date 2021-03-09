@@ -29,8 +29,22 @@ namespace Motel.Repository
 
         public async Task<PaginatedList<Customer>> GetCustomerList(int pageNumber, int pageSize)
         {
-            var customers = _dbContext.Set<Customer>().AsQueryable();
-            var list =  await PaginatedList<Customer>.CreateAsync(customers, pageNumber, pageSize);
+            var query = _dbContext.Set<Customer>().AsQueryable();
+            var list =  await PaginatedList<Customer>.CreateAsync(query, pageNumber, pageSize);
+            return list;
+        }
+
+        public async Task<PaginatedList<Customer>> GetCustomerList(string searchString, int pageNumber, int pageSize)
+        {
+            var query = _dbContext.Set<Customer>().AsQueryable();
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                query = query.Where(m => m.Name.Contains(searchString));
+            }
+
+            var list = await PaginatedList<Customer>.CreateAsync(query, pageNumber, pageSize);
+            
             return list;
         }
 

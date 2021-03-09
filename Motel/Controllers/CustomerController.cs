@@ -25,11 +25,25 @@ namespace Motel.Controllers
         }
 
         // GET: Customer
-        public async Task<IActionResult> Index(int? pageNumber)
+        public async Task<IActionResult> Index(int? pageNumber, CustomerIndexViewModel customerIndexVM)
         {
-            var customerIndexVM = await _CustomerService.GetCustomerList(pageNumber ?? 1, pageSize);
+            if (!string.IsNullOrEmpty(customerIndexVM.SearchString))
+            {
+                return View(await _CustomerService.GetCustomerList(pageNumber ?? 1, pageSize));
+            }
+            else
+            {
+                return View(await _CustomerService.GetCustomerList(pageNumber ?? 1, pageSize));
+            }
+        }
+        // POST: Customer
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Index(CustomerIndexViewModel customerIndexVM)
+        {
+            //return View(await _CustomerService.GetCustomerList(customerIndexVM.PageNumber == 0 ? 1 : customerIndexVM.PageNumber, pageSize));
+            return View(await _CustomerService.GetCustomerList(customerIndexVM, pageSize));
 
-            return View(customerIndexVM);
         }
 
         // GET: Customer/AddOrEdit
@@ -39,8 +53,8 @@ namespace Motel.Controllers
                 return View(new CustomerViewModel());
             else
             {
-                var CustomerVM = await _CustomerService.GetCustomer(id.Value);
-                return View(CustomerVM);
+                var customerVM = await _CustomerService.GetCustomer(id.Value);
+                return View(customerVM);
             }
 
         }
@@ -48,18 +62,18 @@ namespace Motel.Controllers
         // POST: Customer/AddOrEdit
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddOrEdit(CustomerViewModel CustomerVM)
+        public async Task<IActionResult> AddOrEdit(CustomerViewModel customerVM)
         {
             if (ModelState.IsValid)
             {
-                if (CustomerVM.Id == null)
-                    await _CustomerService.AddCustomer(CustomerVM);
+                if (customerVM.Id == null)
+                    await _CustomerService.AddCustomer(customerVM);
                 else
-                    await _CustomerService.UpdateCustomer(CustomerVM);
+                    await _CustomerService.UpdateCustomer(customerVM);
 
                 return RedirectToAction(nameof(Index));
             }
-            return View(CustomerVM);
+            return View(customerVM);
         }
 
         // GET: Customer/Remove/5
