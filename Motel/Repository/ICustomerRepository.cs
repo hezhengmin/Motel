@@ -10,6 +10,7 @@ namespace Motel.Repository
     {
         Task<Customer> GetCustomer(Guid id);
         Task<List<Customer>> GetCustomerList();
+        Task<PaginatedList<Customer>> GetCustomerList(int pageNumber, int pageSize);
         Task AddCustomer(Customer Customer);
         Task UpdateCustomer(Customer Customer);
         Task RemoveCustomer(Guid id);

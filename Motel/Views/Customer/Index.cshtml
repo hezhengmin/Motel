@@ -1,5 +1,4 @@
-﻿@model IEnumerable<Motel.ViewModels.CustomerViewModel>
-
+﻿@model PaginatedList<Motel.ViewModels.CustomerViewModel>
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -7,120 +6,54 @@
 
 <h1>Index</h1>
 
-@if (User.Identity.IsAuthenticated)
-{
-    <div>Hello, @User.Identity.Name</div>
-}
 <p>
     <a asp-action="AddOrEdit">Create New</a>
 </p>
-<table id="dataTable" class="table table-striped table-bordered">
+<table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.IdentityNum)
+                @Html.DisplayNameFor(model => model.FirstOrDefault().IdentityNum)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Gender)
+                @Html.DisplayNameFor(model => model.FirstOrDefault().Gender)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Name)
+                @Html.DisplayNameFor(model => model.FirstOrDefault().Name)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Address)
+                @Html.DisplayNameFor(model => model.FirstOrDefault().Address)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Tel)
+                @Html.DisplayNameFor(model => model.FirstOrDefault().Tel)
             </th>
-            <th class="nosort"></th>
+            <th></th>
         </tr>
     </thead>
-</table>
-
-
-@section Scripts {
-    <script>
-        let $dataTable = $("#dataTable");
-        $(document).ready(function () {
-            $dataTable = $("#dataTable").DataTable({
-                "ajax": {
-                    "url": "/Customer/GetAllDataApiJson",
-                    "type": "GET",
-                    "datatype": "json"
-                },
-                "columnDefs": [{
-                    "targets": "nosort",
-                    "orderable": false,
-                }],
-                "columns": [
-                    {
-                        "data": "identityNum",
-                        "width": "15%"
-                    },
-                    {
-                        "data": "gender",
-                        "width": "10%"
-                    },
-                    {
-                        "data": "name",
-                        "width": "10%"
-                    },
-                    {
-                        "data": "address",
-                        "width": "40%"
-                    },
-                    {
-                        "data": "tel",
-                        "width": "15%"
-                    },
-                    {
-                        "data": "id",
-                        "width": "10%",
-                        className: "text-center",
-                        "render": function (data, type, row, meta) {
-                            return `<a href="/Customer/AddOrEdit/${data}">
-                                               <i class="fas fa-edit fa-lg"></i>
-                                            </a> |
-                                            <a href="javascript:void(0)" onclick=deleteData("/Customer/DeleteByDataApiJson/${data}")>
-                                               <i class="fas fa-trash-alt fa-lg"></i>
-                                            </a>`;
-                        }
-                    }
-                ],
-            });
-        });
-
-        function deleteData(url) {
-            Swal.fire({
-                title: "Are you sure?",
-                text: 'You won"t be able to revert this!',
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#d33",
-                confirmButtonText: "Yes, delete it!"
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    $.ajax({
-                        url: url,
-                        type: "DELETE"
-                    }).done(function (data) {
-                        if (data.success) {
-                            Swal.fire(
-                                "Deleted!",
-                                "Your file has been deleted.",
-                                "success"
-                            )
-                            $dataTable.ajax.reload();
-                        } else {
-
-                        }
-                    }).fail(function (jqXHR, textStatus, errorThrown) {
-                        console.log(errorThrown);
-                    });
-
-                }
-            })
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IdentityNum)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Gender)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Address)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Tel)
+                </td>
+                <td>
+                    <a asp-action="AddOrEdit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Remove" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
         }
-    </script>
-}
+    </tbody>
+</table>

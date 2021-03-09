@@ -17,6 +17,7 @@ namespace Motel.Controllers
     public class CustomerController : Controller
     {
         private readonly ICustomerService _CustomerService;
+        private int pageSize = 5;
 
         public CustomerController(ICustomerService CustomerService)
         {
@@ -24,9 +25,9 @@ namespace Motel.Controllers
         }
 
         // GET: Customer
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? pageNumber)
         {
-            var CustomerListVM = await _CustomerService.GetCustomerList();
+            var CustomerListVM = await _CustomerService.GetCustomerList(pageNumber ?? 1, pageSize);
             return View(CustomerListVM);
         }
 

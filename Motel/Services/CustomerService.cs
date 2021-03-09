@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Motel.Services
 {
-    public class CustomerService :ICustomerService
+    public class CustomerService : ICustomerService
     {
         private readonly IMapper _mapper;
         private readonly ICustomerRepository _CustomerRepository;
@@ -30,14 +30,19 @@ namespace Motel.Services
             return _mapper.Map<List<CustomerViewModel>>(await _CustomerRepository.GetCustomerList());
         }
 
-        public async Task AddCustomer(CustomerViewModel CustomerVM)
+        public async Task<PaginatedList<CustomerViewModel>> GetCustomerList(int pageNumber, int pageSize)
         {
-            var Customer = _mapper.Map<Customer>(CustomerVM);
+            return _mapper.Map<PaginatedList<CustomerViewModel>>(await _CustomerRepository.GetCustomerList(pageNumber, pageSize));
+        }
+
+        public async Task AddCustomer(CustomerViewModel customerVM)
+        {
+            var Customer = _mapper.Map<Customer>(customerVM);
             await _CustomerRepository.AddCustomer(Customer);
         }
-        public async Task UpdateCustomer(CustomerViewModel CustomerVM)
+        public async Task UpdateCustomer(CustomerViewModel customerVM)
         {
-            var Customer = _mapper.Map<Customer>(CustomerVM);
+            var Customer = _mapper.Map<Customer>(customerVM);
             await _CustomerRepository.UpdateCustomer(Customer);
         }
 
@@ -50,5 +55,7 @@ namespace Motel.Services
         {
             return _CustomerRepository.GetCustomerExists(id);
         }
+
+
     }
 }

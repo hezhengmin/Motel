@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Motel.Models;
+using Motel.Repository;
 using Motel.ViewModels;
 using System;
 using System.Collections.Generic;

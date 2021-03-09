@@ -1,4 +1,5 @@
-﻿using Motel.ViewModels;
+﻿using Motel.Repository;
+using Motel.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,8 +11,9 @@ namespace Motel.Services
     {
         Task<CustomerViewModel> GetCustomer(Guid id);
         Task<List<CustomerViewModel>> GetCustomerList();
-        Task AddCustomer(CustomerViewModel CustomerVM);
-        Task UpdateCustomer(CustomerViewModel CustomerVM);
+        Task<PaginatedList<CustomerViewModel>> GetCustomerList(int pageNumber, int pageSize);
+        Task AddCustomer(CustomerViewModel customerVM);
+        Task UpdateCustomer(CustomerViewModel customerVM);
         Task RemoveCustomer(Guid id);
         bool GetCustomerExists(Guid id);
     }
