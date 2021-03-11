@@ -27,23 +27,17 @@ namespace Motel.Controllers
         // GET: Customer
         public async Task<IActionResult> Index(int? pageNumber, CustomerIndexViewModel customerIndexVM)
         {
-            if (!string.IsNullOrEmpty(customerIndexVM.SearchString))
-            {
-                return View(await _CustomerService.GetCustomerList(pageNumber ?? 1, pageSize));
-            }
-            else
-            {
-                return View(await _CustomerService.GetCustomerList(pageNumber ?? 1, pageSize));
-            }
+            var model = await _CustomerService.GetCustomerList(pageNumber ?? 1, pageSize);
+            return View(model);
         }
+
         // POST: Customer
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Index(CustomerIndexViewModel customerIndexVM)
         {
-            //return View(await _CustomerService.GetCustomerList(customerIndexVM.PageNumber == 0 ? 1 : customerIndexVM.PageNumber, pageSize));
-            return View(await _CustomerService.GetCustomerList(customerIndexVM, pageSize));
-
+            var model = await _CustomerService.GetCustomerList(customerIndexVM, pageSize);
+            return PartialView("~/Views/Customer/Partial/_IndexPartial.cshtml", model);
         }
 
         // GET: Customer/AddOrEdit
@@ -106,5 +100,10 @@ namespace Motel.Controllers
             await _CustomerService.RemoveCustomer(id);
             return Json(new { success = true, message = "成功刪除!" });
         }
+
+        //public async Task<IActionResult> GetIndexPartial()
+        //{
+
+        //}
     }
 }
