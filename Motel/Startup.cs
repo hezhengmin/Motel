@@ -4,14 +4,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Motel.Data;
-using Motel.Repository;
-using Motel.Services;
+using Infrastructure.Data;
 using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Motel.Configurations;
 
 namespace Motel
 {
@@ -33,14 +32,13 @@ namespace Motel
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
 
-            services.AddAutoMapper(typeof(Startup));
-   
-            services.AddTransient<ICustomerRepository, CustomerRepository>();
-            services.AddTransient<ICustomerService, CustomerService>();
+            //https://github.com/AutoMapper/AutoMapper.Extensions.Microsoft.DependencyInjection
+            services.AddAutoMapperConfiguration();
+
+            services.AddDependencyInjectionConfiguration();
 
             services.AddControllersWithViews()
                     .AddNewtonsoftJson(options => options.SerializerSettings.Converters.Add(new StringEnumConverter()));
-            services.AddRazorPages();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -61,7 +59,6 @@ namespace Motel
 
             app.UseRouting();
 
-            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
@@ -69,7 +66,6 @@ namespace Motel
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
-                endpoints.MapRazorPages();
             });
         }
     }

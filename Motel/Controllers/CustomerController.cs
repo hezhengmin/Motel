@@ -4,16 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using Motel.Data;
-using Motel.Models;
-using Motel.Services;
-using Motel.ViewModels;
+using Application.Services;
+using Application.ViewModels;
 
 namespace Motel.Controllers
 {
-    [Authorize]
     public class CustomerController : Controller
     {
         private readonly ICustomerService _CustomerService;
@@ -100,10 +95,5 @@ namespace Motel.Controllers
             await _CustomerService.RemoveCustomer(id);
             return Json(new { success = true, message = "成功刪除!" });
         }
-
-        //public async Task<IActionResult> GetIndexPartial()
-        //{
-
-        //}
     }
 }
