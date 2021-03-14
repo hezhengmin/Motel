@@ -1,32 +1,105 @@
-﻿@{
-    ViewData["Title"] = "Customer";
+﻿@model Application.ViewModels.CustomerIndexViewModel
+
+@{
+    ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Index</h1>
-<form asp-action="Index"
-      asp-controller="Customer"
-      method="post"
-      data-ajax="true"
-      data-ajax-method="post"
-      data-ajax-complete="completed"
-      data-ajax-failure="failed"
-      data-ajax-mode="replace"
-      data-ajax-update="#panel">
-    <div id="panel">
-        @await Html.PartialAsync("~/Views/Customer/Partial/_IndexPartial.cshtml")
+
+<div id="view-all">
+    @await Html.PartialAsync("_IndexPartial", Model)
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" id="form-modal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+            </div>
+        </div>
     </div>
-</form>
+</div>
 
-@section scripts{
-    <script src="~/lib/jquery-ajax-unobtrusive/jquery.unobtrusive-ajax.min.js"></script>
+@section Scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
     <script>
-        completed = () => {
-            console.log('Posted using Unobtrusive AJAX');
-        };
 
-        failed = function (xhr) {
-            console.log(`Status: {xhr.status}, Status Text: {xhr.statusText}`);
-        };
+
+        showInPopup = (url, title) => {
+            $.ajax({
+                type: "GET",
+                url: url,
+                success: function (res) {
+                    $("#form-modal .modal-body").html(res.html);
+                    $("#form-modal .modal-title").html(title);
+                    $("#form-modal").modal("show");
+                    // to make popup draggable
+                    $(".modal-dialog").draggable({
+                        handle: ".modal-header"
+                    });
+                }
+            })
+        }
+
+        //新增或編輯
+        jQueryAjaxPost = form => {
+            try {
+                $.ajax({
+                    type: "POST",
+                    url: form.action,
+                    data: new FormData(form),
+                    contentType: false,
+                    processData: false,
+                    success: function (res) {
+                        if (res.isValid) {
+                            $("#view-all").html(res.html)
+                            $("#form-modal .modal-body").html("");
+                            $("#form-modal .modal-title").html("");
+                            $("#form-modal").modal("hide");
+                        }
+                        else
+                            $("#form-modal .modal-body").html(res.html);
+                    },
+                    error: function (err) {
+                        console.log(err)
+                    }
+                })
+                //to prevent default form submit event
+                return false;
+            } catch (ex) {
+                console.log(ex)
+            }
+        }
+
+        //刪除
+        jQueryAjaxDelete = (url, id) => {
+            if (confirm("你確定要刪除嗎?")) {
+                try {
+                    $.ajax({
+                        type: "Delete",
+                        url: url,
+                        data: JSON.stringify({ id: id}),
+                        contentType: false, //sending data to the server , default: 'application/x-www-form-urlencoded; charset=UTF-8'
+                        processData: false,
+                        success: function (res) {
+                            $("#view-all").html(res.html);
+                        },
+                        error: function (err) {
+                            console.log(err)
+                        }
+                    })
+                } catch (ex) {
+                    console.log(ex)
+                }
+            }
+
+            return false;
+        }
     </script>
 }

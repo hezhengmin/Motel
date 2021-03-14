@@ -20,7 +20,7 @@ namespace Motel.Controllers
         }
 
         // GET: Customer
-        public async Task<IActionResult> Index(int? pageNumber, CustomerIndexViewModel customerIndexVM)
+        public async Task<IActionResult> Index(int? pageNumber)
         {
             var model = await _CustomerService.GetCustomerList(pageNumber ?? 1, pageSize);
             return View(model);
@@ -31,19 +31,20 @@ namespace Motel.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Index(CustomerIndexViewModel customerIndexVM)
         {
-            var model = await _CustomerService.GetCustomerList(customerIndexVM, pageSize);
-            return PartialView("~/Views/Customer/Partial/_IndexPartial.cshtml", model);
+            return View(await _CustomerService.GetCustomerList(customerIndexVM, pageSize));
         }
 
         // GET: Customer/AddOrEdit
         public async Task<IActionResult> AddOrEdit(Guid? id)
         {
-            if (id == null)
-                return View(new CustomerViewModel());
+            if (id == null || id == Guid.Empty)
+            {
+                return Json(new { html = Helper.RenderRazorViewToString(this, "AddOrEdit", new CustomerViewModel()) });
+            }
             else
             {
                 var customerVM = await _CustomerService.GetCustomer(id.Value);
-                return View(customerVM);
+                return Json(new { html = Helper.RenderRazorViewToString(this, "AddOrEdit", customerVM) });
             }
 
         }
@@ -55,45 +56,25 @@ namespace Motel.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (customerVM.Id == null)
+                if (customerVM.Id == null || customerVM.Id == Guid.Empty)
                     await _CustomerService.AddCustomer(customerVM);
                 else
                     await _CustomerService.UpdateCustomer(customerVM);
 
-                return RedirectToAction(nameof(Index));
+                var model = await _CustomerService.GetCustomerList(1, pageSize);
+
+                return Json(new { isValid = true, html = Helper.RenderRazorViewToString(this, "_IndexPartial", model) });
             }
-            return View(customerVM);
+
+            return Json(new { isValid = false, html = Helper.RenderRazorViewToString(this, "AddOrEdit", customerVM) });
         }
 
-        // GET: Customer/Remove/5
-        public async Task<IActionResult> Remove(Guid? id)
-        {
-            if (id == null) return NotFound();
-            await _CustomerService.RemoveCustomer(id.Value);
-
-            return RedirectToAction(nameof(Index));
-        }
-
-        //-------------------------------------------  return Json
-
-        //url: Customer/GetAllDataApiJson
-        [HttpGet]
-        public async Task<IActionResult> GetAllDataApiJson()
-        {
-            return Json(new { data = await _CustomerService.GetCustomerList() });
-        }
-
-        //url: Customer/DeleteByDataApiJson
         [HttpDelete]
-        public async Task<IActionResult> DeleteByDataApiJson(Guid id)
+        public async Task<IActionResult> Remove(Guid id)
         {
-            if (!_CustomerService.GetCustomerExists(id))
-            {
-                return Json(new { success = false, message = "找不到資料!" });
-            }
-
             await _CustomerService.RemoveCustomer(id);
-            return Json(new { success = true, message = "成功刪除!" });
+            var model = await _CustomerService.GetCustomerList(1, pageSize);
+            return Json(new { html = Helper.RenderRazorViewToString(this, "_IndexPartial", model) });
         }
     }
 }

@@ -1,30 +1,6 @@
 ﻿@model Application.ViewModels.CustomerIndexViewModel
 
-<div class="form-actions no-color">
-    <p>
-        Find by name:  <input asp-for="@Model.SearchString" />
-        <input type="submit" value="Search" class="btn btn-default" /> |
-        <a asp-action="Index">Back to Full List</a>
-    </p>
-</div>
-
-<p>
-    <a asp-action="AddOrEdit" class="btn btn-primary btn-sm">
-        新增
-    </a>
-</p>
-<div class="clearfix">
-    <span class="float-left">Float left</span>
-    <div class="float-right">
-        <a asp-action="AddOrEdit" class="btn btn-primary btn-sm">新增</a>
-    </div>
-</div>
-<div class="d-flex flex-row-reverse bg-secondary">
-    <div class="p-2 bg-info">Flex item 1</div>
-    <div class="p-2 bg-warning">Flex item 2</div>
-    <div class="p-2 bg-primary">Flex item 3</div>
-</div>
-<table class="table table-bordered">
+<table class="table">
     <thead>
         <tr>
             <th>
@@ -42,7 +18,11 @@
             <th>
                 @Html.DisplayNameFor(model => model.CustomerViewModelList.FirstOrDefault().Tel)
             </th>
-            <th></th>
+            <th>
+                <a onclick="showInPopup('@Url.Action("AddOrEdit","Customer",null,Context.Request.Scheme)','新增')" class="btn btn-primary text-white">
+                    新增
+                </a>
+            </th>
         </tr>
     </thead>
     <tbody>
@@ -67,30 +47,15 @@
                         @Html.DisplayFor(modelItem => item.Tel)
                     </td>
                     <td>
-                        <a asp-action="AddOrEdit" asp-route-id="@item.Id" class="btn btn-success btn-sm">編輯</a>
-                        <a asp-action="Remove" asp-route-id="@item.Id" class="btn btn-danger btn-sm">刪除</a>
+                        <a onclick="showInPopup('@Url.Action("AddOrEdit","Customer",new {id=@item.Id},Context.Request.Scheme)','編輯')" class="btn btn-success text-white">
+                            編輯
+                        </a>
+                        <a onclick="jQueryAjaxDelete('@Url.Action("Remove","Customer",new {id=@item.Id},Context.Request.Scheme)','@item.Id')" class="btn btn-danger text-white">
+                            刪除
+                        </a>
                     </td>
                 </tr>
             }
         }
     </tbody>
 </table>
-
-@{
-    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
-    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
-}
-
-<input type="submit"
-       asp-for="@Model.PageNumber"
-       asp-route-pageNumber="@(Model.PageNumber - 1)"
-       class="btn btn-primary btn-sm @prevDisabled"
-       value="@(Model.PageNumber - 1)"/>
-
-@Model.PageNumber / @Model.TotalPages
-
-<input type="submit"
-       asp-for="@Model.PageNumber"
-       asp-route-pageNumber="@(Model.PageNumber + 1)"
-       class="btn btn-primary btn-sm @nextDisabled"
-       value="@(Model.PageNumber + 1)" />

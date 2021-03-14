@@ -1,9 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Application.ViewModels;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Infrastructure.Data;
-using Application.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -14,14 +11,12 @@ namespace Motel.Controllers
 {
     public class HomeController : Controller
     {
-        //private readonly ILogger<HomeController> _logger;
-        //private readonly MotelDbContext _context;
+        private readonly ILogger<HomeController> _logger;
 
-        //public HomeController(ILogger<HomeController> logger, MotelDbContext context)
-        //{
-        //    _logger = logger;
-        //    _context = context;
-        //}
+        public HomeController(ILogger<HomeController> logger)
+        {
+            _logger = logger;
+        }
 
         public IActionResult Index()
         {
