@@ -6,11 +6,11 @@
 }
 
 
-<div id="view-all">
+<div id="view">
     @await Html.PartialAsync("_IndexPartial", Model)
 </div>
 
-<div class="modal fade" tabindex="-1" role="dialog" id="form-modal">
+<div class="modal fade" tabindex="-1" role="dialog" id="modal">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -29,22 +29,27 @@
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 
     <script>
-
+        const $view = $("#view");
+        const $modal = $("#modal");
+        const $modalTitle = $("#modal .modal-title");
+        const $modalBoby = $("#modal .modal-body");
+        const $modalDialog = $("#modal .modal-dialog");
 
         showInPopup = (url, title) => {
             $.ajax({
                 type: "GET",
-                url: url,
-                success: function (res) {
-                    $("#form-modal .modal-body").html(res.html);
-                    $("#form-modal .modal-title").html(title);
-                    $("#form-modal").modal("show");
-                    // to make popup draggable
-                    $(".modal-dialog").draggable({
-                        handle: ".modal-header"
-                    });
-                }
-            })
+                url: url
+            }).done(function (res) {
+                $modalBoby.html(res.html);
+                $modalTitle.html(title);
+                $modal.modal("show");
+                // to make popup draggable
+                $modalDialog.draggable({
+                    handle: ".modal-header"
+                });
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                console.log(jqXHR, textStatus, errorThrown);
+            });
         }
 
         //新增或編輯
@@ -55,21 +60,19 @@
                     url: form.action,
                     data: new FormData(form),
                     contentType: false,
-                    processData: false,
-                    success: function (res) {
-                        if (res.isValid) {
-                            $("#view-all").html(res.html)
-                            $("#form-modal .modal-body").html("");
-                            $("#form-modal .modal-title").html("");
-                            $("#form-modal").modal("hide");
-                        }
-                        else
-                            $("#form-modal .modal-body").html(res.html);
-                    },
-                    error: function (err) {
-                        console.log(err)
+                    processData: false
+                }).done(function (res) {
+                    if (res.isValid) {
+                        $view.html(res.html)
+                        $modalBoby.html("");
+                        $modalTitle.html("");
+                        $modal.modal("hide");
                     }
-                })
+                    else
+                        $modalBoby.html(res.html);
+                }).fail(function (jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR, textStatus, errorThrown);
+                });
                 //to prevent default form submit event
                 return false;
             } catch (ex) {
@@ -84,16 +87,14 @@
                     $.ajax({
                         type: "Delete",
                         url: url,
-                        data: JSON.stringify({ id: id}),
+                        data: JSON.stringify({ id: id }),
                         contentType: false, //sending data to the server , default: 'application/x-www-form-urlencoded; charset=UTF-8'
-                        processData: false,
-                        success: function (res) {
-                            $("#view-all").html(res.html);
-                        },
-                        error: function (err) {
-                            console.log(err)
-                        }
-                    })
+                        processData: false
+                    }).done(function (res) {
+                        $view.html(res.html);
+                    }).fail(function (jqXHR, textStatus, errorThrown) {
+                        console.log(jqXHR, textStatus, errorThrown);
+                    });
                 } catch (ex) {
                     console.log(ex)
                 }

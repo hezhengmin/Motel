@@ -19,7 +19,7 @@
                 @Html.DisplayNameFor(model => model.CustomerViewModelList.FirstOrDefault().Tel)
             </th>
             <th>
-                <a onclick="showInPopup('@Url.Action("AddOrEdit","Customer",null,Context.Request.Scheme)','新增')" class="btn btn-primary text-white">
+                <a onclick="showInPopup('@Url.Action("AddOrEdit","Customer", new { id = Guid.Empty} ,Context.Request.Scheme)','新增')" class="btn btn-primary text-white">
                     新增
                 </a>
             </th>
