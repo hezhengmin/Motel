@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Application.Services;
 using Application.ViewModels;
@@ -29,7 +28,7 @@ namespace Motel.Controllers
         // POST: Customer
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Index(CustomerIndexViewModel customerIndexVM)
+        public async Task<IActionResult> Index([FromBody] CustomerIndexViewModel customerIndexVM)
         {
             return View(await _CustomerService.GetCustomerList(customerIndexVM, pageSize));
         }

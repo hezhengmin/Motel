@@ -59,3 +59,35 @@
         }
     </tbody>
 </table>
+
+
+@{
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+}
+
+@Model.PageNumber / @Model.TotalPages
+<nav aria-label="Page navigation" id="navigation">
+    <ul class="pagination justify-content-center">
+        <li class="page-item @prevDisabled" data-num="@(Model.PageNumber - 1)"><a class="page-link" href="#">上一頁</a></li>
+        @for (var i = 1; i <= Model.TotalPages; i++)
+        {
+            <li class="page-item" data-num=@i><a class="page-link" href="#">@i</a></li>
+        }
+        <li class="page-item @nextDisabled" data-num="@(Model.PageNumber + 1)"><a class="page-link" href="#">下一頁</a></li>
+    </ul>
+</nav>
+@*<input type="submit"
+           asp-for="@Model.PageNumber"
+           asp-route-pageNumber="@(Model.PageNumber - 1)"
+           class="btn btn-primary btn-sm @prevDisabled"
+           value="@(Model.PageNumber - 1)" />
+
+    @Model.PageNumber / @Model.TotalPages
+
+    <input type="submit"
+           asp-for="@Model.PageNumber"
+           asp-route-pageNumber="@(Model.PageNumber + 1)"
+           class="btn btn-primary btn-sm @nextDisabled"
+           value="@(Model.PageNumber + 1)" />*@
+

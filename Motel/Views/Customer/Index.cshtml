@@ -34,6 +34,18 @@
         const $modalTitle = $("#modal .modal-title");
         const $modalBoby = $("#modal .modal-body");
         const $modalDialog = $("#modal .modal-dialog");
+        const $pages = $("#navigation > .pagination li.page-item").not('.disabled');
+
+
+
+        $(function () {
+
+            $pages.on("click", function (e) {
+                e.preventDefault();
+                let num = $(this).data("num");
+                console.log(num);
+            });
+        });
 
         showInPopup = (url, title) => {
             $.ajax({
