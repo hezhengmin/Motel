@@ -34,25 +34,25 @@
         const $modalTitle = $("#modal .modal-title");
         const $modalBoby = $("#modal .modal-body");
         const $modalDialog = $("#modal .modal-dialog");
-        //const $pages = $("#navigation > .pagination li.page-item").not('.disabled');
+        const $pages = $("#navigation > .pagination li.page-item").not('.disabled');
 
         $(function () {
 
-            //$pages.on("click", function (e) {
-            //    e.preventDefault();
-            //    let num = $(this).data("num");
+            $pages.on("click", function (e) {
+                e.preventDefault();
+                let pageNumber = $(this).data("num");
 
-            //    jQueryAjaxPagePost(num);
-            //});
+                jQueryAjaxPagePost(pageNumber);
+            });
 
         });
 
 
-        jQueryAjaxPagePost = (num) => {
+        jQueryAjaxPagePost = (pageNumber) => {
 
             let model = {
                 SearchString: "",
-                PageNumber: num,
+                PageNumber: pageNumber,
                 TotalPages: "",
                 HasPreviousPage: "",
                 HasNextPage: "",
@@ -64,7 +64,7 @@
                 url: "/Customer/Index",
                 dataType: "json",
                 contentType: "application/json; charset=utf-8",
-                data: JSON.stringify({ PageNumber: num}),
+                data: JSON.stringify({ PageNumber: pageNumber}),
                 processData: false,
                 beforeSend: function (xhr) {
                     xhr.setRequestHeader("X-XSRF-TOKEN",
@@ -72,7 +72,7 @@
                 }
             }).done(function (res) {
                 if (res.isValid) {
-                    console.log(res.html);
+                    //console.log(res.html);
                     $view.html(res.html)
                 }
             }).fail(function (jqXHR, textStatus, errorThrown) {
