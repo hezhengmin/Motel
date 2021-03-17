@@ -69,14 +69,17 @@
 @Model.PageNumber / @Model.TotalPages
 <nav aria-label="Page navigation" id="navigation">
     <ul class="pagination justify-content-center">
-        <li class="page-item @prevDisabled" data-num="@(Model.PageNumber - 1)"><a class="page-link" href="#">上一頁</a></li>
+        <li class="page-item @prevDisabled" data-num="@(Model.PageNumber - 1)"><a class="page-link" href="#" onclick="jQueryAjaxPagePost(@(Model.PageNumber - 1))">上一頁</a></li>
         @for (var i = 1; i <= Model.TotalPages; i++)
         {
-            <li class="page-item" data-num=@i><a class="page-link" href="#">@i</a></li>
+            <li class="page-item" data-num=@i><a class="page-link" href="#" onclick="jQueryAjaxPagePost(@i)">@i</a></li>
         }
-        <li class="page-item @nextDisabled" data-num="@(Model.PageNumber + 1)"><a class="page-link" href="#">下一頁</a></li>
+        <li class="page-item @nextDisabled" data-num="@(Model.PageNumber + 1)"><a class="page-link" href="#" onclick="jQueryAjaxPagePost(@(Model.PageNumber + 1))">下一頁</a></li>
     </ul>
 </nav>
+
+@Html.AntiForgeryToken()
+
 @*<input type="submit"
            asp-for="@Model.PageNumber"
            asp-route-pageNumber="@(Model.PageNumber - 1)"

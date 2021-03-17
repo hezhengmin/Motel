@@ -34,6 +34,9 @@ namespace Motel
 
             services.AddControllersWithViews()
                     .AddNewtonsoftJson(options => options.SerializerSettings.Converters.Add(new StringEnumConverter()));
+
+            services.AddAntiforgery(options => options.HeaderName = "X-XSRF-TOKEN");
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

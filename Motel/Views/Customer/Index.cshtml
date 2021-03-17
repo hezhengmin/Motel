@@ -34,18 +34,52 @@
         const $modalTitle = $("#modal .modal-title");
         const $modalBoby = $("#modal .modal-body");
         const $modalDialog = $("#modal .modal-dialog");
-        const $pages = $("#navigation > .pagination li.page-item").not('.disabled');
-
-
+        //const $pages = $("#navigation > .pagination li.page-item").not('.disabled');
 
         $(function () {
 
-            $pages.on("click", function (e) {
-                e.preventDefault();
-                let num = $(this).data("num");
-                console.log(num);
-            });
+            //$pages.on("click", function (e) {
+            //    e.preventDefault();
+            //    let num = $(this).data("num");
+
+            //    jQueryAjaxPagePost(num);
+            //});
+
         });
+
+
+        jQueryAjaxPagePost = (num) => {
+
+            let model = {
+                SearchString: "",
+                PageNumber: num,
+                TotalPages: "",
+                HasPreviousPage: "",
+                HasNextPage: "",
+                CustomerViewModelList: {}
+            };
+
+            $.ajax({
+                type: "POST",
+                url: "/Customer/Index",
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify({ PageNumber: num}),
+                processData: false,
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("X-XSRF-TOKEN",
+                        $('input:hidden[name="__RequestVerificationToken"]').val());
+                }
+            }).done(function (res) {
+                if (res.isValid) {
+                    console.log(res.html);
+                    $view.html(res.html)
+                }
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                console.log(jqXHR, textStatus, errorThrown);
+            });
+        }
+
 
         showInPopup = (url, title) => {
             $.ajax({
@@ -66,6 +100,7 @@
 
         //新增或編輯
         jQueryAjaxPost = form => {
+
             try {
                 $.ajax({
                     type: "POST",

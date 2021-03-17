@@ -28,9 +28,11 @@ namespace Motel.Controllers
         // POST: Customer
         [HttpPost]
         [ValidateAntiForgeryToken]
+        //[Consumes("application/x-www-form-urlencoded")]
         public async Task<IActionResult> Index([FromBody] CustomerIndexViewModel customerIndexVM)
         {
-            return View(await _CustomerService.GetCustomerList(customerIndexVM, pageSize));
+            var model = await _CustomerService.GetCustomerList(customerIndexVM, pageSize);
+            return Json(new { isValid = true, html = Helper.RenderRazorViewToString(this, "_IndexPartial", model) });
         }
 
         // GET: Customer/AddOrEdit
