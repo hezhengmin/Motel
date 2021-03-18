@@ -51,20 +51,22 @@
         jQueryAjaxPagePost = (pageNumber) => {
 
             let model = {
-                SearchString: "",
-                PageNumber: pageNumber,
-                TotalPages: "",
-                HasPreviousPage: "",
-                HasNextPage: "",
-                CustomerViewModelList: {}
+                "SearchString": "",
+                "PageNumber": pageNumber,
+                "TotalPages": undefined,
+                "HasPreviousPage": undefined,
+                "HasNextPage": undefined,
+                "CustomerViewModelList": []
             };
+
+            console.log(JSON.stringify(model));
 
             $.ajax({
                 type: "POST",
                 url: "/Customer/Index",
                 dataType: "json",
                 contentType: "application/json; charset=utf-8",
-                data: JSON.stringify({ PageNumber: pageNumber}),
+                data: JSON.stringify(model),
                 processData: false,
                 beforeSend: function (xhr) {
                     xhr.setRequestHeader("X-XSRF-TOKEN",
@@ -72,7 +74,6 @@
                 }
             }).done(function (res) {
                 if (res.isValid) {
-                    //console.log(res.html);
                     $view.html(res.html)
                 }
             }).fail(function (jqXHR, textStatus, errorThrown) {
@@ -100,7 +101,6 @@
 
         //新增或編輯
         jQueryAjaxPost = form => {
-
             try {
                 $.ajax({
                     type: "POST",
