@@ -40,6 +40,10 @@ namespace Application.Services
         {
             var pageNumber = customerIndexVM.PageNumber == 0 ? 1 : customerIndexVM.PageNumber;
             var query = _mapper.Map<CustomerIndexViewModel>(await _CustomerRepository.GetCustomerList(customerIndexVM.SearchString, pageNumber, pageSize));
+
+            if (!string.IsNullOrEmpty(customerIndexVM.SearchString))
+                query.SearchString = customerIndexVM.SearchString;
+
             return query;
         }
 

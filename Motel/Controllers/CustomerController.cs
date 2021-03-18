@@ -28,8 +28,15 @@ namespace Motel.Controllers
         // POST: Customer
         [HttpPost]
         [ValidateAntiForgeryToken]
-        //[Consumes("application/x-www-form-urlencoded")]
         public async Task<IActionResult> Index([FromBody] CustomerIndexViewModel customerIndexVM)
+        {
+            var model = await _CustomerService.GetCustomerList(customerIndexVM, pageSize);
+            return Json(new { isValid = true, html = Helper.RenderRazorViewToString(this, "_IndexPartial", model) });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Search([FromForm] CustomerIndexViewModel customerIndexVM)
         {
             var model = await _CustomerService.GetCustomerList(customerIndexVM, pageSize);
             return Json(new { isValid = true, html = Helper.RenderRazorViewToString(this, "_IndexPartial", model) });
