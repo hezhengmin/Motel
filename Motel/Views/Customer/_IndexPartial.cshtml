@@ -1,110 +1,119 @@
 ﻿@model Application.ViewModels.CustomerIndexViewModel
 
 
-    <form class="form-inline" asp-action="Search" onsubmit="return jQueryAjaxSearchPost(this);">
-        <div class="form-group mx-sm-3 mb-2">
-            <label asp-for="SearchString" class="mr-3">
-                @Html.DisplayNameFor(model => model.CustomerViewModelList.FirstOrDefault().Name)
-            </label>
-            <input asp-for="SearchString" class="form-control" />
-        </div>
-        <button type="submit" class="btn btn-primary mb-2">搜尋</button>
-    </form>
-
-
-    <table class="table">
-        <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.CustomerViewModelList.FirstOrDefault().IdentityNum)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.CustomerViewModelList.FirstOrDefault().Gender)
-                </th>
-                <th>
+<div class="row">
+    <div class="col-auto mr-auto">
+        <form class="form-inline" asp-action="Search" onsubmit="return jQueryAjaxSearchPost(this);">
+            <div class="form-group mx-sm-3 mb-2">
+                <label asp-for="SearchString" class="mr-3">
                     @Html.DisplayNameFor(model => model.CustomerViewModelList.FirstOrDefault().Name)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.CustomerViewModelList.FirstOrDefault().Address)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.CustomerViewModelList.FirstOrDefault().Tel)
-                </th>
-                <th>
-                    <a onclick="showInPopup('@Url.Action("AddOrEdit","Customer", new { id = Guid.Empty} ,Context.Request.Scheme)','新增')" class="btn btn-primary text-white">
-                        新增
-                    </a>
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            @if (Model.CustomerViewModelList != null && Model.CustomerViewModelList.Count > 0)
+                </label>
+                <input asp-for="SearchString" class="form-control" />
+            </div>
+            <button type="submit" class="btn btn-primary mb-2">搜尋</button>
+        </form>
+    </div>
+    <div class="col-auto mr-3">
+        <a onclick="showInPopup('@Url.Action("AddOrEdit","Customer", new { id = Guid.Empty} ,Context.Request.Scheme)','新增')" class="btn btn-primary text-white">
+            新增
+        </a>
+    </div>
+</div>
+
+
+
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.CustomerViewModelList.FirstOrDefault().IdentityNum)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CustomerViewModelList.FirstOrDefault().Gender)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CustomerViewModelList.FirstOrDefault().Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CustomerViewModelList.FirstOrDefault().Address)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CustomerViewModelList.FirstOrDefault().Tel)
+            </th>
+            <th>
+
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.CustomerViewModelList != null && Model.CustomerViewModelList.Count > 0)
+        {
+            @foreach (var item in Model.CustomerViewModelList)
             {
-                @foreach (var item in Model.CustomerViewModelList)
-                {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.IdentityNum)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Gender)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Name)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Address)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Tel)
-                        </td>
-                        <td>
-                            <a onclick="showInPopup('@Url.Action("AddOrEdit","Customer",new {id=@item.Id},Context.Request.Scheme)','編輯')" class="btn btn-success text-white">
-                                編輯
-                            </a>
-                            <a onclick="jQueryAjaxDelete('@Url.Action("Remove","Customer",new {id=@item.Id},Context.Request.Scheme)','@item.Id')" class="btn btn-danger text-white">
-                                刪除
-                            </a>
-                        </td>
-                    </tr>
-                }
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.IdentityNum)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Gender)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Address)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Tel)
+                    </td>
+                    <td class="text-right">
+                        <a onclick="showInPopup('@Url.Action("AddOrEdit","Customer",new {id=@item.Id},Context.Request.Scheme)','編輯')" class="btn btn-success text-white">
+                            編輯
+                        </a>
+                        <a onclick="jQueryAjaxDelete('@Url.Action("Remove","Customer",new {id=@item.Id},Context.Request.Scheme)','@item.Id')" class="btn btn-danger text-white">
+                            刪除
+                        </a>
+                    </td>
+                </tr>
             }
-        </tbody>
-    </table>
+        }
+    </tbody>
+</table>
 
 
-    @{
-        var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
-        var nextDisabled = !Model.HasNextPage ? "disabled" : "";
-    }
+@{
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+}
 
 
+
+@Model.PageNumber / @Model.TotalPages
+<nav aria-label="Page navigation" id="navigation">
+    <ul class="pagination justify-content-center">
+        <li class="page-item @prevDisabled" data-num="@(Model.PageNumber - 1)"><a class="page-link" href="#" onclick="jQueryAjaxPagePost(@(Model.PageNumber - 1))">上一頁</a></li>
+        @for (var i = 1; i <= Model.TotalPages; i++)
+        {
+            <li class="page-item" data-num=@i><a class="page-link" href="#" onclick="jQueryAjaxPagePost(@i)">@i</a></li>
+        }
+        <li class="page-item @nextDisabled" data-num="@(Model.PageNumber + 1)"><a class="page-link" href="#" onclick="jQueryAjaxPagePost(@(Model.PageNumber + 1))">下一頁</a></li>
+    </ul>
+</nav>
+
+@Html.AntiForgeryToken()
+
+@*<input type="submit"
+           asp-for="@Model.PageNumber"
+           asp-route-pageNumber="@(Model.PageNumber - 1)"
+           class="btn btn-primary btn-sm @prevDisabled"
+           value="@(Model.PageNumber - 1)" />
 
     @Model.PageNumber / @Model.TotalPages
-    <nav aria-label="Page navigation" id="navigation">
-        <ul class="pagination justify-content-center">
-            <li class="page-item @prevDisabled" data-num="@(Model.PageNumber - 1)"><a class="page-link" href="#" onclick="jQueryAjaxPagePost(@(Model.PageNumber - 1))">上一頁</a></li>
-            @for (var i = 1; i <= Model.TotalPages; i++)
-            {
-                <li class="page-item" data-num=@i><a class="page-link" href="#" onclick="jQueryAjaxPagePost(@i)">@i</a></li>
-            }
-            <li class="page-item @nextDisabled" data-num="@(Model.PageNumber + 1)"><a class="page-link" href="#" onclick="jQueryAjaxPagePost(@(Model.PageNumber + 1))">下一頁</a></li>
-        </ul>
-    </nav>
 
-    @Html.AntiForgeryToken()
-
-    @*<input type="submit"
-               asp-for="@Model.PageNumber"
-               asp-route-pageNumber="@(Model.PageNumber - 1)"
-               class="btn btn-primary btn-sm @prevDisabled"
-               value="@(Model.PageNumber - 1)" />
-
-        @Model.PageNumber / @Model.TotalPages
-
-        <input type="submit"
-               asp-for="@Model.PageNumber"
-               asp-route-pageNumber="@(Model.PageNumber + 1)"
-               class="btn btn-primary btn-sm @nextDisabled"
-               value="@(Model.PageNumber + 1)" />*@
+    <input type="submit"
+           asp-for="@Model.PageNumber"
+           asp-route-pageNumber="@(Model.PageNumber + 1)"
+           class="btn btn-primary btn-sm @nextDisabled"
+           value="@(Model.PageNumber + 1)" />*@
 
