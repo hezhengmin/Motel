@@ -20,28 +20,25 @@
     </div>
 </div>
 
-
-
-
 <table class="table table-striped">
     <thead>
         <tr>
-            <th>
+            <th style="width: 140px;">
                 @Html.DisplayNameFor(model => model.CustomerViewModelList.FirstOrDefault().IdentityNum)
             </th>
-            <th>
+            <th style="width: 65px;">
                 @Html.DisplayNameFor(model => model.CustomerViewModelList.FirstOrDefault().Gender)
             </th>
-            <th>
+            <th style="width: 120px;">
                 @Html.DisplayNameFor(model => model.CustomerViewModelList.FirstOrDefault().Name)
             </th>
-            <th>
+            <th style="width: auto;">
                 @Html.DisplayNameFor(model => model.CustomerViewModelList.FirstOrDefault().Address)
             </th>
-            <th>
+            <th style="width: 120px;">
                 @Html.DisplayNameFor(model => model.CustomerViewModelList.FirstOrDefault().Tel)
             </th>
-            <th>
+            <th style="width: 145px;">
 
             </th>
         </tr>
@@ -71,7 +68,7 @@
                         <a onclick="showInPopup('@Url.Action("AddOrEdit","Customer",new {id=@item.Id},Context.Request.Scheme)','編輯')" class="btn btn-success text-white">
                             編輯
                         </a>
-                        <a onclick="jQueryAjaxDelete('@Url.Action("Remove","Customer",new {id=@item.Id},Context.Request.Scheme)','@item.Id')" class="btn btn-danger text-white">
+                        <a onclick="jQueryAjaxDelete('@Url.Action("Remove","Customer",new {id=@item.Id},Context.Request.Scheme)', '@item.Id', '@Model.PageNumber')" class="btn btn-danger text-white">
                             刪除
                         </a>
                     </td>
@@ -92,12 +89,12 @@
 @Model.PageNumber / @Model.TotalPages
 <nav aria-label="Page navigation" id="navigation">
     <ul class="pagination justify-content-center">
-        <li class="page-item @prevDisabled" data-num="@(Model.PageNumber - 1)"><a class="page-link" href="#" onclick="jQueryAjaxPagePost(@(Model.PageNumber - 1))">上一頁</a></li>
+        <li class="page-item @prevDisabled" data-num="@(Model.PageNumber - 1)"><a class="page-link" href="javascript:void(0);" onclick="jQueryAjaxPagePost(@(Model.PageNumber - 1))">上一頁</a></li>
         @for (var i = 1; i <= Model.TotalPages; i++)
         {
-            <li class="page-item" data-num=@i><a class="page-link" href="#" onclick="jQueryAjaxPagePost(@i)">@i</a></li>
+            <li class="page-item @(Model.PageNumber ==i ? "active" : "")"><a class="page-link" href="javascript:void(0)" onclick="jQueryAjaxPagePost(@i)">@i</a></li>
         }
-        <li class="page-item @nextDisabled" data-num="@(Model.PageNumber + 1)"><a class="page-link" href="#" onclick="jQueryAjaxPagePost(@(Model.PageNumber + 1))">下一頁</a></li>
+        <li class="page-item @nextDisabled" data-num="@(Model.PageNumber + 1)"><a class="page-link" href="javascript:void(0)" onclick="jQueryAjaxPagePost(@(Model.PageNumber + 1))">下一頁</a></li>
     </ul>
 </nav>
 

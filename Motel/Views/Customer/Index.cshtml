@@ -41,17 +41,15 @@
 
             $pages.on("click", function (e) {
                 e.preventDefault();
-                let pageNumber = $(this).data("num");
+                //let pageNumber = $(this).data("num");
 
-                jQueryAjaxPagePost(pageNumber);
+                
             });
 
         });
 
 
         jQueryAjaxPagePost = (pageNumber) => {
-
-            console.log($search.val(), $("#SearchString").val());
 
             let model = {
                 "SearchString": $("#SearchString").val(),
@@ -84,6 +82,7 @@
 
 
         showInPopup = (url, title) => {
+
             $.ajax({
                 type: "GET",
                 url: url
@@ -139,6 +138,7 @@
 
         //新增或編輯
         jQueryAjaxPost = form => {
+
             try {
                 $.ajax({
                     type: "POST",
@@ -166,15 +166,22 @@
         }
 
         //刪除
-        jQueryAjaxDelete = (url, id) => {
+        jQueryAjaxDelete = (url, id, pageNumber) => {
+
+            let model = {
+                "Id": id,
+                "PageNumber": pageNumber,
+                "SearchString": $("#SearchString").val()
+            };
+
             if (confirm("你確定要刪除嗎?")) {
                 try {
                     $.ajax({
                         type: "Delete",
                         url: url,
-                        data: JSON.stringify({ id: id }),
-                        contentType: false, //sending data to the server , default: 'application/x-www-form-urlencoded; charset=UTF-8'
-                        processData: false
+                        dataType: "json",
+                        contentType: "application/json; charset=utf-8",
+                        data: JSON.stringify(model)
                     }).done(function (res) {
                         $view.html(res.html);
                     }).fail(function (jqXHR, textStatus, errorThrown) {

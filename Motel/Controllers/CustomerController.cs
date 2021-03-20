@@ -78,10 +78,10 @@ namespace Motel.Controllers
         }
 
         [HttpDelete]
-        public async Task<IActionResult> Remove(Guid id)
+        public async Task<IActionResult> Remove([FromBody] CustomerDeleteViewModel customerDeleteVM)
         {
-            await _CustomerService.RemoveCustomer(id);
-            var model = await _CustomerService.GetCustomerList(1, pageSize);
+            await _CustomerService.RemoveCustomer(customerDeleteVM.Id);
+            var model = await _CustomerService.GetCustomerList(customerDeleteVM, pageSize);
             return Json(new { html = Helper.RenderRazorViewToString(this, "_IndexPartial", model) });
         }
     }

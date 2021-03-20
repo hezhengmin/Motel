@@ -47,6 +47,17 @@ namespace Application.Services
             return query;
         }
 
+        public async Task<CustomerIndexViewModel> GetCustomerList(CustomerDeleteViewModel customerDeleteVM, int pageSize)
+        {
+            var pageNumber = customerDeleteVM.PageNumber == 0 ? 1 : customerDeleteVM.PageNumber;
+            var query = _mapper.Map<CustomerIndexViewModel>(await _CustomerRepository.GetCustomerList(customerDeleteVM.SearchString, pageNumber, pageSize));
+
+            if (!string.IsNullOrEmpty(customerDeleteVM.SearchString))
+                query.SearchString = customerDeleteVM.SearchString;
+
+            return query;
+        }
+
         public async Task AddCustomer(CustomerViewModel customerVM)
         {
             var Customer = _mapper.Map<Customer>(customerVM);
@@ -67,5 +78,7 @@ namespace Application.Services
         {
             return _CustomerRepository.GetCustomerExists(id);
         }
+
+        
     }
 }
