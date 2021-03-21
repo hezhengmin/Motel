@@ -58,6 +58,10 @@ namespace Infrastructure.Data
                     .HasMaxLength(10)
                     .HasComment("客戶姓名");
 
+                entity.Property(e => e.SysDate)
+                    .HasColumnType("datetime")
+                    .HasComment("系統日期");
+
                 entity.Property(e => e.Tel)
                     .IsRequired()
                     .HasMaxLength(20)
@@ -103,6 +107,10 @@ namespace Infrastructure.Data
                     .HasColumnType("money")
                     .HasComment("房間價格");
 
+                entity.Property(e => e.SysDate)
+                    .HasColumnType("datetime")
+                    .HasComment("系統日期");
+
                 entity.HasOne(d => d.Customer)
                     .WithMany(p => p.OccupiedRoom)
                     .HasForeignKey(d => d.CustomerId)
@@ -134,6 +142,10 @@ namespace Infrastructure.Data
                     .HasComment("預訂者姓名");
 
                 entity.Property(e => e.RoomId).HasComment("");
+
+                entity.Property(e => e.SysDate)
+                    .HasColumnType("datetime")
+                    .HasComment("系統日期");
 
                 entity.Property(e => e.Tel)
                     .IsRequired()
@@ -176,6 +188,10 @@ namespace Infrastructure.Data
 
                 entity.Property(e => e.RoomTypeId).HasComment("指定房屋類別");
 
+                entity.Property(e => e.SysDate)
+                    .HasColumnType("datetime")
+                    .HasComment("系統日期");
+
                 entity.HasOne(d => d.RoomType)
                     .WithMany(p => p.Room)
                     .HasForeignKey(d => d.RoomTypeId)
@@ -188,6 +204,10 @@ namespace Infrastructure.Data
                 entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
 
                 entity.Property(e => e.State).HasComment("狀態");
+
+                entity.Property(e => e.SysDate)
+                    .HasColumnType("datetime")
+                    .HasComment("系統日期");
 
                 entity.Property(e => e.Type).HasComment("種類");
 
@@ -231,6 +251,10 @@ namespace Infrastructure.Data
                     .HasColumnName("QKPrice")
                     .HasColumnType("money")
                     .HasComment("休息價(元/3hr)");
+
+                entity.Property(e => e.SysDate)
+                    .HasColumnType("datetime")
+                    .HasComment("系統日期");
 
                 entity.Property(e => e.Tv)
                     .HasColumnName("TV")

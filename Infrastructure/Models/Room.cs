@@ -20,6 +20,7 @@ namespace Infrastructure.Models
         public Guid RoomTypeId { get; set; }
         public string Describe { get; set; }
         public string Position { get; set; }
+        public DateTime SysDate { get; set; }
 
         public virtual RoomType RoomType { get; set; }
         public virtual RoomState RoomState { get; set; }

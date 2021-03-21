@@ -17,6 +17,7 @@ namespace Infrastructure.Models
         public string Name { get; set; }
         public string Tel { get; set; }
         public bool CheckIn { get; set; }
+        public DateTime SysDate { get; set; }
 
         public virtual Customer Customer { get; set; }
         public virtual Room Room { get; set; }

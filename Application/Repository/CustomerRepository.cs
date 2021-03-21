@@ -25,13 +25,17 @@ namespace Application.Repository
 
         public async Task<List<Customer>> GetCustomerList()
         {
-            return await _dbContext.Customer.ToListAsync();
+            return await _dbContext.Customer.OrderByDescending(m => m.SysDate).ToListAsync();
         }
 
         public async Task<PaginatedList<Customer>> GetCustomerList(int pageNumber, int pageSize)
         {
             var query = _dbContext.Set<Customer>().AsQueryable();
-            var list =  await PaginatedList<Customer>.CreateAsync(query, pageNumber, pageSize);
+
+            query = query.OrderByDescending(m => m.SysDate);
+
+            var list = await PaginatedList<Customer>.CreateAsync(query, pageNumber, pageSize);
+            
             return list;
         }
 
@@ -44,13 +48,16 @@ namespace Application.Repository
                 query = query.Where(m => m.Name.Contains(searchString));
             }
 
+            query = query.OrderByDescending(m => m.SysDate);
+
             var list = await PaginatedList<Customer>.CreateAsync(query, pageNumber, pageSize);
-            
+
             return list;
         }
 
         public async Task AddCustomer(Customer customer)
         {
+            customer.SysDate = DateTime.Now;
             _dbContext.Add(customer);
             await _dbContext.SaveChangesAsync();
         }

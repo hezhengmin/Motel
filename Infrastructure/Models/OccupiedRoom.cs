@@ -21,6 +21,7 @@ namespace Infrastructure.Models
         public decimal? Price { get; set; }
         public int? Days { get; set; }
         public bool OccupyType { get; set; }
+        public DateTime SysDate { get; set; }
 
         public virtual Customer Customer { get; set; }
         public virtual Room Room { get; set; }

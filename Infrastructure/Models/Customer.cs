@@ -21,6 +21,7 @@ namespace Infrastructure.Models
         public string Name { get; set; }
         public string Address { get; set; }
         public string Tel { get; set; }
+        public DateTime SysDate { get; set; }
 
         public virtual ICollection<OccupiedRoom> OccupiedRoom { get; set; }
         public virtual ICollection<Reservation> Reservation { get; set; }

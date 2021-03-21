@@ -34,25 +34,18 @@
         const $modalTitle = $("#modal .modal-title");
         const $modalBoby = $("#modal .modal-body");
         const $modalDialog = $("#modal .modal-dialog");
-        const $pages = $("#navigation > .pagination li.page-item").not('.disabled');
+
         let $search = $("#SearchString");
 
         $(function () {
-
-            $pages.on("click", function (e) {
-                e.preventDefault();
-                //let pageNumber = $(this).data("num");
-
-                
-            });
-
+            
         });
 
-
+        //分頁
         jQueryAjaxPagePost = (pageNumber) => {
 
             let model = {
-                "SearchString": $("#SearchString").val(),
+                "SearchString": $search.val(),
                 "PageNumber": pageNumber,
                 "TotalPages": undefined,
                 "HasPreviousPage": undefined,
@@ -101,20 +94,7 @@
 
         //搜尋
         jQueryAjaxSearchPost = form => {
-
-            //var data = JSON.stringify($(form).serializeArray());
-
-            //console.log(data);
-
-            //let model = {
-            //    "SearchString": "",
-            //    "PageNumber": pageNumber,
-            //    "TotalPages": undefined,
-            //    "HasPreviousPage": undefined,
-            //    "HasNextPage": undefined,
-            //    "CustomerViewModelList": []
-            //};
-
+            
             try {
                 $.ajax({
                     type: "POST",
@@ -171,7 +151,7 @@
             let model = {
                 "Id": id,
                 "PageNumber": pageNumber,
-                "SearchString": $("#SearchString").val()
+                "SearchString": $search.val()
             };
 
             if (confirm("你確定要刪除嗎?")) {

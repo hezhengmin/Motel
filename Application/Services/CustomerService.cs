@@ -12,34 +12,34 @@ namespace Application.Services
     public class CustomerService : ICustomerService
     {
         private readonly IMapper _mapper;
-        private readonly ICustomerRepository _CustomerRepository;
+        private readonly ICustomerRepository _customerRepository;
 
         public CustomerService(IMapper mapper, ICustomerRepository CustomerRepository)
         {
             _mapper = mapper;
-            _CustomerRepository = CustomerRepository;
+            _customerRepository = CustomerRepository;
         }
 
         public async Task<CustomerViewModel> GetCustomer(Guid id)
         {
-            return _mapper.Map<CustomerViewModel>(await _CustomerRepository.GetCustomer(id));
+            return _mapper.Map<CustomerViewModel>(await _customerRepository.GetCustomer(id));
         }
 
         public async Task<List<CustomerViewModel>> GetCustomerList()
         {
-            return _mapper.Map<List<CustomerViewModel>>(await _CustomerRepository.GetCustomerList());
+            return _mapper.Map<List<CustomerViewModel>>(await _customerRepository.GetCustomerList());
         }
 
         public async Task<CustomerIndexViewModel> GetCustomerList(int pageNumber, int pageSize)
         {
-            var query = _mapper.Map<CustomerIndexViewModel>(await _CustomerRepository.GetCustomerList(pageNumber, pageSize));
+            var query = _mapper.Map<CustomerIndexViewModel>(await _customerRepository.GetCustomerList(pageNumber, pageSize));
             return query;
         }
 
         public async Task<CustomerIndexViewModel> GetCustomerList(CustomerIndexViewModel customerIndexVM, int pageSize)
         {
             var pageNumber = customerIndexVM.PageNumber == 0 ? 1 : customerIndexVM.PageNumber;
-            var query = _mapper.Map<CustomerIndexViewModel>(await _CustomerRepository.GetCustomerList(customerIndexVM.SearchString, pageNumber, pageSize));
+            var query = _mapper.Map<CustomerIndexViewModel>(await _customerRepository.GetCustomerList(customerIndexVM.SearchString, pageNumber, pageSize));
 
             if (!string.IsNullOrEmpty(customerIndexVM.SearchString))
                 query.SearchString = customerIndexVM.SearchString;
@@ -50,7 +50,7 @@ namespace Application.Services
         public async Task<CustomerIndexViewModel> GetCustomerList(CustomerDeleteViewModel customerDeleteVM, int pageSize)
         {
             var pageNumber = customerDeleteVM.PageNumber == 0 ? 1 : customerDeleteVM.PageNumber;
-            var query = _mapper.Map<CustomerIndexViewModel>(await _CustomerRepository.GetCustomerList(customerDeleteVM.SearchString, pageNumber, pageSize));
+            var query = _mapper.Map<CustomerIndexViewModel>(await _customerRepository.GetCustomerList(customerDeleteVM.SearchString, pageNumber, pageSize));
 
             if (!string.IsNullOrEmpty(customerDeleteVM.SearchString))
                 query.SearchString = customerDeleteVM.SearchString;
@@ -60,25 +60,28 @@ namespace Application.Services
 
         public async Task AddCustomer(CustomerViewModel customerVM)
         {
-            var Customer = _mapper.Map<Customer>(customerVM);
-            await _CustomerRepository.AddCustomer(Customer);
+            var customer = _mapper.Map<Customer>(customerVM);
+            await _customerRepository.AddCustomer(customer);
         }
+
         public async Task UpdateCustomer(CustomerViewModel customerVM)
         {
-            var Customer = _mapper.Map<Customer>(customerVM);
-            await _CustomerRepository.UpdateCustomer(Customer);
+            var entity = await _customerRepository.GetCustomer(customerVM.Id);
+
+            var customer = _mapper.Map(customerVM, entity);
+
+            await _customerRepository.UpdateCustomer(customer);
         }
 
         public async Task RemoveCustomer(Guid id)
         {
-            await _CustomerRepository.RemoveCustomer(id);
+            await _customerRepository.RemoveCustomer(id);
         }
 
         public bool GetCustomerExists(Guid id)
         {
-            return _CustomerRepository.GetCustomerExists(id);
+            return _customerRepository.GetCustomerExists(id);
         }
 
-        
     }
 }

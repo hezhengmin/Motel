@@ -12,6 +12,7 @@ namespace Infrastructure.Models
         public Guid Id { get; set; }
         public byte State { get; set; }
         public bool Type { get; set; }
+        public DateTime SysDate { get; set; }
 
         public virtual Room IdNavigation { get; set; }
     }

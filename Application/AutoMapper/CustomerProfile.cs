@@ -11,9 +11,11 @@ namespace Application.AutoMapper
         public CustomerProfile()
         {
             CreateMap<Customer, CustomerViewModel>();
+            
             CreateMap<CustomerViewModel, Customer>();
+          
             CreateMap<PaginatedList<Customer>, CustomerIndexViewModel>()
-                .ForMember(dest=>dest.CustomerViewModelList , opt => opt.MapFrom(src =>src.ToList()));
+                .ForMember(dest => dest.CustomerViewModelList, opt => opt.MapFrom(src => src.ToList()));
         }
     }
 }

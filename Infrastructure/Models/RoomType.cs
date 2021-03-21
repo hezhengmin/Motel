@@ -24,6 +24,7 @@ namespace Infrastructure.Models
         public decimal Qk2price { get; set; }
         public bool AirCondition { get; set; }
         public bool Tv { get; set; }
+        public DateTime SysDate { get; set; }
 
         public virtual ICollection<Room> Room { get; set; }
     }

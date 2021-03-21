@@ -19,9 +19,10 @@ namespace Motel.Controllers
         }
 
         // GET: Customer
-        public async Task<IActionResult> Index(int? pageNumber)
+        public async Task<IActionResult> Index()
         {
-            var model = await _CustomerService.GetCustomerList(pageNumber ?? 1, pageSize);
+            int pageNumber = 1;
+            var model = await _CustomerService.GetCustomerList(pageNumber, pageSize);
             return View(model);
         }
 
