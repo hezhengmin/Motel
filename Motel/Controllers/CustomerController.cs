@@ -10,19 +10,19 @@ namespace Motel.Controllers
 {
     public class CustomerController : Controller
     {
-        private readonly ICustomerService _CustomerService;
+        private readonly ICustomerService _customerService;
         private int pageSize = 5;
 
-        public CustomerController(ICustomerService CustomerService)
+        public CustomerController(ICustomerService customerService)
         {
-            _CustomerService = CustomerService;
+            _customerService = customerService;
         }
 
         // GET: Customer
         public async Task<IActionResult> Index()
         {
             int pageNumber = 1;
-            var model = await _CustomerService.GetCustomerList(pageNumber, pageSize);
+            var model = await _customerService.GetCustomerList(pageNumber, pageSize);
             return View(model);
         }
 
@@ -31,7 +31,7 @@ namespace Motel.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Index([FromBody] CustomerIndexViewModel customerIndexVM)
         {
-            var model = await _CustomerService.GetCustomerList(customerIndexVM, pageSize);
+            var model = await _customerService.GetCustomerList(customerIndexVM, pageSize);
             return Json(new { isValid = true, html = Helper.RenderRazorViewToString(this, "_IndexPartial", model) });
         }
 
@@ -39,7 +39,7 @@ namespace Motel.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Search([FromForm] CustomerIndexViewModel customerIndexVM)
         {
-            var model = await _CustomerService.GetCustomerList(customerIndexVM, pageSize);
+            var model = await _customerService.GetCustomerList(customerIndexVM, pageSize);
             return Json(new { isValid = true, html = Helper.RenderRazorViewToString(this, "_IndexPartial", model) });
         }
 
@@ -52,7 +52,7 @@ namespace Motel.Controllers
             }
             else
             {
-                var customerVM = await _CustomerService.GetCustomer(id.Value);
+                var customerVM = await _customerService.GetCustomer(id.Value);
                 return Json(new { html = Helper.RenderRazorViewToString(this, "AddOrEdit", customerVM) });
             }
 
@@ -61,16 +61,16 @@ namespace Motel.Controllers
         // POST: Customer/AddOrEdit
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddOrEdit(CustomerViewModel customerVM)
+        public async Task<IActionResult> AddOrEdit([FromBody] CustomerViewModel customerVM)
         {
             if (ModelState.IsValid)
             {
                 if (customerVM.Id == null || customerVM.Id == Guid.Empty)
-                    await _CustomerService.AddCustomer(customerVM);
+                    await _customerService.AddCustomer(customerVM);
                 else
-                    await _CustomerService.UpdateCustomer(customerVM);
+                    await _customerService.UpdateCustomer(customerVM);
 
-                var model = await _CustomerService.GetCustomerList(1, pageSize);
+                var model = await _customerService.GetCustomerList(1, pageSize);
 
                 return Json(new { isValid = true, html = Helper.RenderRazorViewToString(this, "_IndexPartial", model) });
             }
@@ -81,8 +81,8 @@ namespace Motel.Controllers
         [HttpDelete]
         public async Task<IActionResult> Remove([FromBody] CustomerDeleteViewModel customerDeleteVM)
         {
-            await _CustomerService.RemoveCustomer(customerDeleteVM.Id);
-            var model = await _CustomerService.GetCustomerList(customerDeleteVM, pageSize);
+            await _customerService.RemoveCustomer(customerDeleteVM.Id);
+            var model = await _customerService.GetCustomerList(customerDeleteVM, pageSize);
             return Json(new { html = Helper.RenderRazorViewToString(this, "_IndexPartial", model) });
         }
     }
