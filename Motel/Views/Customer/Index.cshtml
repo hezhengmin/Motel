@@ -1,4 +1,4 @@
-﻿@model Application.ViewModels.CustomerIndexViewModel
+﻿@model Application.ViewModels.Customer.CustomerIndexViewModel
 
 @{
     ViewData["Title"] = "Index";
@@ -28,7 +28,7 @@
 @section Scripts{
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 
-    <script>
+<script>
         const $view = $("#view");
         const $modal = $("#modal");
         const $modalTitle = $("#modal .modal-title");
@@ -137,33 +137,24 @@
         //新增或編輯
         jQueryAjaxPost = form => {
 
-            //var geeks = {
-            //    name: "Shubham",
-            //    age: 21,
-            //    Intern: "Geeksoforgeeks",
-            //    Place: "Work from Home"
-            //};
-
-            //console.log(geeks, JSON.stringify(geeks));
-
             let $form = $(form).serializeObject();
-            console.log("form", $form);
-            console.log("JSON.stringify($form)", JSON.stringify($form));
-            //delete $form[__RequestVerificationToken];
-            //console.log("JSON.stringify($form)", JSON.stringify($form));
-
+            console.log($form);
             let model = {
-                Id: $form.Id,
-                IdentityNum: $form.IdentityNum,
-                Gender: $form.Gender,
-                Name: $form.Name,
-                Address: $form.Address,
-                Tel: $form.Tel
-                //__RequestVerificationToken: "CfDJ8MOqASPYQldBl7LqFNKMeal2HvCPgkm2th1yrgEU5Wkes5_5XvafIDueyyeG1wZaDKhDdf_E5PJBji6VUhELGNK23WyZkkkcAfE_2nwmPu9X0e8tHULgtIYNlfH5XjxyXNuv_KwL7odk2e8fkzrWqAg"
+                FilterViewModel: {
+                    SearchString: $("#SearchString").val(),
+                    PageNumber: $("#navigation li.active > a.page-link").text()
+                },
+                CustomerViewModel: {
+                    Id: $form.Id,
+                    IdentityNum: $form.IdentityNum,
+                    Gender: $form.Gender,
+                    Name: $form.Name,
+                    Address: $form.Address,
+                    Tel: $form.Tel
+                }
             };
 
-            console.log("model", model);
-            console.log("JSON.stringify(model)", JSON.stringify(model));
+            console.log(model);
 
             try {
                 $.ajax({
@@ -225,5 +216,5 @@
 
             return false;
         }
-    </script>
+</script>
 }

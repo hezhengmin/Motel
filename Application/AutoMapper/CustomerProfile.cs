@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Infrastructure.Models;
 using Application.Paging;
-using Application.ViewModels;
+using Application.ViewModels.Customer;
 using System.Linq;
 
 namespace Application.AutoMapper

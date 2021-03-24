@@ -7,7 +7,7 @@ using Application.ViewModels.Enums;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
-namespace Application.ViewModels
+namespace Application.ViewModels.Customer
 {
     public class CustomerViewModel
     {

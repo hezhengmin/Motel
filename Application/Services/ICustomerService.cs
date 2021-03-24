@@ -1,4 +1,4 @@
-﻿using Application.ViewModels;
+﻿using Application.ViewModels.Customer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +11,7 @@ namespace Application.Services
         Task<CustomerViewModel> GetCustomer(Guid id);
         Task<List<CustomerViewModel>> GetCustomerList();
         Task<CustomerIndexViewModel> GetCustomerList(int pageNumber, int pageSize);
+        Task<CustomerIndexViewModel> GetCustomerList(FilterViewModel filterVM, int pageSize);
         Task<CustomerIndexViewModel> GetCustomerList(CustomerDeleteViewModel customerDeleteVM, int pageSize);
         Task<CustomerIndexViewModel> GetCustomerList(CustomerIndexViewModel customerIndexVM, int pageSize);
         Task AddCustomer(CustomerViewModel customerVM);

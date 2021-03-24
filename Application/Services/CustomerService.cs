@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Application.ViewModels;
+using Application.ViewModels.Customer;
 using Application.Repository;
 using Infrastructure.Models;
 using System;
@@ -33,6 +33,17 @@ namespace Application.Services
         public async Task<CustomerIndexViewModel> GetCustomerList(int pageNumber, int pageSize)
         {
             var query = _mapper.Map<CustomerIndexViewModel>(await _customerRepository.GetCustomerList(pageNumber, pageSize));
+            return query;
+        }
+
+        public async Task<CustomerIndexViewModel> GetCustomerList(FilterViewModel filterVM, int pageSize)
+        {
+            var pageNumber = filterVM.PageNumber == 0 ? 1 : filterVM.PageNumber;
+            var query = _mapper.Map<CustomerIndexViewModel>(await _customerRepository.GetCustomerList(filterVM.SearchString, pageNumber, pageSize));
+
+            if (!string.IsNullOrEmpty(filterVM.SearchString))
+                query.SearchString = filterVM.SearchString;
+
             return query;
         }
 
@@ -82,6 +93,5 @@ namespace Application.Services
         {
             return _customerRepository.GetCustomerExists(id);
         }
-
     }
 }

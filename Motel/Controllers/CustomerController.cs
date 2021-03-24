@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Application.Services;
-using Application.ViewModels;
+using Application.ViewModels.Customer;
 
 namespace Motel.Controllers
 {
@@ -48,12 +48,16 @@ namespace Motel.Controllers
         {
             if (id == null || id == Guid.Empty)
             {
-                return Json(new { html = Helper.RenderRazorViewToString(this, "AddOrEdit", new CustomerViewModel()) });
+                var model = new CompoundViewModel();
+                model.CustomerViewModel = new CustomerViewModel();
+                return Json(new { html = Helper.RenderRazorViewToString(this, "AddOrEdit", model) });
             }
             else
             {
                 var customerVM = await _customerService.GetCustomer(id.Value);
-                return Json(new { html = Helper.RenderRazorViewToString(this, "AddOrEdit", customerVM) });
+                var model = new CompoundViewModel();
+                model.CustomerViewModel = customerVM;
+                return Json(new { html = Helper.RenderRazorViewToString(this, "AddOrEdit", model) });
             }
 
         }
@@ -61,21 +65,25 @@ namespace Motel.Controllers
         // POST: Customer/AddOrEdit
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddOrEdit([FromBody] CustomerViewModel customerVM)
+        public async Task<IActionResult> AddOrEdit([FromBody] CompoundViewModel compoundVM)
         {
             if (ModelState.IsValid)
             {
-                if (customerVM.Id == null || customerVM.Id == Guid.Empty)
-                    await _customerService.AddCustomer(customerVM);
+                if (compoundVM.CustomerViewModel.Id == null || compoundVM.CustomerViewModel.Id == Guid.Empty)
+                {
+                    await _customerService.AddCustomer(compoundVM.CustomerViewModel);
+                    var model = await _customerService.GetCustomerList(1, pageSize);
+                    return Json(new { isValid = true, html = Helper.RenderRazorViewToString(this, "_IndexPartial", model) });
+                }
                 else
-                    await _customerService.UpdateCustomer(customerVM);
-
-                var model = await _customerService.GetCustomerList(1, pageSize);
-
-                return Json(new { isValid = true, html = Helper.RenderRazorViewToString(this, "_IndexPartial", model) });
+                {
+                    await _customerService.UpdateCustomer(compoundVM.CustomerViewModel);
+                    var model = await _customerService.GetCustomerList(compoundVM.FilterViewModel, pageSize);
+                    return Json(new { isValid = true, html = Helper.RenderRazorViewToString(this, "_IndexPartial", model) });
+                }
             }
 
-            return Json(new { isValid = false, html = Helper.RenderRazorViewToString(this, "AddOrEdit", customerVM) });
+            return Json(new { isValid = false, html = Helper.RenderRazorViewToString(this, "AddOrEdit", compoundVM) });
         }
 
         [HttpDelete]
