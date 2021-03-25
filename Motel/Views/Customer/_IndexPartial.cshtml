@@ -78,15 +78,13 @@
     </tbody>
 </table>
 
-
 @{
     var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
     var nextDisabled = !Model.HasNextPage ? "disabled" : "";
 }
 
-
-
 @Model.PageNumber / @Model.TotalPages
+
 <nav aria-label="Page navigation" id="navigation">
     <ul class="pagination justify-content-center">
         <li class="page-item @prevDisabled" data-num="@(Model.PageNumber - 1)"><a class="page-link" href="javascript:void(0);" onclick="jQueryAjaxPagePost(@(Model.PageNumber - 1))">上一頁</a></li>
@@ -99,18 +97,3 @@
 </nav>
 
 @Html.AntiForgeryToken()
-
-@*<input type="submit"
-           asp-for="@Model.PageNumber"
-           asp-route-pageNumber="@(Model.PageNumber - 1)"
-           class="btn btn-primary btn-sm @prevDisabled"
-           value="@(Model.PageNumber - 1)" />
-
-    @Model.PageNumber / @Model.TotalPages
-
-    <input type="submit"
-           asp-for="@Model.PageNumber"
-           asp-route-pageNumber="@(Model.PageNumber + 1)"
-           class="btn btn-primary btn-sm @nextDisabled"
-           value="@(Model.PageNumber + 1)" />*@
-
