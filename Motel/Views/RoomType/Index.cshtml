@@ -1,4 +1,4 @@
-﻿@model Application.ViewModels.Customer.CustomerIndexViewModel
+﻿@model Application.ViewModels.RoomType.RoomTypeIndexViewModel
 
 @{
     ViewData["Title"] = "Index";
@@ -28,7 +28,7 @@
 @section Scripts{
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 
-<script>
+    <script>
         const $view = $("#view");
         const $modal = $("#modal");
         const $modalTitle = $("#modal .modal-title");
@@ -48,16 +48,12 @@
                 "TotalPages": undefined,
                 "HasPreviousPage": undefined,
                 "HasNextPage": undefined,
-                "CustomerViewModelList": []
+                "RoomTypeViewModelList": []
             };
-
-            //console.log("model", model);
-            //console.log("JSON.stringify(model)", JSON.stringify(model));
-
 
             $.ajax({
                 type: "POST",
-                url: "/Customer/Index",
+                url: "/RoomType/Index",
                 dataType: "json",
                 contentType: "application/json; charset=utf-8",
                 data: JSON.stringify(model),
@@ -117,12 +113,12 @@
         $.fn.serializeObject = function () {
             var o = {};
             var a = this.serializeArray();
+        
             $.each(a, function () {
                 if (o[this.name]) {
-                    if (!o[this.name].push) {
+                    if (!o[this.name].push && o[this.name].length == 0) {
                         o[this.name] = [o[this.name]];
                     }
-                    o[this.name].push(this.value || '');
                 } else {
                     o[this.name] = this.value || '';
                 }
@@ -133,24 +129,29 @@
         //新增或編輯
         jQueryAjaxPost = form => {
 
+            //console.log("$form", $(form));
+
             let $form = $(form).serializeObject();
-            console.log($form);
+            //console.log("$(form).serializeObject()", $form);
+
             let model = {
                 FilterViewModel: {
                     SearchString: $("#SearchString").val(),
                     PageNumber: $("#navigation li.active > a.page-link").text()
                 },
-                CustomerViewModel: {
-                    Id: $form["CustomerViewModel.Id"],
-                    IdentityNum: $form["CustomerViewModel.IdentityNum"],
-                    Gender: $form["CustomerViewModel.Gender"],
-                    Name: $form["CustomerViewModel.Name"],
-                    Address: $form["CustomerViewModel.Address"],
-                    Tel: $form["CustomerViewModel.Tel"],
+                RoomTypeViewModel: {
+                    Id: $form["RoomTypeViewModel.Id"],
+                    Name: $form["RoomTypeViewModel.Name"],
+                    Area: $form["RoomTypeViewModel.Area"],
+                    BedQuantity: $form["RoomTypeViewModel.BedQuantity"],
+                    Price: $form["RoomTypeViewModel.Price"],
+                    Hprice: $form["RoomTypeViewModel.Hprice"],
+                    Qkprice: $form["RoomTypeViewModel.Qkprice"],
+                    Qk2price: $form["RoomTypeViewModel.Qk2price"],
+                    AirCondition: $form["RoomTypeViewModel.AirCondition"],
+                    Tv: $form["RoomTypeViewModel.Tv"]
                 }
             };
-
-            console.log(model);
 
             try {
                 $.ajax({
@@ -212,5 +213,5 @@
 
             return false;
         }
-</script>
+    </script>
 }

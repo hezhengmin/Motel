@@ -13,8 +13,8 @@ namespace Application.Repository
         Task<List<Customer>> GetCustomerList();
         Task<PaginatedList<Customer>> GetCustomerList(int pageNumber, int pageSize);
         Task<PaginatedList<Customer>> GetCustomerList(string searchString, int pageNumber, int pageSize);
-        Task AddCustomer(Customer Customer);
-        Task UpdateCustomer(Customer Customer);
+        Task AddCustomer(Customer customer);
+        Task UpdateCustomer(Customer customer);
         Task RemoveCustomer(Guid id);
         bool GetCustomerExists(Guid id);
     }

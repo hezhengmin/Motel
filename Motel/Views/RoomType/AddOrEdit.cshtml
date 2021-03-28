@@ -1,0 +1,97 @@
+﻿@model Application.ViewModels.RoomType.CompoundViewModel
+
+@{
+    Layout = null;
+}
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="AddOrEdit" asp-route-id="@Model.RoomTypeViewModel.Id" onsubmit="return jQueryAjaxPost(this);">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="RoomTypeViewModel.Id" />
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="RoomTypeViewModel.Name" class="control-label"></label>
+                        <input asp-for="RoomTypeViewModel.Name" class="form-control" />
+                        <span asp-validation-for="RoomTypeViewModel.Name" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="RoomTypeViewModel.Area" class="control-label"></label>
+                        <input asp-for="RoomTypeViewModel.Area" class="form-control" />
+                        <span asp-validation-for="RoomTypeViewModel.Area" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="RoomTypeViewModel.BedQuantity" class="control-label"></label>
+                        <input asp-for="RoomTypeViewModel.BedQuantity" class="form-control" />
+                        <span asp-validation-for="RoomTypeViewModel.BedQuantity" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="RoomTypeViewModel.Price" class="control-label"></label>
+                        <input asp-for="RoomTypeViewModel.Price" class="form-control" />
+                        <span asp-validation-for="RoomTypeViewModel.Price" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="RoomTypeViewModel.Hprice" class="control-label"></label>
+                        <input asp-for="RoomTypeViewModel.Hprice" class="form-control" />
+                        <span asp-validation-for="RoomTypeViewModel.Hprice" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="RoomTypeViewModel.Qkprice" class="control-label"></label>
+                        <input asp-for="RoomTypeViewModel.Qkprice" class="form-control" />
+                        <span asp-validation-for="RoomTypeViewModel.Qkprice" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="RoomTypeViewModel.Qk2price" class="control-label"></label>
+                        <input asp-for="RoomTypeViewModel.Qk2price" class="form-control" />
+                        <span asp-validation-for="RoomTypeViewModel.Qk2price" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+
+                    </div>
+                </div>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="RoomTypeViewModel.AirCondition">
+                    @Html.DisplayNameFor(model => model.RoomTypeViewModel.AirCondition)
+                </label>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                   <input class="form-check-input" asp-for="RoomTypeViewModel.Tv">
+                   @Html.DisplayNameFor(model => model.RoomTypeViewModel.Tv)
+                </label>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="儲存" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

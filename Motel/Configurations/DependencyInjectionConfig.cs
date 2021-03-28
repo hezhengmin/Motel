@@ -16,6 +16,8 @@ namespace Motel.Configurations
 
             services.AddScoped<ICustomerService, CustomerService>();
             services.AddScoped<ICustomerRepository, CustomerRepository>();
+            services.AddScoped<IRoomTypeService, RoomTypeService>();
+            services.AddScoped<IRoomTypeRepository, RoomTypeRepository>();
         }
     }
 }
