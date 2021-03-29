@@ -14,29 +14,29 @@ namespace Application.ViewModels.RoomType
         [Display(Name = "類型名稱")]
         public string Name { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "{0}必填")]
         [Display(Name = "房間面積")]
-        public double Area { get; set; }
+        public double? Area { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "{0}必填")]
         [Display(Name = "配備床數")]
-        public int BedQuantity { get; set; }
+        public int? BedQuantity { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "{0}必填")]
         [Display(Name = "平日價")]
-        public decimal Price { get; set; }
+        public decimal? Price { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "{0}必填")]
         [Display(Name = "假日價")]
-        public decimal Hprice { get; set; }
+        public decimal? Hprice { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "{0}必填")]
         [Display(Name = "休息價(元/3hr)")]
-        public decimal Qkprice { get; set; }
+        public decimal? Qkprice { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "{0}必填")]
         [Display(Name = "休息價(元/2hr)")]
-        public decimal Qk2price { get; set; }
+        public decimal? Qk2price { get; set; }
 
         [Required]
         [Display(Name = "是否有空調")]
