@@ -172,12 +172,10 @@ namespace Infrastructure.Data
 
                 entity.Property(e => e.Describe)
                     .HasMaxLength(50)
-                    .IsUnicode(false)
                     .HasComment("房間位置");
 
                 entity.Property(e => e.Position)
-                    .HasMaxLength(10)
-                    .IsUnicode(false)
+                    .HasMaxLength(50)
                     .HasComment("房間描述");
 
                 entity.Property(e => e.RoomNumber)
