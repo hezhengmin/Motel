@@ -4,8 +4,9 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using Application.ViewModels.Enums;
+using Application.ViewModels.RoomType;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 
 namespace Application.ViewModels.Room
 {
@@ -30,5 +31,9 @@ namespace Application.ViewModels.Room
         [StringLength(50)]
         [Display(Name = "房間位置")]
         public string Position { get; set; }
+
+        public List<SelectListItem> RoomTypeList { get; set; }
+
+        public RoomTypeViewModel RoomType { get; set; }
     }
 }

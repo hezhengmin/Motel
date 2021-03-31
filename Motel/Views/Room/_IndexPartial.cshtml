@@ -1,0 +1,111 @@
+﻿@model Application.ViewModels.Room.RoomIndexViewModel
+
+
+<div class="row">
+    <div class="col-auto mr-auto">
+        <form class="form-inline" asp-action="Search" onsubmit="return jQueryAjaxSearchPost(this);">
+            <div class="form-group mx-sm-3 mb-2">
+                <label asp-for="SearchString" class="mr-3">
+                    @Html.DisplayNameFor(model => model.RoomViewModelList.FirstOrDefault().RoomNumber)
+                </label>
+                <input asp-for="SearchString" class="form-control" />
+            </div>
+            <button type="submit" class="btn btn-primary mb-2">搜尋</button>
+        </form>
+    </div>
+    <div class="col-auto mr-3">
+        <a onclick="showInPopup('@Url.Action("AddOrEdit","Room", new { id = Guid.Empty} ,Context.Request.Scheme)','新增')" class="btn btn-primary text-white">
+            新增
+        </a>
+    </div>
+</div>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.RoomViewModelList.FirstOrDefault().RoomNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RoomViewModelList.FirstOrDefault().RoomType.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RoomViewModelList.FirstOrDefault().RoomType.Price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RoomViewModelList.FirstOrDefault().RoomType.Hprice)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RoomViewModelList.FirstOrDefault().RoomType.Qkprice)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RoomViewModelList.FirstOrDefault().RoomType.Qk2price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RoomViewModelList.FirstOrDefault().Position)
+            </th>
+            <th>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.RoomViewModelList != null && Model.RoomViewModelList.Count > 0)
+        {
+            @foreach (var item in Model.RoomViewModelList)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RoomNumber)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RoomType.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RoomType.Price)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RoomType.Hprice)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RoomType.Qkprice)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RoomType.Qk2price)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Position)
+                    </td>
+
+                    <td class="text-right">
+                        <a onclick="showInPopup('@Url.Action("AddOrEdit","Room",new {id=@item.Id},Context.Request.Scheme)','編輯')" class="btn btn-success text-white">
+                            編輯
+                        </a>
+                        <a onclick="jQueryAjaxDelete('@Url.Action("Remove","Room",new {id=@item.Id},Context.Request.Scheme)', '@item.Id', '@Model.PageNumber')" class="btn btn-danger text-white">
+                            刪除
+                        </a>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+@{
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+}
+
+@Model.PageNumber / @Model.TotalPages
+
+<nav aria-label="Page navigation" id="navigation">
+    <ul class="pagination justify-content-center">
+        <li class="page-item @prevDisabled" data-num="@(Model.PageNumber - 1)"><a class="page-link" href="javascript:void(0);" onclick="jQueryAjaxPagePost(@(Model.PageNumber - 1))">上一頁</a></li>
+        @for (var i = 1; i <= Model.TotalPages; i++)
+        {
+            <li class="page-item @(Model.PageNumber ==i ? "active" : "")"><a class="page-link" href="javascript:void(0)" onclick="jQueryAjaxPagePost(@i)">@i</a></li>
+        }
+        <li class="page-item @nextDisabled" data-num="@(Model.PageNumber + 1)"><a class="page-link" href="javascript:void(0)" onclick="jQueryAjaxPagePost(@(Model.PageNumber + 1))">下一頁</a></li>
+    </ul>
+</nav>
+
+@Html.AntiForgeryToken()

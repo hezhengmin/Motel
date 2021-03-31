@@ -13,6 +13,6 @@ namespace Application.ViewModels.Room
         public int TotalPages { get; set; }
         public bool HasPreviousPage { get; set; }
         public bool HasNextPage { get; set; }
-        public PaginatedList<RoomViewModel> CustomerViewModelList { get; set; }
+        public PaginatedList<RoomViewModel> RoomViewModelList { get; set; }
     }
 }

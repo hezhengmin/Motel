@@ -1,0 +1,212 @@
+﻿@model Application.ViewModels.Room.RoomIndexViewModel
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div id="view">
+    @await Html.PartialAsync("_IndexPartial", Model)
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" id="modal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        const $view = $("#view");
+        const $modal = $("#modal");
+        const $modalTitle = $("#modal .modal-title");
+        const $modalBoby = $("#modal .modal-body");
+        const $modalDialog = $("#modal .modal-dialog");
+
+        $(function () {
+
+        });
+
+        //分頁
+        jQueryAjaxPagePost = (pageNumber) => {
+
+            let model = {
+                SearchString: $("#SearchString").val(),
+                PageNumber: pageNumber,
+                TotalPages: undefined,
+                HasPreviousPage: undefined,
+                HasNextPage: undefined,
+                RoomViewModelList: []
+            };
+
+            $.ajax({
+                type: "POST",
+                url: "/Room/Index",
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(model),
+                processData: false,
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("X-XSRF-TOKEN",
+                        $('input:hidden[name="__RequestVerificationToken"]').val());
+                }
+            }).done(function (res) {
+                if (res.isValid) {
+                    $view.html(res.html)
+                }
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                console.log(jqXHR, textStatus, errorThrown);
+            });
+        }
+
+
+        showInPopup = (url, title) => {
+
+            $.ajax({
+                type: "GET",
+                url: url
+            }).done(function (res) {
+                $modalBoby.html(res.html);
+                $modalTitle.html(title);
+                $modal.modal("show");
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                console.log(jqXHR, textStatus, errorThrown);
+            });
+        }
+
+        //搜尋
+        jQueryAjaxSearchPost = form => {
+
+            try {
+                $.ajax({
+                    type: "POST",
+                    url: form.action,
+                    data: new FormData(form),
+                    contentType: false,
+                    processData: false
+                }).done(function (res) {
+                    if (res.isValid) {
+                        $view.html(res.html)
+                    }
+                }).fail(function (jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR, textStatus, errorThrown);
+                });
+                //to prevent default form submit event
+                return false;
+            } catch (ex) {
+                console.log(ex)
+            }
+        }
+
+        $.fn.serializeObject = function () {
+            var o = {};
+            var a = this.serializeArray();
+            $.each(a, function () {
+                if (o[this.name]) {
+                    if (!o[this.name].push) {
+                        o[this.name] = [o[this.name]];
+                    }
+                    o[this.name].push(this.value || '');
+                } else {
+                    o[this.name] = this.value || '';
+                }
+            });
+            return o;
+        };
+
+        //新增或編輯
+        jQueryAjaxPost = form => {
+
+            let $form = $(form).serializeObject();
+            console.log($form);
+            let model = {
+                FilterViewModel: {
+                    SearchString: $("#SearchString").val(),
+                    PageNumber: $("#navigation li.active > a.page-link").text()
+                },
+                RoomViewModel: {
+                    Id: $form["RoomViewModel.Id"],
+                    IdentityNum: $form["RoomViewModel.IdentityNum"],
+                    Gender: $form["RoomViewModel.Gender"],
+                    Name: $form["RoomViewModel.Name"],
+                    Address: $form["RoomViewModel.Address"],
+                    Tel: $form["RoomViewModel.Tel"],
+                }
+            };
+
+            console.log(model);
+
+            try {
+                $.ajax({
+                    type: "POST",
+                    url: form.action,
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify(model),
+                    processData: false,
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader("X-XSRF-TOKEN",
+                            $('input:hidden[name="__RequestVerificationToken"]').val());
+                    }
+                }).done(function (res) {
+                    if (res.isValid) {
+                        $view.html(res.html)
+                        $modalBoby.html("");
+                        $modalTitle.html("");
+                        $modal.modal("hide");
+                    }
+                    else
+                        $modalBoby.html(res.html);
+                }).fail(function (jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR, textStatus, errorThrown);
+                });
+                //to prevent default form submit event
+                return false;
+            } catch (ex) {
+                console.log(ex)
+            }
+        }
+
+        //刪除
+        jQueryAjaxDelete = (url, id, pageNumber) => {
+
+            let model = {
+                Id: id,
+                PageNumber: pageNumber,
+                SearchString: $("#SearchString").val()
+            };
+
+            if (confirm("你確定要刪除嗎?")) {
+                try {
+                    $.ajax({
+                        type: "Delete",
+                        url: url,
+                        dataType: "json",
+                        contentType: "application/json; charset=utf-8",
+                        data: JSON.stringify(model)
+                    }).done(function (res) {
+                        $view.html(res.html);
+                    }).fail(function (jqXHR, textStatus, errorThrown) {
+                        console.log(jqXHR, textStatus, errorThrown);
+                    });
+                } catch (ex) {
+                    console.log(ex)
+                }
+            }
+
+            return false;
+        }
+    </script>
+}

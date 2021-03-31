@@ -6,7 +6,7 @@ namespace Application.ViewModels.Room
 {
     public class CompoundViewModel
     {
-        public RoomViewModel CustomerViewModel { get; set; }
+        public RoomViewModel RoomViewModel { get; set; }
         public FilterViewModel FilterViewModel { get; set; }
     }
 }
