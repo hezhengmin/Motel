@@ -8,6 +8,7 @@ namespace Application.ViewModels.RoomType
 {
     public class RoomTypeViewModel
     {
+        [Key]
         public Guid Id { get; set; }
 
         [Required]

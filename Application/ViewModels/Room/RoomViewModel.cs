@@ -34,6 +34,6 @@ namespace Application.ViewModels.Room
 
         public List<SelectListItem> RoomTypeList { get; set; }
 
-        public RoomTypeViewModel RoomType { get; set; }
+        public RoomTypeViewModel RoomTypeViewModel { get; set; }
     }
 }

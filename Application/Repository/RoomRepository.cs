@@ -20,17 +20,17 @@ namespace Application.Repository
 
         public async Task<Room> GetRoom(Guid id)
         {
-            return await _dbContext.Room.FirstOrDefaultAsync(m => m.Id == id);
+            return await _dbContext.Room.Include(m => m.RoomType).FirstOrDefaultAsync(m => m.Id == id);
         }
 
         public async Task<List<Room>> GetRoomList()
         {
-            return await _dbContext.Room.OrderByDescending(m => m.SysDate).ToListAsync();
+            return await _dbContext.Room.Include(m => m.RoomType).OrderByDescending(m => m.SysDate).ToListAsync();
         }
 
         public async Task<PaginatedList<Room>> GetRoomList(int pageNumber, int pageSize)
         {
-            var query = _dbContext.Set<Room>().AsQueryable();
+            var query = _dbContext.Set<Room>().Include(m => m.RoomType).AsQueryable();
 
             query = query.OrderByDescending(m => m.SysDate);
 
@@ -41,7 +41,7 @@ namespace Application.Repository
 
         public async Task<PaginatedList<Room>> GetRoomList(string searchString, int pageNumber, int pageSize)
         {
-            var query = _dbContext.Set<Room>().AsQueryable();
+            var query = _dbContext.Set<Room>().Include(m => m.RoomType).AsQueryable();
 
             if (!string.IsNullOrEmpty(searchString))
             {

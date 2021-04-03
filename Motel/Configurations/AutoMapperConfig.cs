@@ -10,6 +10,7 @@ namespace Motel.Configurations
         {
             if (services == null) throw new ArgumentNullException(nameof(services));
 
+            services.AddAutoMapper(typeof(Startup).Assembly);
             services.AddAutoMapper(typeof(CustomerProfile));
             services.AddAutoMapper(typeof(RoomTypeProfile));
             services.AddAutoMapper(typeof(RoomProfile));
