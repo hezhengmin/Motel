@@ -18,9 +18,6 @@ namespace Application.AutoMapper
             CreateMap<PaginatedList<Room>, RoomIndexViewModel>()
                 .ForMember(dest => dest.RoomViewModelList, opt => opt.MapFrom(src => src.ToList()))
                 .AfterMap<MapRoomTypeCollectionAction>();
-            //.AfterMap((src, dest) => dest.SearchString = "John");
-            //.AfterMap((src, dest) => dest.RoomViewModelList.Select(m=>m.RoomTypeViewModel) = new RoomIndexViewModel());
-            //.ForMember(dest => dest.RoomViewModelList.Select(m => m.RoomTypeViewModel), opt => opt.MapFrom(src => src.Select(m => m.RoomType)));
         }
     }
 
@@ -37,36 +34,12 @@ namespace Application.AutoMapper
         {
             foreach (var item in destination.RoomViewModelList)
             {
-                //var room = source.Where(m=>m.Id=item.i).Select(c => c.Id).Intersect(destination.RoomViewModelList.Select(d => d.Id));
-
                 if (source.Select(m => m.Id).Contains(item.Id))
                 {
                     var roomType = source.Where(m => m.RoomType.Id == item.RoomTypeId).Select(m => m.RoomType).FirstOrDefault();
-                    //var roomTypeViewModel = Mapper
-                    //var roomTypeViewModel = Mapper.Map<RoomTypeViewModel>(roomType);
-                    //var dest = Mapper.Map<RoomType, RoomTypeViewModel>(new RoomType { Area = 0 });
-
-                    //item.RoomTypeViewModel = new RoomTypeViewModel()
-                    //{
-                    //    Id = roomType.Id,
-                    //    Area = roomType.Area,
-                    //    Price = roomType.Price,
-                    //    Hprice = roomType.Hprice,
-                    //    AirCondition = roomType.AirCondition,
-                    //    BedQuantity = roomType.BedQuantity,
-                    //    Name = roomType.Name,
-                    //    Qk2price = roomType.Qk2price,
-                    //    Qkprice = roomType.Qkprice,
-                    //    Tv = roomType.Tv
-                    //};
-
-
                     item.RoomTypeViewModel = _mapper.Map<RoomTypeViewModel>(roomType);
-
                 }
             }
-
-            destination.SearchString = "Sam";
         }
     }
 }

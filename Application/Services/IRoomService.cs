@@ -9,6 +9,7 @@ namespace Application.Services
     public interface IRoomService
     {
         Task<RoomViewModel> GetRoom(Guid id);
+        Task<CompoundViewModel> GetAddOrEditRoom(Guid? id);
         Task<List<RoomViewModel>> GetRoomList();
         Task<RoomIndexViewModel> GetRoomList(int pageNumber, int pageSize);
         Task<RoomIndexViewModel> GetRoomList(FilterViewModel filterVM, int pageSize);

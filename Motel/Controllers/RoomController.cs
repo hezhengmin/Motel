@@ -46,20 +46,8 @@ namespace Motel.Controllers
         // GET: Room/AddOrEdit
         public async Task<IActionResult> AddOrEdit(Guid? id)
         {
-            if (id == null || id == Guid.Empty)
-            {
-                var model = new CompoundViewModel();
-                model.RoomViewModel = new RoomViewModel();
-                return Json(new { html = Helper.RenderRazorViewToString(this, "AddOrEdit", model) });
-            }
-            else
-            {
-                var RoomVM = await _roomService.GetRoom(id.Value);
-                var model = new CompoundViewModel();
-                model.RoomViewModel = RoomVM;
-                return Json(new { html = Helper.RenderRazorViewToString(this, "AddOrEdit", model) });
-            }
-
+            var compoundVM = await _roomService.GetAddOrEditRoom(id);
+            return Json(new { html = Helper.RenderRazorViewToString(this, "AddOrEdit", compoundVM) });
         }
 
         // POST: Room/AddOrEdit
@@ -82,6 +70,9 @@ namespace Motel.Controllers
                     return Json(new { isValid = true, html = Helper.RenderRazorViewToString(this, "_IndexPartial", model) });
                 }
             }
+
+            //compoundVM.RoomViewModel.RoomTypeList = new SelectList(_MedicalCenterOrdinanceContext.AspNetRoles, "Id", "Name");
+
 
             return Json(new { isValid = false, html = Helper.RenderRazorViewToString(this, "AddOrEdit", compoundVM) });
         }
