@@ -71,9 +71,7 @@ namespace Motel.Controllers
                 }
             }
 
-            //compoundVM.RoomViewModel.RoomTypeList = new SelectList(_MedicalCenterOrdinanceContext.AspNetRoles, "Id", "Name");
-
-
+            compoundVM = await _roomService.GetAddOrEditRoom(compoundVM);
             return Json(new { isValid = false, html = Helper.RenderRazorViewToString(this, "AddOrEdit", compoundVM) });
         }
 

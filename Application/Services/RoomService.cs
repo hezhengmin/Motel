@@ -53,6 +53,18 @@ namespace Application.Services
             return model;
         }
 
+        public async Task<CompoundViewModel> GetAddOrEditRoom(CompoundViewModel compoundVM)
+        {
+            compoundVM.RoomViewModel.RoomTypeList = new List<SelectListItem>();
+
+            foreach (var roomType in await _roomTypeRepository.GetRoomTypeList())
+            {
+                compoundVM.RoomViewModel.RoomTypeList.Add(new SelectListItem(roomType.Name, roomType.Id.ToString()));
+            }
+
+            return compoundVM;
+        }
+
         public async Task<List<RoomViewModel>> GetRoomList()
         {
             return _mapper.Map<List<RoomViewModel>>(await _roomRepository.GetRoomList());
