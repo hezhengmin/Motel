@@ -14,8 +14,6 @@ namespace Infrastructure.Models
         public Guid CustomerId { get; set; }
         public DateTime BeginDate { get; set; }
         public byte Days { get; set; }
-        public string Name { get; set; }
-        public string Tel { get; set; }
         public bool CheckIn { get; set; }
         public DateTime SysDate { get; set; }
 

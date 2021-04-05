@@ -28,7 +28,7 @@
 @section Scripts{
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 
-<script>
+    <script>
         const $view = $("#view");
         const $modal = $("#modal");
         const $modalTitle = $("#modal .modal-title");
@@ -51,13 +51,9 @@
                 CustomerViewModelList: []
             };
 
-            //console.log("model", model);
-            //console.log("JSON.stringify(model)", JSON.stringify(model));
-
-
             $.ajax({
                 type: "POST",
-                url: "/Customer/Index",
+                url: "/Reservation/Index",
                 dataType: "json",
                 contentType: "application/json; charset=utf-8",
                 data: JSON.stringify(model),
@@ -212,5 +208,5 @@
 
             return false;
         }
-</script>
+    </script>
 }

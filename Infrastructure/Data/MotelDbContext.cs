@@ -26,6 +26,7 @@ namespace Infrastructure.Data
         public virtual DbSet<Room> Room { get; set; }
         public virtual DbSet<RoomState> RoomState { get; set; }
         public virtual DbSet<RoomType> RoomType { get; set; }
+        public virtual DbSet<User> User { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -134,24 +135,13 @@ namespace Infrastructure.Data
 
                 entity.Property(e => e.CheckIn).HasComment("");
 
-                entity.Property(e => e.Days).HasComment("天數/小時");
-
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(20)
-                    .HasComment("預訂者姓名");
+                entity.Property(e => e.Days).HasComment("天數");
 
                 entity.Property(e => e.RoomId).HasComment("");
 
                 entity.Property(e => e.SysDate)
                     .HasColumnType("datetime")
                     .HasComment("系統日期");
-
-                entity.Property(e => e.Tel)
-                    .IsRequired()
-                    .HasMaxLength(20)
-                    .IsUnicode(false)
-                    .HasComment("預訂者電話");
 
                 entity.HasOne(d => d.Customer)
                     .WithMany(p => p.Reservation)
@@ -257,6 +247,50 @@ namespace Infrastructure.Data
                 entity.Property(e => e.Tv)
                     .HasColumnName("TV")
                     .HasComment("是否有電視");
+            });
+
+            modelBuilder.Entity<User>(entity =>
+            {
+                entity.Property(e => e.UserId)
+                    .HasMaxLength(10)
+                    .IsUnicode(false)
+                    .HasComment("使用者名稱");
+
+                entity.Property(e => e.Address)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .HasComment("地址");
+
+                entity.Property(e => e.Department)
+                    .HasMaxLength(50)
+                    .HasComment("工作部門");
+
+                entity.Property(e => e.Email)
+                    .IsRequired()
+                    .HasMaxLength(30)
+                    .IsUnicode(false)
+                    .HasComment("電子郵件");
+
+                entity.Property(e => e.Gender).HasComment("性別");
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(10)
+                    .HasComment("員工姓名");
+
+                entity.Property(e => e.Password)
+                    .IsRequired()
+                    .HasMaxLength(20)
+                    .IsUnicode(false)
+                    .HasComment("密碼");
+
+                entity.Property(e => e.Power).HasComment("員工類型");
+
+                entity.Property(e => e.Tel)
+                    .IsRequired()
+                    .HasMaxLength(20)
+                    .IsUnicode(false)
+                    .HasComment("員工電話");
             });
 
             OnModelCreatingPartial(modelBuilder);
