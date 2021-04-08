@@ -14,9 +14,7 @@
         </form>
     </div>
     <div class="col-auto mr-3">
-        @*<a onclick="showInPopup('@Url.Action("AddOrEdit","Customer", new { id = Guid.Empty} ,Context.Request.Scheme)','新增')" class="btn btn-primary text-white">
-            新增
-        </a>*@
+       
     </div>
 </div>
 
@@ -71,6 +69,10 @@
                         <a onclick="jQueryAjaxDelete('@Url.Action("Remove","Customer",new {id=@item.Id},Context.Request.Scheme)', '@item.Id', '@Model.PageNumber')" class="btn btn-danger text-white">
                             刪除
                         </a>*@
+
+                        <a onclick="showListPopup('@Url.Action("ReservationList","Reservation", new { id = @item.Id} ,Context.Request.Scheme)','列表')" class="btn btn-primary text-white">
+                            預訂
+                        </a>
                     </td>
                 </tr>
             }

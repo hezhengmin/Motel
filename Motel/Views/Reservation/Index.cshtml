@@ -11,7 +11,7 @@
 </div>
 
 <div class="modal fade" tabindex="-1" role="dialog" id="modal">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title"></h5>
@@ -71,7 +71,21 @@
             });
         }
 
+        //預訂列表
+        showListPopup = (url, title) => {
+            $.ajax({
+                type: "GET",
+                url: url
+            }).done(function (res) {
+                $modalBoby.html(res.html);
+                $modalTitle.html(title);
+                $modal.modal("show");
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                console.log(jqXHR, textStatus, errorThrown);
+            });
+        }
 
+        
         showInPopup = (url, title) => {
 
             $.ajax({
