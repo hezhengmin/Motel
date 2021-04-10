@@ -9,6 +9,8 @@ namespace Application.Services
     public interface IReservationService
     {
         Task<ReservationViewModel> GetReservation(Guid id);
+        Task<CompoundReservationViewModel> GetAddOrEditReservation(Guid? id);
+        Task<CompoundReservationViewModel> GetAddOrEditReservation(CompoundReservationViewModel compoundVM);
         Task<List<ReservationViewModel>> GetReservationList();
         Task<ReservationIndexViewModel> GetReservationList(int pageNumber, int pageSize);
         Task<ReservationIndexViewModel> GetReservationList(FilterViewModel filterVM, int pageSize);

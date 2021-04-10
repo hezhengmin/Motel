@@ -30,9 +30,9 @@ namespace Application.Services
             return _mapper.Map<RoomViewModel>(await _roomRepository.GetRoom(id));
         }
 
-        public async Task<CompoundViewModel> GetAddOrEditRoom(Guid? id)
+        public async Task<CompoundRoomViewModel> GetAddOrEditRoom(Guid? id)
         {
-            var model = new CompoundViewModel();
+            var model = new CompoundRoomViewModel();
             if (id == null || id == Guid.Empty)
             {
                 model.RoomViewModel = new RoomViewModel();
@@ -53,7 +53,7 @@ namespace Application.Services
             return model;
         }
 
-        public async Task<CompoundViewModel> GetAddOrEditRoom(CompoundViewModel compoundVM)
+        public async Task<CompoundRoomViewModel> GetAddOrEditRoom(CompoundRoomViewModel compoundVM)
         {
             compoundVM.RoomViewModel.RoomTypeList = new List<SelectListItem>();
 

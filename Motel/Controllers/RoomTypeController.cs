@@ -49,14 +49,14 @@ namespace Motel.Controllers
         {
             if (id == null || id == Guid.Empty)
             {
-                var model = new CompoundViewModel();
+                var model = new CompoundRoomTypeViewModel();
                 model.RoomTypeViewModel = new RoomTypeViewModel();
                 return Json(new { html = Helper.RenderRazorViewToString(this, "AddOrEdit", model) });
             }
             else
             {
                 var RoomTypeVM = await _RoomTypeService.GetRoomType(id.Value);
-                var model = new CompoundViewModel();
+                var model = new CompoundRoomTypeViewModel();
                 model.RoomTypeViewModel = RoomTypeVM;
                 return Json(new { html = Helper.RenderRazorViewToString(this, "AddOrEdit", model) });
             }
@@ -66,7 +66,7 @@ namespace Motel.Controllers
         // POST: RoomType/AddOrEdit
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddOrEdit([FromBody] CompoundViewModel compoundVM)
+        public async Task<IActionResult> AddOrEdit([FromBody] CompoundRoomTypeViewModel compoundVM)
         {
             if (ModelState.IsValid)
             {

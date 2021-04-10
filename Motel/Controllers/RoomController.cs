@@ -53,7 +53,7 @@ namespace Motel.Controllers
         // POST: Room/AddOrEdit
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddOrEdit([FromBody] CompoundViewModel compoundVM)
+        public async Task<IActionResult> AddOrEdit([FromBody] CompoundRoomViewModel compoundVM)
         {
             if (ModelState.IsValid)
             {

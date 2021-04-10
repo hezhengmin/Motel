@@ -25,6 +25,41 @@ namespace Application.Services
             return _mapper.Map<ReservationViewModel>(await _reservationRepository.GetReservation(id));
         }
 
+        public async Task<CompoundReservationViewModel> GetAddOrEditReservation(Guid? id)
+        {
+            var model = new CompoundReservationViewModel();
+            if (id == null || id == Guid.Empty)
+            {
+                model.ReservationViewModel = new ReservationViewModel();
+            }
+            else
+            {
+                var roomVM = await this.GetReservation(id.Value);
+                model.ReservationViewModel = roomVM;
+            }
+
+            //model.RoomViewModel.RoomTypeList = new List<SelectListItem>();
+
+            //foreach (var roomType in _roomTypeRepository.GetRoomTypeList().Result)
+            //{
+            //    model.RoomViewModel.RoomTypeList.Add(new SelectListItem(roomType.Name, roomType.Id.ToString()));
+            //}
+
+            return model;
+        }
+
+        public async Task<CompoundReservationViewModel> GetAddOrEditReservation(CompoundReservationViewModel compoundVM)
+        {
+            //compoundVM.RoomViewModel.RoomTypeList = new List<SelectListItem>();
+
+            //foreach (var roomType in await _roomTypeRepository.GetRoomTypeList())
+            //{
+            //    compoundVM.RoomViewModel.RoomTypeList.Add(new SelectListItem(roomType.Name, roomType.Id.ToString()));
+            //}
+
+            return compoundVM;
+        }
+
         public async Task<List<ReservationViewModel>> GetReservationList()
         {
             return _mapper.Map<List<ReservationViewModel>>(await _reservationRepository.GetReservationList());

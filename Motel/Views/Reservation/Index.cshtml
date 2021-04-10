@@ -10,8 +10,26 @@
     @await Html.PartialAsync("_IndexPartial", Model)
 </div>
 
-<div class="modal fade" tabindex="-1" role="dialog" id="modal">
+@*ReservationList*@
+<div class="modal fade" tabindex="-1" role="dialog" id="stack1">
     <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="btn" data-toggle="modal" href="#stack2">Launch modal</button>
+                <h5 class="modal-title"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+            </div>
+        </div>
+    </div>
+</div>
+
+@*AddOrEdit*@
+<div class="modal fade" tabindex="-1" role="dialog" id="stack2">
+    <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title"></h5>
@@ -30,10 +48,10 @@
 
     <script>
         const $view = $("#view");
-        const $modal = $("#modal");
-        const $modalTitle = $("#modal .modal-title");
-        const $modalBoby = $("#modal .modal-body");
-        const $modalDialog = $("#modal .modal-dialog");
+        const $modal = $("#stack1");
+        const $modalTitle = $("#stack1 .modal-title");
+        const $modalBoby = $("#stack1 .modal-body");
+        const $modalDialog = $("#stack1 .modal-dialog");
 
         $(function () {
 
@@ -85,7 +103,7 @@
             });
         }
 
-        
+
         showInPopup = (url, title) => {
 
             $.ajax({
@@ -197,9 +215,9 @@
         jQueryAjaxDelete = (url, id, pageNumber) => {
 
             let model = {
-                "Id": id,
-                "PageNumber": pageNumber,
-                "SearchString": $("#SearchString").val()
+                Id: id,
+                PageNumber: pageNumber,
+                SearchString: $("#SearchString").val()
             };
 
             if (confirm("你確定要刪除嗎?")) {

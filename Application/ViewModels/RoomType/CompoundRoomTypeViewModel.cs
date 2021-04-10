@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Application.ViewModels.RoomType
 {
-    public class CompoundViewModel
+    public class CompoundRoomTypeViewModel
     {
         public RoomTypeViewModel RoomTypeViewModel { get; set; }
         public FilterViewModel FilterViewModel { get; set; }

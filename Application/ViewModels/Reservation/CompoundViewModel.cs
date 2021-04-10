@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Application.ViewModels.Reservation
 {
-    public class CompoundViewModel
+    public class CompoundReservationViewModel
     {
         public ReservationViewModel ReservationViewModel { get; set; }
         public FilterViewModel FilterViewModel { get; set; }
