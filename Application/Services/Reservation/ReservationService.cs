@@ -65,6 +65,12 @@ namespace Application.Services
             return _mapper.Map<List<ReservationViewModel>>(await _reservationRepository.GetReservationList());
         }
 
+        public async Task<ReservationIndexViewModel> GetReservationList(Guid customer, int pageNumber, int pageSize)
+        {
+            var query = _mapper.Map<ReservationIndexViewModel>(await _reservationRepository.GetReservationList(customer, pageNumber, pageSize));
+            return query;
+        }
+
         public async Task<ReservationIndexViewModel> GetReservationList(int pageNumber, int pageSize)
         {
             var query = _mapper.Map<ReservationIndexViewModel>(await _reservationRepository.GetReservationList(pageNumber, pageSize));

@@ -95,6 +95,7 @@
                 type: "GET",
                 url: url
             }).done(function (res) {
+                console.log(res);
                 $modalBoby.html(res.html);
                 $modalTitle.html(title);
                 $modal.modal("show");

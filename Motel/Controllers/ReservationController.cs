@@ -24,7 +24,7 @@ namespace Motel.Controllers
             _reservationService = reservationService;
         }
 
-        
+
         public async Task<IActionResult> Index()
         {
             int pageNumber = 1;
@@ -48,22 +48,22 @@ namespace Motel.Controllers
             var model = await _customerService.GetCustomerList(customerIndexVM, pageSize);
             return Json(new { isValid = true, html = Helper.RenderRazorViewToString(this, "_IndexPartial", model) });
         }
-        
+
         public async Task<IActionResult> ReservationIndex(Guid id)
         {
             int pageNumber = 1;
-            var model = await _customerService.GetCustomerList(pageNumber, pageSize);
-            return Json(new { isValid = true, html = Helper.RenderRazorViewToString(this, "_IndexPartial", model) });
+            var model = await _reservationService.GetReservationList(id, pageNumber, pageSize);
+            return Json(new { isValid = true, html = Helper.RenderRazorViewToString(this, "ReservationIndex", model) });
         }
 
-        // GET: Room/AddOrEdit
+        // GET: Reservation/AddOrEdit
         public async Task<IActionResult> AddOrEdit(Guid? id)
         {
             var compoundVM = await _reservationService.GetAddOrEditReservation(id);
             return Json(new { html = Helper.RenderRazorViewToString(this, "AddOrEdit", compoundVM) });
         }
 
-        // POST: Room/AddOrEdit
+        // POST: Reservation/AddOrEdit
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddOrEdit([FromBody] CompoundReservationViewModel compoundVM)
@@ -89,10 +89,10 @@ namespace Motel.Controllers
         }
 
         [HttpDelete]
-        public async Task<IActionResult> Remove([FromBody] ReservationDeleteViewModel RoomDeleteVM)
+        public async Task<IActionResult> Remove([FromBody] ReservationDeleteViewModel ReservationDeleteVM)
         {
-            await _reservationService.RemoveReservation(RoomDeleteVM.Id);
-            var model = await _reservationService.GetReservationList(RoomDeleteVM, pageSize);
+            await _reservationService.RemoveReservation(ReservationDeleteVM.Id);
+            var model = await _reservationService.GetReservationList(ReservationDeleteVM, pageSize);
             return Json(new { html = Helper.RenderRazorViewToString(this, "_IndexPartial", model) });
         }
     }

@@ -29,6 +29,17 @@ namespace Application.Repository
             return await _dbContext.Reservation.OrderByDescending(m => m.SysDate).ToListAsync();
         }
 
+        public async Task<PaginatedList<Reservation>> GetReservationList(Guid customerId, int pageNumber, int pageSize)
+        {
+            var query = _dbContext.Set<Reservation>().AsQueryable();
+
+            query = query.Where(m => m.CustomerId == customerId).OrderByDescending(m => m.SysDate);
+
+            var list = await PaginatedList<Reservation>.CreateAsync(query, pageNumber, pageSize);
+
+            return list;
+        }
+
         public async Task<PaginatedList<Reservation>> GetReservationList(int pageNumber, int pageSize)
         {
             var query = _dbContext.Set<Reservation>().AsQueryable();
