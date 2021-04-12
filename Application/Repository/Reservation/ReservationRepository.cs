@@ -33,6 +33,9 @@ namespace Application.Repository
         {
             var query = _dbContext.Set<Reservation>().AsQueryable();
 
+            query = query.Include(m => m.Room)
+                         .ThenInclude(m => m.RoomType);
+
             query = query.Where(m => m.CustomerId == customerId).OrderByDescending(m => m.SysDate);
 
             var list = await PaginatedList<Reservation>.CreateAsync(query, pageNumber, pageSize);

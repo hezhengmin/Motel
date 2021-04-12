@@ -27,10 +27,10 @@
                 @Html.DisplayNameFor(model => model.ReservationViewModelList.FirstOrDefault().BeginDate)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ReservationViewModelList.FirstOrDefault().CustomerId)
+                @Html.DisplayNameFor(model => model.ReservationViewModelList.FirstOrDefault().RoomTypeName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ReservationViewModelList.FirstOrDefault().RoomId)
+                @Html.DisplayNameFor(model => model.ReservationViewModelList.FirstOrDefault().RoomNumber)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.ReservationViewModelList.FirstOrDefault().Days)
@@ -53,10 +53,10 @@
                         @Html.DisplayFor(modelItem => item.BeginDate)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.CustomerId)
+                        @Html.DisplayFor(modelItem => item.RoomTypeName)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.RoomId)
+                        @Html.DisplayFor(modelItem => item.RoomNumber)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Days)

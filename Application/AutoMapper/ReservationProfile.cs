@@ -12,6 +12,10 @@ namespace Application.AutoMapper
         {
             CreateMap<Reservation, ReservationViewModel>();
 
+            CreateMap<Reservation, ReservationListViewModel>()
+                .ForMember(dest => dest.RoomTypeName, opt => opt.MapFrom(src => src.Room.RoomType.Name))
+                .ForMember(dest => dest.RoomNumber, opt => opt.MapFrom(src => src.Room.RoomNumber));
+
             CreateMap<ReservationViewModel, Reservation>();
 
             CreateMap<PaginatedList<Reservation>, ReservationIndexViewModel>()

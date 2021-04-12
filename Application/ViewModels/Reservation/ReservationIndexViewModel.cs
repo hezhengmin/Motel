@@ -13,6 +13,6 @@ namespace Application.ViewModels.Reservation
         public int TotalPages { get; set; }
         public bool HasPreviousPage { get; set; }
         public bool HasNextPage { get; set; }
-        public PaginatedList<ReservationViewModel> ReservationViewModelList { get; set; }
+        public PaginatedList<ReservationListViewModel> ReservationViewModelList { get; set; }
     }
 }
