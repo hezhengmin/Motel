@@ -53,6 +53,12 @@
         const $modalBoby = $("#stack1 .modal-body");
         const $modalDialog = $("#stack1 .modal-dialog");
 
+        //預訂
+        const $modalReserve = $("#stack2");
+        const $modalReserveTitle = $("#stack2 .modal-title");
+        const $modalReserveBoby = $("#stack2 .modal-body");
+        const $modalReserveDialog = $("#stack2 .modal-dialog");
+
         $(function () {
 
         });
@@ -95,7 +101,6 @@
                 type: "GET",
                 url: url
             }).done(function (res) {
-                console.log(res);
                 $modalBoby.html(res.html);
                 $modalTitle.html(title);
                 $modal.modal("show");
@@ -111,9 +116,9 @@
                 type: "GET",
                 url: url
             }).done(function (res) {
-                $modalBoby.html(res.html);
-                $modalTitle.html(title);
-                $modal.modal("show");
+                $modalReserveBoby.html(res.html);
+                $modalReserveTitle.html(title);
+                $modalReserve.modal("show");
             }).fail(function (jqXHR, textStatus, errorThrown) {
                 console.log(jqXHR, textStatus, errorThrown);
             });
@@ -163,23 +168,21 @@
         jQueryAjaxPost = form => {
 
             let $form = $(form).serializeObject();
-            console.log($form);
+            
             let model = {
                 FilterViewModel: {
                     SearchString: $("#SearchString").val(),
-                    PageNumber: $("#navigation li.active > a.page-link").text()
+                    PageNumber: $("#navigationReservation li.active > a.page-link").text()
                 },
                 CustomerViewModel: {
-                    Id: $form["CustomerViewModel.Id"],
-                    IdentityNum: $form["CustomerViewModel.IdentityNum"],
-                    Gender: $form["CustomerViewModel.Gender"],
-                    Name: $form["CustomerViewModel.Name"],
-                    Address: $form["CustomerViewModel.Address"],
-                    Tel: $form["CustomerViewModel.Tel"],
+                    //Id: $form["CustomerViewModel.Id"],
+                    //IdentityNum: $form["CustomerViewModel.IdentityNum"],
+                    //Gender: $form["CustomerViewModel.Gender"],
+                    //Name: $form["CustomerViewModel.Name"],
+                    //Address: $form["CustomerViewModel.Address"],
+                    //Tel: $form["CustomerViewModel.Tel"],
                 }
             };
-
-            console.log(model);
 
             try {
                 $.ajax({
@@ -196,12 +199,12 @@
                 }).done(function (res) {
                     if (res.isValid) {
                         $view.html(res.html)
-                        $modalBoby.html("");
-                        $modalTitle.html("");
-                        $modal.modal("hide");
+                        $modalReserveBoby.html("");
+                        $modalReserveTitle.html("");
+                        $modalReserve.modal("hide");
                     }
                     else
-                        $modalBoby.html(res.html);
+                        $modalReserveBoby.html(res.html);
                 }).fail(function (jqXHR, textStatus, errorThrown) {
                     console.log(jqXHR, textStatus, errorThrown);
                 });

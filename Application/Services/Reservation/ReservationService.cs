@@ -83,7 +83,7 @@ namespace Application.Services
             var query = _mapper.Map<ReservationIndexViewModel>(await _reservationRepository.GetReservationList(filterVM.SearchString, pageNumber, pageSize));
 
             if (!string.IsNullOrEmpty(filterVM.SearchString))
-                query.SearchString = filterVM.SearchString;
+                query.ReservationSearchString = filterVM.SearchString;
 
             return query;
         }
@@ -91,10 +91,10 @@ namespace Application.Services
         public async Task<ReservationIndexViewModel> GetReservationList(ReservationIndexViewModel ReservationIndexVM, int pageSize)
         {
             var pageNumber = ReservationIndexVM.PageNumber == 0 ? 1 : ReservationIndexVM.PageNumber;
-            var query = _mapper.Map<ReservationIndexViewModel>(await _reservationRepository.GetReservationList(ReservationIndexVM.SearchString, pageNumber, pageSize));
+            var query = _mapper.Map<ReservationIndexViewModel>(await _reservationRepository.GetReservationList(ReservationIndexVM.ReservationSearchString, pageNumber, pageSize));
 
-            if (!string.IsNullOrEmpty(ReservationIndexVM.SearchString))
-                query.SearchString = ReservationIndexVM.SearchString;
+            if (!string.IsNullOrEmpty(ReservationIndexVM.ReservationSearchString))
+                query.ReservationSearchString = ReservationIndexVM.ReservationSearchString;
 
             return query;
         }
@@ -105,7 +105,7 @@ namespace Application.Services
             var query = _mapper.Map<ReservationIndexViewModel>(await _reservationRepository.GetReservationList(ReservationDeleteVM.SearchString, pageNumber, pageSize));
 
             if (!string.IsNullOrEmpty(ReservationDeleteVM.SearchString))
-                query.SearchString = ReservationDeleteVM.SearchString;
+                query.ReservationSearchString = ReservationDeleteVM.SearchString;
 
             return query;
         }
