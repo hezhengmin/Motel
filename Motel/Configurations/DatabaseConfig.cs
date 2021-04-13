@@ -18,6 +18,7 @@ namespace Motel.Configurations
             services.AddDbContext<MotelDbContext>(options =>
             {
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
+                options.EnableSensitiveDataLogging(true);
             });
         }
     }
