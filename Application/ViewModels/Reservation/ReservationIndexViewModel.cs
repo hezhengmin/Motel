@@ -8,6 +8,7 @@ namespace Application.ViewModels.Reservation
 {
     public class ReservationIndexViewModel
     {
+        public Guid CustomerId { get; set; }
         public string ReservationSearchString { get; set; }
         public int PageNumber { get; set; }
         public int TotalPages { get; set; }

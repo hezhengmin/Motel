@@ -57,9 +57,9 @@ namespace Motel.Controllers
         }
 
         // GET: Reservation/AddOrEdit
-        public async Task<IActionResult> AddOrEdit(Guid? id)
+        public async Task<IActionResult> AddOrEdit(Guid? id, Guid customerId)
         {
-            var compoundVM = await _reservationService.GetAddOrEditReservation(id);
+            var compoundVM = await _reservationService.GetAddOrEditReservation(id, customerId);
             return Json(new { html = Helper.RenderRazorViewToString(this, "AddOrEdit", compoundVM) });
         }
 

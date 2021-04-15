@@ -25,12 +25,13 @@ namespace Application.Services
             return _mapper.Map<ReservationViewModel>(await _reservationRepository.GetReservation(id));
         }
 
-        public async Task<CompoundReservationViewModel> GetAddOrEditReservation(Guid? id)
+        public async Task<CompoundReservationViewModel> GetAddOrEditReservation(Guid? id, Guid customerId)
         {
             var model = new CompoundReservationViewModel();
             if (id == null || id == Guid.Empty)
             {
                 model.ReservationViewModel = new ReservationViewModel();
+                model.ReservationViewModel.CustomerId = customerId;
             }
             else
             {
@@ -65,9 +66,11 @@ namespace Application.Services
             return _mapper.Map<List<ReservationViewModel>>(await _reservationRepository.GetReservationList());
         }
 
-        public async Task<ReservationIndexViewModel> GetReservationList(Guid customer, int pageNumber, int pageSize)
+        public async Task<ReservationIndexViewModel> GetReservationList(Guid customerId, int pageNumber, int pageSize)
         {
-            var query = _mapper.Map<ReservationIndexViewModel>(await _reservationRepository.GetReservationList(customer, pageNumber, pageSize));
+            var query = _mapper.Map<ReservationIndexViewModel>(await _reservationRepository.GetReservationList(customerId, pageNumber, pageSize));
+            query.CustomerId = customerId;
+
             return query;
         }
 
