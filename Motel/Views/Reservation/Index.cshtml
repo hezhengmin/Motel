@@ -151,12 +151,12 @@
         $.fn.serializeObject = function () {
             var o = {};
             var a = this.serializeArray();
+
             $.each(a, function () {
                 if (o[this.name]) {
-                    if (!o[this.name].push) {
+                    if (!o[this.name].push && o[this.name].length == 0) {
                         o[this.name] = [o[this.name]];
                     }
-                    o[this.name].push(this.value || '');
                 } else {
                     o[this.name] = this.value || '';
                 }
@@ -168,21 +168,29 @@
         jQueryAjaxPost = form => {
 
             let $form = $(form).serializeObject();
-            
+
+            console.log($form);
+
+            let pageNumber = $("#navigationReservation li.active > a.page-link").text();
+            if (pageNumber === "") pageNumber = 1;
+
             let model = {
                 FilterViewModel: {
-                    SearchString: $("#SearchString").val(),
-                    PageNumber: $("#navigationReservation li.active > a.page-link").text()
+                    SearchString: $("#ReservationSearchString").val(),
+                    PageNumber: pageNumber
                 },
-                CustomerViewModel: {
-                    //Id: $form["CustomerViewModel.Id"],
-                    //IdentityNum: $form["CustomerViewModel.IdentityNum"],
-                    //Gender: $form["CustomerViewModel.Gender"],
-                    //Name: $form["CustomerViewModel.Name"],
-                    //Address: $form["CustomerViewModel.Address"],
-                    //Tel: $form["CustomerViewModel.Tel"],
+                ReservationViewModel: {
+                    Id: $form["ReservationViewModel.Id"],
+                    RoomId: $form["ReservationViewModel.RoomId"],
+                    CustomerId: $form["ReservationViewModel.CustomerId"],
+                    BeginDate: $form["ReservationViewModel.BeginDate"],
+                    Days: $form["ReservationViewModel.Days"],
+                    CheckIn: $form["ReservationViewModel.CheckIn"],
                 }
             };
+
+
+            console.log(model);
 
             try {
                 $.ajax({
@@ -198,7 +206,7 @@
                     }
                 }).done(function (res) {
                     if (res.isValid) {
-                        $view.html(res.html)
+                        $modalBoby.html(res.html)
                         $modalReserveBoby.html("");
                         $modalReserveTitle.html("");
                         $modalReserve.modal("hide");

@@ -13,8 +13,8 @@ namespace Application.Services
         Task<CompoundReservationViewModel> GetAddOrEditReservation(CompoundReservationViewModel compoundVM);
         Task<List<ReservationViewModel>> GetReservationList();
         Task<ReservationIndexViewModel> GetReservationList(Guid customerId, int pageNumber, int pageSize);
-        Task<ReservationIndexViewModel> GetReservationList(int pageNumber, int pageSize);
-        Task<ReservationIndexViewModel> GetReservationList(FilterViewModel filterVM, int pageSize);
+        Task<ReservationIndexViewModel> GetReservationList(Guid customerId, FilterViewModel filterVM, int pageSize);
+        Task<ReservationIndexViewModel> GetReservationList(CompoundReservationViewModel compoundVM, int pageSize);
         Task<ReservationIndexViewModel> GetReservationList(ReservationDeleteViewModel ReservationDeleteVM, int pageSize);
         Task<ReservationIndexViewModel> GetReservationList(ReservationIndexViewModel ReservationIndexVM, int pageSize);
         Task AddReservation(ReservationViewModel ReservationVM);

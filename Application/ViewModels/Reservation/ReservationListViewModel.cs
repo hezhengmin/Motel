@@ -18,6 +18,7 @@ namespace Application.ViewModels.Reservation
 
         [Required(ErrorMessage = "{0}必填")]
         [Display(Name = "預訂日期")]
+        [DataType(DataType.Date)]
         public DateTime BeginDate { get; set; }
 
         [Range(1, 255)]

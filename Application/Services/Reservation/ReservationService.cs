@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Application.Services
 {
@@ -13,11 +14,15 @@ namespace Application.Services
     {
         private readonly IMapper _mapper;
         private readonly IReservationRepository _reservationRepository;
+        private readonly IRoomRepository _roomRepository;
 
-        public ReservationService(IMapper mapper, IReservationRepository reservationRepository)
+        public ReservationService(IMapper mapper,
+                                  IReservationRepository reservationRepository,
+                                  IRoomRepository roomRepository)
         {
             _mapper = mapper;
             _reservationRepository = reservationRepository;
+            _roomRepository = roomRepository;
         }
 
         public async Task<ReservationViewModel> GetReservation(Guid id)
@@ -30,8 +35,11 @@ namespace Application.Services
             var model = new CompoundReservationViewModel();
             if (id == null || id == Guid.Empty)
             {
-                model.ReservationViewModel = new ReservationViewModel();
-                model.ReservationViewModel.CustomerId = customerId;
+                model.ReservationViewModel = new ReservationViewModel
+                {
+                    CustomerId = customerId,
+                    BeginDate = DateTime.Now
+                };
             }
             else
             {
@@ -39,24 +47,24 @@ namespace Application.Services
                 model.ReservationViewModel = roomVM;
             }
 
-            //model.RoomViewModel.RoomTypeList = new List<SelectListItem>();
+            model.ReservationViewModel.RoomList = new List<SelectListItem>();
 
-            //foreach (var roomType in _roomTypeRepository.GetRoomTypeList().Result)
-            //{
-            //    model.RoomViewModel.RoomTypeList.Add(new SelectListItem(roomType.Name, roomType.Id.ToString()));
-            //}
+            foreach (var room in _roomRepository.GetRoomList().Result)
+            {
+                model.ReservationViewModel.RoomList.Add(new SelectListItem(room.RoomNumber, room.Id.ToString()));
+            }
 
             return model;
         }
 
         public async Task<CompoundReservationViewModel> GetAddOrEditReservation(CompoundReservationViewModel compoundVM)
         {
-            //compoundVM.RoomViewModel.RoomTypeList = new List<SelectListItem>();
+            compoundVM.ReservationViewModel.RoomList = new List<SelectListItem>();
 
-            //foreach (var roomType in await _roomTypeRepository.GetRoomTypeList())
-            //{
-            //    compoundVM.RoomViewModel.RoomTypeList.Add(new SelectListItem(roomType.Name, roomType.Id.ToString()));
-            //}
+            foreach (var room in await _roomRepository.GetRoomList())
+            {
+                compoundVM.ReservationViewModel.RoomList.Add(new SelectListItem(room.RoomNumber, room.Id.ToString()));
+            }
 
             return compoundVM;
         }
@@ -74,16 +82,11 @@ namespace Application.Services
             return query;
         }
 
-        public async Task<ReservationIndexViewModel> GetReservationList(int pageNumber, int pageSize)
-        {
-            var query = _mapper.Map<ReservationIndexViewModel>(await _reservationRepository.GetReservationList(pageNumber, pageSize));
-            return query;
-        }
-
-        public async Task<ReservationIndexViewModel> GetReservationList(FilterViewModel filterVM, int pageSize)
+        public async Task<ReservationIndexViewModel> GetReservationList(Guid customerId, FilterViewModel filterVM, int pageSize)
         {
             var pageNumber = filterVM.PageNumber == 0 ? 1 : filterVM.PageNumber;
             var query = _mapper.Map<ReservationIndexViewModel>(await _reservationRepository.GetReservationList(filterVM.SearchString, pageNumber, pageSize));
+            query.CustomerId = customerId;
 
             if (!string.IsNullOrEmpty(filterVM.SearchString))
                 query.ReservationSearchString = filterVM.SearchString;
@@ -91,6 +94,22 @@ namespace Application.Services
             return query;
         }
 
+        public async Task<ReservationIndexViewModel> GetReservationList(CompoundReservationViewModel compoundVM, int pageSize)
+        {
+            if (compoundVM.ReservationViewModel.Id == null || compoundVM.ReservationViewModel.Id == Guid.Empty)
+            {
+                await this.AddReservation(compoundVM.ReservationViewModel);
+                var model = await this.GetReservationList(compoundVM.ReservationViewModel.CustomerId, 1, pageSize);
+                return model;
+            }
+            else
+            {
+                await this.UpdateReservation(compoundVM.ReservationViewModel);
+                var model = await this.GetReservationList(compoundVM.ReservationViewModel.CustomerId, compoundVM.FilterViewModel, pageSize);
+                return model;
+            }
+        }
+        
         public async Task<ReservationIndexViewModel> GetReservationList(ReservationIndexViewModel ReservationIndexVM, int pageSize)
         {
             var pageNumber = ReservationIndexVM.PageNumber == 0 ? 1 : ReservationIndexVM.PageNumber;
@@ -137,5 +156,7 @@ namespace Application.Services
         {
             return _reservationRepository.GetReservationExists(id);
         }
+
+
     }
 }

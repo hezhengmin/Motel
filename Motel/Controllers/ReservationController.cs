@@ -70,18 +70,8 @@ namespace Motel.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (compoundVM.ReservationViewModel.Id == null || compoundVM.ReservationViewModel.Id == Guid.Empty)
-                {
-                    await _reservationService.AddReservation(compoundVM.ReservationViewModel);
-                    var model = await _reservationService.GetReservationList(1, pageSize);
-                    return Json(new { isValid = true, html = Helper.RenderRazorViewToString(this, "_IndexPartial", model) });
-                }
-                else
-                {
-                    await _reservationService.UpdateReservation(compoundVM.ReservationViewModel);
-                    var model = await _reservationService.GetReservationList(compoundVM.FilterViewModel, pageSize);
-                    return Json(new { isValid = true, html = Helper.RenderRazorViewToString(this, "_IndexPartial", model) });
-                }
+                var model = await _reservationService.GetReservationList(compoundVM, pageSize);
+                return Json(new { isValid = true, html = Helper.RenderRazorViewToString(this, "ReservationIndex", model) });
             }
 
             compoundVM = await _reservationService.GetAddOrEditReservation(compoundVM);

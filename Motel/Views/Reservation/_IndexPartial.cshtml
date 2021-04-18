@@ -14,7 +14,6 @@
         </form>
     </div>
     <div class="col-auto mr-3">
-       
     </div>
 </div>
 
@@ -63,13 +62,6 @@
                         @Html.DisplayFor(modelItem => item.Tel)
                     </td>
                     <td class="text-right">
-                        @*<a onclick="showInPopup('@Url.Action("AddOrEdit","Customer",new {id=@item.Id},Context.Request.Scheme)','編輯')" class="btn btn-success text-white">
-                            編輯
-                        </a>
-                        <a onclick="jQueryAjaxDelete('@Url.Action("Remove","Customer",new {id=@item.Id},Context.Request.Scheme)', '@item.Id', '@Model.PageNumber')" class="btn btn-danger text-white">
-                            刪除
-                        </a>*@
-
                         <a onclick="showListPopup('@Url.Action("ReservationIndex","Reservation", new { id = @item.Id} ,Context.Request.Scheme)','列表')" class="btn btn-primary text-white">
                             預訂
                         </a>
