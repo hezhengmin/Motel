@@ -70,9 +70,14 @@ namespace Application.Repository
 
         public async Task RemoveCustomer(Guid id)
         {
-            var customer = await GetCustomer(id);
+            var customer = await _dbContext.Set<Customer>()
+                                           .Include(m => m.Reservation)
+                                           .Include(m => m.OccupiedRoom)
+                                           .FirstOrDefaultAsync(m => m.Id == id);
             if (customer != null)
             {
+                _dbContext.RemoveRange(customer.Reservation);
+                _dbContext.RemoveRange(customer.OccupiedRoom);
                 _dbContext.Customer.Remove(customer);
                 await _dbContext.SaveChangesAsync();
             }
