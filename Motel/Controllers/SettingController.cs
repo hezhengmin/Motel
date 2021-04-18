@@ -15,6 +15,17 @@ namespace Motel.Controllers
             return View();
         }
 
+        public IActionResult Setting(string button)
+        {
+            if (button == "success")
+            {
+                TempData["Setting"] = "設定成功!";
+            }
+
+            
+            return RedirectToAction(nameof(Index));
+        }
+
         // GET: SettingController/Details/5
         public ActionResult Details(int id)
         {
