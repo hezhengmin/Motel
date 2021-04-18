@@ -49,10 +49,29 @@ namespace Motel.Controllers
             return Json(new { isValid = true, html = Helper.RenderRazorViewToString(this, "_IndexPartial", model) });
         }
 
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ReservationSearch([FromForm] ReservationIndexViewModel reservationIndexVM)
+        {
+            var model = await _reservationService.GetReservationList(reservationIndexVM, pageSize);
+            return Json(new { isValid = true, html = Helper.RenderRazorViewToString(this, "ReservationIndex", model) });
+        }
+
+        
+
         public async Task<IActionResult> ReservationIndex(Guid id)
         {
             int pageNumber = 1;
             var model = await _reservationService.GetReservationList(id, pageNumber, pageSize);
+            return Json(new { isValid = true, html = Helper.RenderRazorViewToString(this, "ReservationIndex", model) });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ReservationIndex([FromBody] ReservationIndexViewModel reservationIndexVM)
+        {
+            var model = await _reservationService.GetReservationList(reservationIndexVM, pageSize);
             return Json(new { isValid = true, html = Helper.RenderRazorViewToString(this, "ReservationIndex", model) });
         }
 
@@ -83,7 +102,7 @@ namespace Motel.Controllers
         {
             await _reservationService.RemoveReservation(ReservationDeleteVM.Id);
             var model = await _reservationService.GetReservationList(ReservationDeleteVM, pageSize);
-            return Json(new { html = Helper.RenderRazorViewToString(this, "_IndexPartial", model) });
+            return Json(new { html = Helper.RenderRazorViewToString(this, "ReservationIndex", model) });
         }
     }
 }

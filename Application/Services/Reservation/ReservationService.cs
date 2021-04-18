@@ -85,7 +85,7 @@ namespace Application.Services
         public async Task<ReservationIndexViewModel> GetReservationList(Guid customerId, FilterViewModel filterVM, int pageSize)
         {
             var pageNumber = filterVM.PageNumber == 0 ? 1 : filterVM.PageNumber;
-            var query = _mapper.Map<ReservationIndexViewModel>(await _reservationRepository.GetReservationList(filterVM.SearchString, pageNumber, pageSize));
+            var query = _mapper.Map<ReservationIndexViewModel>(await _reservationRepository.GetReservationList(customerId, filterVM.SearchString, pageNumber, pageSize));
             query.CustomerId = customerId;
 
             if (!string.IsNullOrEmpty(filterVM.SearchString))
@@ -109,8 +109,8 @@ namespace Application.Services
                 return model;
             }
         }
-        
-        public async Task<ReservationIndexViewModel> GetReservationList(ReservationIndexViewModel ReservationIndexVM, int pageSize)
+
+        public async Task<ReservationIndexViewModel> GetReservationList(Guid customerId, ReservationIndexViewModel ReservationIndexVM, int pageSize)
         {
             var pageNumber = ReservationIndexVM.PageNumber == 0 ? 1 : ReservationIndexVM.PageNumber;
             var query = _mapper.Map<ReservationIndexViewModel>(await _reservationRepository.GetReservationList(ReservationIndexVM.ReservationSearchString, pageNumber, pageSize));
@@ -121,13 +121,28 @@ namespace Application.Services
             return query;
         }
 
+        public async Task<ReservationIndexViewModel> GetReservationList(ReservationIndexViewModel ReservationIndexVM, int pageSize)
+        {
+            var pageNumber = ReservationIndexVM.PageNumber == 0 ? 1 : ReservationIndexVM.PageNumber;
+            var query = _mapper.Map<ReservationIndexViewModel>(await _reservationRepository.GetReservationList(ReservationIndexVM.CustomerId, ReservationIndexVM.ReservationSearchString, pageNumber, pageSize));
+
+            if (!string.IsNullOrEmpty(ReservationIndexVM.ReservationSearchString))
+                query.ReservationSearchString = ReservationIndexVM.ReservationSearchString;
+            if (ReservationIndexVM.CustomerId != null)
+                query.CustomerId = ReservationIndexVM.CustomerId;
+
+            return query;
+        }
+
         public async Task<ReservationIndexViewModel> GetReservationList(ReservationDeleteViewModel ReservationDeleteVM, int pageSize)
         {
             var pageNumber = ReservationDeleteVM.PageNumber == 0 ? 1 : ReservationDeleteVM.PageNumber;
-            var query = _mapper.Map<ReservationIndexViewModel>(await _reservationRepository.GetReservationList(ReservationDeleteVM.SearchString, pageNumber, pageSize));
+            var query = _mapper.Map<ReservationIndexViewModel>(await _reservationRepository.GetReservationList(ReservationDeleteVM.CustomerId, ReservationDeleteVM.ReservationSearchString, pageNumber, pageSize));
 
-            if (!string.IsNullOrEmpty(ReservationDeleteVM.SearchString))
-                query.ReservationSearchString = ReservationDeleteVM.SearchString;
+            if (!string.IsNullOrEmpty(ReservationDeleteVM.ReservationSearchString))
+                query.ReservationSearchString = ReservationDeleteVM.ReservationSearchString;
+            if (ReservationDeleteVM.CustomerId != null)
+                query.CustomerId = ReservationDeleteVM.CustomerId;
 
             return query;
         }
@@ -156,7 +171,5 @@ namespace Application.Services
         {
             return _reservationRepository.GetReservationExists(id);
         }
-
-
     }
 }

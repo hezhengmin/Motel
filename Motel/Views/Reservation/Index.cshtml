@@ -15,7 +15,6 @@
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <button class="btn" data-toggle="modal" href="#stack2">Launch modal</button>
                 <h5 class="modal-title"></h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
@@ -63,7 +62,7 @@
 
         });
 
-        //分頁
+        //客戶分頁
         jQueryAjaxPagePost = (pageNumber) => {
 
             let model = {
@@ -94,6 +93,44 @@
                 console.log(jqXHR, textStatus, errorThrown);
             });
         }
+
+        //預訂分頁
+        jQueryAjaxReservationPagePost = (pageNumber, customerId) => {
+
+            console.log(pageNumber, customerId);
+
+            let model = {
+                CustomerId: customerId,
+                ReservationSearchString: $("#ReservationSearchString").val(),
+                PageNumber: pageNumber,
+                TotalPages: undefined,
+                HasPreviousPage: undefined,
+                HasNextPage: undefined,
+                ReservationViewModelList: []
+            };
+
+            console.log(model);
+
+            $.ajax({
+                type: "POST",
+                url: "/Reservation/ReservationIndex",
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(model),
+                processData: false,
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("X-XSRF-TOKEN",
+                        $('input:hidden[name="__RequestVerificationToken"]').val());
+                }
+            }).done(function (res) {
+                if (res.isValid) {
+                    $modalBoby.html(res.html)
+                }
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                console.log(jqXHR, textStatus, errorThrown);
+            });
+        }
+
 
         //預訂列表
         showListPopup = (url, title) => {
@@ -137,6 +174,29 @@
                 }).done(function (res) {
                     if (res.isValid) {
                         $view.html(res.html)
+                    }
+                }).fail(function (jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR, textStatus, errorThrown);
+                });
+                //to prevent default form submit event
+                return false;
+            } catch (ex) {
+                console.log(ex)
+            }
+        }
+
+        jQueryAjaxReservationSearchPost = form => {
+
+            try {
+                $.ajax({
+                    type: "POST",
+                    url: form.action,
+                    data: new FormData(form),
+                    contentType: false,
+                    processData: false
+                }).done(function (res) {
+                    if (res.isValid) {
+                        $modalBoby.html(res.html);
                     }
                 }).fail(function (jqXHR, textStatus, errorThrown) {
                     console.log(jqXHR, textStatus, errorThrown);
@@ -224,12 +284,13 @@
         }
 
         //刪除
-        jQueryAjaxDelete = (url, id, pageNumber) => {
+        jQueryAjaxDelete = (url, id, pageNumber,customerId) => {
 
             let model = {
                 Id: id,
+                CustomerId: customerId,
                 PageNumber: pageNumber,
-                SearchString: $("#SearchString").val()
+                ReservationSearchString: $("#ReservationSearchString").val()
             };
 
             if (confirm("你確定要刪除嗎?")) {
@@ -241,7 +302,7 @@
                         contentType: "application/json; charset=utf-8",
                         data: JSON.stringify(model)
                     }).done(function (res) {
-                        $view.html(res.html);
+                        $modalBoby.html(res.html);
                     }).fail(function (jqXHR, textStatus, errorThrown) {
                         console.log(jqXHR, textStatus, errorThrown);
                     });

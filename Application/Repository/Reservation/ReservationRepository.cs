@@ -58,6 +58,30 @@ namespace Application.Repository
         {
             var query = _dbContext.Set<Reservation>().AsQueryable();
 
+            query = query.Include(m => m.Room)
+                         .ThenInclude(m => m.RoomType);
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                query = query.Where(m => m.Room.RoomNumber.Contains(searchString));
+            }
+
+            query = query.OrderByDescending(m => m.SysDate);
+
+            var list = await PaginatedList<Reservation>.CreateAsync(query, pageNumber, pageSize);
+
+            return list;
+        }
+
+        public async Task<PaginatedList<Reservation>> GetReservationList(Guid customerId, string searchString, int pageNumber, int pageSize)
+        {
+            var query = _dbContext.Set<Reservation>().AsQueryable();
+
+            query = query.Include(m => m.Room)
+                         .ThenInclude(m => m.RoomType);
+
+            query = query.Where(m => m.CustomerId == customerId);
+
             if (!string.IsNullOrEmpty(searchString))
             {
                 query = query.Where(m => m.Room.RoomNumber.Contains(searchString));
