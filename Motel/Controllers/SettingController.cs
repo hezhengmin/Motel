@@ -1,5 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Infrastructure.Data;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,10 +12,21 @@ namespace Motel.Controllers
 {
     public class SettingController : Controller
     {
+        private readonly MotelDbContext _dbContext;
+
+        public SettingController(MotelDbContext dbContext)
+        {
+            _dbContext = dbContext;
+        }
+
         // GET: SettingController
         public ActionResult Index()
         {
-            return View();
+            var customers = _dbContext.Customer.FromSqlRaw("select * from customer").ToList();
+
+            TempData["Customers"] = JsonConvert.SerializeObject(customers);
+
+            return View(customers);
         }
 
         public IActionResult Setting(string button)
