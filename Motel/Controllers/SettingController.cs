@@ -29,11 +29,15 @@ namespace Motel.Controllers
             return View(customers);
         }
 
+        [Obsolete]
         public IActionResult Setting(string button)
         {
             if (button == "success")
             {
                 TempData["Setting"] = "設定成功!";
+
+                int noOfRowUpdated = _dbContext.Database.ExecuteSqlCommand("update customer set Tel = '0912345678' where Id is not null");
+            
             }
 
             
