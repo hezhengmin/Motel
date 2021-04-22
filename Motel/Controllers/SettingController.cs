@@ -22,11 +22,8 @@ namespace Motel.Controllers
         // GET: SettingController
         public ActionResult Index()
         {
-            var customers = _dbContext.Customer.FromSqlRaw("select * from customer").ToList();
 
-            TempData["Customers"] = JsonConvert.SerializeObject(customers);
-
-            return View(customers);
+            return View();
         }
 
         [Obsolete]
@@ -36,17 +33,9 @@ namespace Motel.Controllers
             {
                 TempData["Setting"] = "設定成功!";
 
+                var customers = _dbContext.Customer.FromSqlRaw("select * from customer").ToList();
 
-                var identityNum = "A111852226";
-                var gender = 1;
-                var tel = "09-12345678";
-                var name = "陳杰英";
-                var address = "臺北市";
-                var sysDate = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");
-                //int noOfRowUpdated = _dbContext.Database.ExecuteSqlCommand($"update customer set Tel = {tel} where Id is not null");
-
-                int insert = _dbContext.Database.ExecuteSqlCommand($"insert into customer (IdentityNum, Gender, Name, Address, Tel, SysDate) values ({identityNum},{gender},{name},{address},{tel},{sysDate})");
-
+                TempData["Customers"] = JsonConvert.SerializeObject(customers);
             }
 
             
