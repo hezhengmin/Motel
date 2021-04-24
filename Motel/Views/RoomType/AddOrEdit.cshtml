@@ -75,14 +75,14 @@
             </div>
             <div class="form-group form-check">
                 <label class="form-check-label">
-                    <input class="form-check-input" asp-for="RoomTypeViewModel.AirCondition">
+                    <input id="RoomTypeViewModel.AirCondition" name="RoomTypeViewModel.AirCondition" type="checkbox" value="true" @(((Model != null) && Model.RoomTypeViewModel.AirCondition) ? "checked=\"checked\"" : "" ) />
                     @Html.DisplayNameFor(model => model.RoomTypeViewModel.AirCondition)
                 </label>
             </div>
             <div class="form-group form-check">
                 <label class="form-check-label">
-                   <input class="form-check-input" asp-for="RoomTypeViewModel.Tv">
-                   @Html.DisplayNameFor(model => model.RoomTypeViewModel.Tv)
+                    <input id="RoomTypeViewModel.Tv" name="RoomTypeViewModel.Tv" type="checkbox" value="true" @(((Model != null) && Model.RoomTypeViewModel.Tv) ? "checked=\"checked\"" : "" ) />
+                    @Html.DisplayNameFor(model => model.RoomTypeViewModel.Tv)
                 </label>
             </div>
             <div class="form-group">

@@ -113,12 +113,12 @@
         $.fn.serializeObject = function () {
             var o = {};
             var a = this.serializeArray();
-        
             $.each(a, function () {
                 if (o[this.name]) {
-                    if (!o[this.name].push && o[this.name].length == 0) {
+                    if (!o[this.name].push) {
                         o[this.name] = [o[this.name]];
                     }
+                    o[this.name].push(this.value || '');
                 } else {
                     o[this.name] = this.value || '';
                 }
@@ -131,10 +131,13 @@
 
             let $form = $(form).serializeObject();
 
+            let pageNumber = $("#navigation li.active > a.page-link").text();
+            if (pageNumber === "") pageNumber = 1;
+
             let model = {
                 FilterViewModel: {
                     SearchString: $("#SearchString").val(),
-                    PageNumber: $("#navigation li.active > a.page-link").text()
+                    PageNumber: pageNumber
                 },
                 RoomTypeViewModel: {
                     Id: $form["RoomTypeViewModel.Id"],
@@ -149,8 +152,6 @@
                     Tv: $form["RoomTypeViewModel.Tv"]
                 }
             };
-
-            console.log("model", model);
 
 
             try {

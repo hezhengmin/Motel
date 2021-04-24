@@ -11,7 +11,7 @@ namespace Application.ViewModels.RoomType
         [Key]
         public Guid Id { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "{0}必填")]
         [Display(Name = "類型名稱")]
         public string Name { get; set; }
 

@@ -134,11 +134,14 @@
         jQueryAjaxPost = form => {
 
             let $form = $(form).serializeObject();
-            console.log($form);
+
+            let pageNumber = $("#navigation li.active > a.page-link").text();
+            if (pageNumber === "") pageNumber = 1;
+
             let model = {
                 FilterViewModel: {
                     SearchString: $("#SearchString").val(),
-                    PageNumber: $("#navigation li.active > a.page-link").text()
+                    PageNumber: pageNumber
                 },
                 CustomerViewModel: {
                     Id: $form["CustomerViewModel.Id"],
@@ -149,8 +152,6 @@
                     Tel: $form["CustomerViewModel.Tel"],
                 }
             };
-
-            console.log(model);
 
             try {
                 $.ajax({
