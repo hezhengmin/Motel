@@ -17,12 +17,13 @@ namespace Application.ViewModels.Room
 
         [Required(ErrorMessage = "{0}必填")]
         [Display(Name = "房間號")]
-        [StringLength(10)]
+        [RegularExpression(@"^[0-9]{4}$")]
+        [StringLength(4)]
         public string RoomNumber { get; set; }
 
         [Required(ErrorMessage = "{0}必填")]
         [Display(Name = "房間類型")]
-        public Guid RoomTypeId { get; set; }
+        public Guid? RoomTypeId { get; set; }
 
         [StringLength(50)]
         [Display(Name = "房間描述")]

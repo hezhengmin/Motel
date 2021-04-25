@@ -18,21 +18,27 @@
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label asp-for="RoomViewModel.RoomTypeId" class="control-label"></label>
-                        <select asp-for="RoomViewModel.RoomTypeId" class="form-control" asp-items="Model.RoomViewModel.RoomTypeList"></select>
-                        <span asp-validation-for="RoomViewModel.RoomTypeId" class="text-danger"></span>
+                        <label asp-for="RoomViewModel.Position" class="control-label"></label>
+                        <input asp-for="RoomViewModel.Position" class="form-control" />
+                        <span asp-validation-for="RoomViewModel.Position" class="text-danger"></span>
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label asp-for="RoomViewModel.Position" class="control-label"></label>
-                        <input asp-for="RoomViewModel.Position" class="form-control" />
-                        <span asp-validation-for="RoomViewModel.Position" class="text-danger"></span>
+                        <label asp-for="RoomViewModel.RoomTypeId" class="control-label"></label>
+                        <select asp-for="RoomViewModel.RoomTypeId" class="form-control" asp-items="Model.RoomViewModel.RoomTypeList"></select>
+                        <span asp-validation-for="RoomViewModel.RoomTypeId" class="text-danger"></span>
                     </div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-6" id="content">
+                    <div class="d-flex flex-column">
+                        <div class="mx-sm-2"><strong>平日價：</strong></div>
+                        <div class="mx-sm-2"><strong>假日價：</strong></div>
+                        <div class="mx-sm-2"><strong>休息價(元/3hr)：</strong></div>
+                        <div class="mx-sm-2"><strong>休息價(元/2hr)：</strong></div>
+                    </div>
                 </div>
             </div>
             <div class="row">
@@ -50,7 +56,47 @@
         </form>
     </div>
 </div>
+<script>
+    $(function () {
 
+        getAllRoomType('@Model.RoomViewModel.RoomTypeId');
+
+        $("#RoomViewModel_RoomTypeId").on("change", function () {
+            let roomTypeId = $(this).val();
+
+            getAllRoomType(roomTypeId);
+        });
+    });
+
+    getAllRoomType = (roomTypeId) => {
+        fetch(`/Room/GetRoomType/${roomTypeId}`)
+            .then(function (response) {
+                return response.json();
+            })
+            .catch(error => console.error("Error:", error))
+            .then(function (data) {
+
+                let array = [];
+
+                if (data.result !== "") {
+                    array.push(data.result.price);
+                    array.push(data.result.hprice);
+                    array.push(data.result.qkprice);
+                    array.push(data.result.qk2price);
+                }
+                else {
+                    array = Array(5).fill("");
+                }
+
+                $("#content").html(`<div class="d-flex flex-column">
+                                        <div class="mx-sm-2"><strong>平日價：</strong>${array[0]}</div>
+                                        <div class="mx-sm-2"><strong>假日價：</strong>${array[1]}</div>
+                                        <div class="mx-sm-2"><strong>休息價(元/3hr)：</strong>${array[2]}</div>
+                                        <div class="mx-sm-2"><strong>休息價(元/2hr)：</strong>${array[3]}</div>
+                                    </div>`);
+            });
+    }
+</script>
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

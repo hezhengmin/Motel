@@ -11,11 +11,15 @@ namespace Motel.Controllers
     public class RoomController : Controller
     {
         private readonly IRoomService _roomService;
+        private readonly IRoomTypeService _roomTypeService;
+
         private int pageSize = 5;
 
-        public RoomController(IRoomService roomService)
+        public RoomController(IRoomService roomService,
+                              IRoomTypeService roomTypeService)
         {
             _roomService = roomService;
+            _roomTypeService = roomTypeService;
         }
 
         // GET: Room
@@ -81,6 +85,16 @@ namespace Motel.Controllers
             await _roomService.RemoveRoom(RoomDeleteVM.Id);
             var model = await _roomService.GetRoomList(RoomDeleteVM, pageSize);
             return Json(new { html = Helper.RenderRazorViewToString(this, "_IndexPartial", model) });
+        }
+
+
+        public async Task<IActionResult> GetRoomType(Guid? id)
+        {
+            if (id == null) return Json(new { result = ""});
+
+            var roomType = await _roomTypeService.GetRoomType(id.Value);
+
+            return Json(new { result = roomType });
         }
     }
 }

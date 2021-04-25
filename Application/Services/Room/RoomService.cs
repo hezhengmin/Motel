@@ -45,6 +45,8 @@ namespace Application.Services
 
             model.RoomViewModel.RoomTypeList = new List<SelectListItem>();
 
+            model.RoomViewModel.RoomTypeList.Add(new SelectListItem("請選擇", ""));
+
             foreach (var roomType in _roomTypeRepository.GetRoomTypeList().Result)
             {
                 model.RoomViewModel.RoomTypeList.Add(new SelectListItem(roomType.Name, roomType.Id.ToString()));
@@ -57,6 +59,8 @@ namespace Application.Services
         {
             compoundVM.RoomViewModel.RoomTypeList = new List<SelectListItem>();
 
+            compoundVM.RoomViewModel.RoomTypeList.Add(new SelectListItem("請選擇", ""));
+            
             foreach (var roomType in await _roomTypeRepository.GetRoomTypeList())
             {
                 compoundVM.RoomViewModel.RoomTypeList.Add(new SelectListItem(roomType.Name, roomType.Id.ToString()));

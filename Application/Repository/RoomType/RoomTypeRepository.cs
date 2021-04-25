@@ -35,7 +35,7 @@ namespace Application.Repository
             query = query.OrderByDescending(m => m.SysDate);
 
             var list = await PaginatedList<RoomType>.CreateAsync(query, pageNumber, pageSize);
-            
+
             return list;
         }
 
@@ -55,25 +55,27 @@ namespace Application.Repository
             return list;
         }
 
-        public async Task AddRoomType(RoomType RoomType)
+        public async Task AddRoomType(RoomType roomType)
         {
-            RoomType.SysDate = DateTime.Now;
-            _dbContext.Add(RoomType);
+            roomType.SysDate = DateTime.Now;
+            _dbContext.Add(roomType);
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task UpdateRoomType(RoomType RoomType)
+        public async Task UpdateRoomType(RoomType roomType)
         {
-            _dbContext.Update(RoomType);
+            _dbContext.Update(roomType);
             await _dbContext.SaveChangesAsync();
         }
 
         public async Task RemoveRoomType(Guid id)
         {
-            var RoomType = await GetRoomType(id);
-            if (RoomType != null)
+            var roomType = await _dbContext.Set<RoomType>().Include(m => m.Room).FirstOrDefaultAsync(m => m.Id == id);
+            
+            if (roomType != null)
             {
-                _dbContext.RoomType.Remove(RoomType);
+                _dbContext.RemoveRange(roomType.Room);
+                _dbContext.RoomType.Remove(roomType);
                 await _dbContext.SaveChangesAsync();
             }
         }
