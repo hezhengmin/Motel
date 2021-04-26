@@ -13,11 +13,20 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
+                        <label asp-for="ReservationViewModel.RoomTypeId" class="control-label"></label>
+                        <select asp-for="ReservationViewModel.RoomTypeId" class="form-control" asp-items="Model.ReservationViewModel.RoomTypeList"></select>
+                        <span asp-validation-for="ReservationViewModel.RoomTypeId" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
                         <label asp-for="ReservationViewModel.RoomId" class="control-label"></label>
                         <select asp-for="ReservationViewModel.RoomId" class="form-control" asp-items="Model.ReservationViewModel.RoomList"></select>
                         <span asp-validation-for="ReservationViewModel.RoomId" class="text-danger"></span>
                     </div>
                 </div>
+            </div>
+            <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
                         <label asp-for="ReservationViewModel.BeginDate" class="control-label"></label>
@@ -25,16 +34,12 @@
                         <span asp-validation-for="ReservationViewModel.BeginDate" class="text-danger"></span>
                     </div>
                 </div>
-            </div>
-            <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
                         <label asp-for="ReservationViewModel.Days" class="control-label"></label>
                         <input asp-for="ReservationViewModel.Days" class="form-control" />
                         <span asp-validation-for="ReservationViewModel.Days" class="text-danger"></span>
                     </div>
-                </div>
-                <div class="col-md-6">
                 </div>
             </div>
             <div class="row">

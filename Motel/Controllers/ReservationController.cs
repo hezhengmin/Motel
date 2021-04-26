@@ -49,7 +49,6 @@ namespace Motel.Controllers
             return Json(new { isValid = true, html = Helper.RenderRazorViewToString(this, "_IndexPartial", model) });
         }
 
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ReservationSearch([FromForm] ReservationIndexViewModel reservationIndexVM)
@@ -57,8 +56,6 @@ namespace Motel.Controllers
             var model = await _reservationService.GetReservationList(reservationIndexVM, pageSize);
             return Json(new { isValid = true, html = Helper.RenderRazorViewToString(this, "ReservationIndex", model) });
         }
-
-        
 
         public async Task<IActionResult> ReservationIndex(Guid id)
         {

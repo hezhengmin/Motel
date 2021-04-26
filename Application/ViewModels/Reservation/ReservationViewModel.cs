@@ -17,7 +17,7 @@ namespace Application.ViewModels.Reservation
 
         [Required(ErrorMessage = "{0}必填")]
         [Display(Name = "房間號碼")]
-        public Guid RoomId { get; set; }
+        public Guid? RoomId { get; set; }
         public Guid CustomerId { get; set; }
         
         [Required(ErrorMessage = "{0}必填")]
@@ -35,5 +35,8 @@ namespace Application.ViewModels.Reservation
         public bool CheckIn { get; set; }
 
         public List<SelectListItem> RoomList { get; set; }
+        public List<SelectListItem> RoomTypeList { get; set; }
+        [Display(Name = "房間類型")]
+        public Guid? RoomTypeId { get; set; }
     }
 }

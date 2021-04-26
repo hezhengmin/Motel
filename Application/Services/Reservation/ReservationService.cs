@@ -15,14 +15,17 @@ namespace Application.Services
         private readonly IMapper _mapper;
         private readonly IReservationRepository _reservationRepository;
         private readonly IRoomRepository _roomRepository;
+        private readonly IRoomTypeRepository _roomTypeRepository;
 
         public ReservationService(IMapper mapper,
                                   IReservationRepository reservationRepository,
-                                  IRoomRepository roomRepository)
+                                  IRoomRepository roomRepository,
+                                  IRoomTypeRepository roomTypeRepository)
         {
             _mapper = mapper;
             _reservationRepository = reservationRepository;
             _roomRepository = roomRepository;
+            _roomTypeRepository = roomTypeRepository;
         }
 
         public async Task<ReservationViewModel> GetReservation(Guid id)
@@ -37,6 +40,7 @@ namespace Application.Services
             {
                 model.ReservationViewModel = new ReservationViewModel
                 {
+                    Days = 1,
                     CustomerId = customerId,
                     BeginDate = DateTime.Now
                 };
@@ -47,11 +51,24 @@ namespace Application.Services
                 model.ReservationViewModel = roomVM;
             }
 
-            model.ReservationViewModel.RoomList = new List<SelectListItem>();
+            //房間資料
 
-            foreach (var room in _roomRepository.GetRoomList().Result)
+            model.ReservationViewModel.RoomList = new List<SelectListItem>();
+            model.ReservationViewModel.RoomList.Add(new SelectListItem("請選擇", ""));
+
+            //foreach (var room in _roomRepository.GetRoomList().Result)
+            //{
+            //    model.ReservationViewModel.RoomList.Add(new SelectListItem(room.RoomNumber, room.Id.ToString()));
+            //}
+
+            //房間類型
+
+            model.ReservationViewModel.RoomTypeList = new List<SelectListItem>();
+            model.ReservationViewModel.RoomTypeList.Add(new SelectListItem("請選擇", ""));
+
+            foreach (var roomType in await _roomTypeRepository.GetRoomTypeList())
             {
-                model.ReservationViewModel.RoomList.Add(new SelectListItem(room.RoomNumber, room.Id.ToString()));
+                model.ReservationViewModel.RoomTypeList.Add(new SelectListItem(roomType.Name, roomType.Id.ToString()));
             }
 
             return model;
@@ -59,11 +76,21 @@ namespace Application.Services
 
         public async Task<CompoundReservationViewModel> GetAddOrEditReservation(CompoundReservationViewModel compoundVM)
         {
-            compoundVM.ReservationViewModel.RoomList = new List<SelectListItem>();
 
-            foreach (var room in await _roomRepository.GetRoomList())
+            compoundVM.ReservationViewModel.RoomList = new List<SelectListItem>();
+            compoundVM.ReservationViewModel.RoomList.Add(new SelectListItem("請選擇", ""));
+
+            //foreach (var room in await _roomRepository.GetRoomList())
+            //{
+            //    compoundVM.ReservationViewModel.RoomList.Add(new SelectListItem(room.RoomNumber, room.Id.ToString()));
+            //}
+
+            compoundVM.ReservationViewModel.RoomTypeList = new List<SelectListItem>();
+            compoundVM.ReservationViewModel.RoomTypeList.Add(new SelectListItem("請選擇", ""));
+            
+            foreach (var roomType in await _roomTypeRepository.GetRoomTypeList())
             {
-                compoundVM.ReservationViewModel.RoomList.Add(new SelectListItem(room.RoomNumber, room.Id.ToString()));
+                compoundVM.ReservationViewModel.RoomTypeList.Add(new SelectListItem(roomType.Name, roomType.Id.ToString()));
             }
 
             return compoundVM;

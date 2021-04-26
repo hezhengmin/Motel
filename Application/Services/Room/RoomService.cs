@@ -137,7 +137,5 @@ namespace Application.Services
         {
             return _roomRepository.GetRoomExists(id);
         }
-
-
     }
 }
