@@ -74,6 +74,11 @@ namespace Application.Services
             return _mapper.Map<List<RoomViewModel>>(await _roomRepository.GetRoomList());
         }
 
+        public async Task<List<RoomViewModel>> GetRoomList(Guid roomTypeId)
+        {
+            return _mapper.Map<List<RoomViewModel>>(await _roomRepository.GetRoomList(roomTypeId));
+        }
+
         public async Task<RoomIndexViewModel> GetRoomList(int pageNumber, int pageSize)
         {
             var query = _mapper.Map<RoomIndexViewModel>(await _roomRepository.GetRoomList(pageNumber, pageSize));

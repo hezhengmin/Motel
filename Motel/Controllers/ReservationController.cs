@@ -14,14 +14,21 @@ namespace Motel.Controllers
     {
         private readonly ICustomerService _customerService;
         private readonly IReservationService _reservationService;
+        private readonly IRoomTypeService _roomTypeService;
+        private readonly IRoomService _roomService;
+
 
         private int pageSize = 5;
 
         public ReservationController(ICustomerService customerService,
-                                     IReservationService reservationService)
+                                     IReservationService reservationService,
+                                     IRoomTypeService roomTypeService,
+                                     IRoomService roomService)
         {
             _customerService = customerService;
             _reservationService = reservationService;
+            _roomTypeService = roomTypeService;
+            _roomService = roomService;
         }
 
 
@@ -100,6 +107,28 @@ namespace Motel.Controllers
             await _reservationService.RemoveReservation(ReservationDeleteVM.Id);
             var model = await _reservationService.GetReservationList(ReservationDeleteVM, pageSize);
             return Json(new { html = Helper.RenderRazorViewToString(this, "ReservationIndex", model) });
+        }
+
+        public async Task<IActionResult> GetRoomType(Guid? id)
+        {
+            if (id == null) return Json(new { result = "" });
+
+            var roomType = await _roomTypeService.GetRoomType(id.Value);
+
+            return Json(new { result = roomType });
+        }
+
+        public async Task<IActionResult> GetRoom(Guid? id)
+        {
+            if (id == null) return Json(new { result = "" });
+
+            var roomList = await _roomService.GetRoomList(id.Value);
+
+            return Json(new { result = roomList.Select(m => new
+            {
+                m.Id,
+                 m.RoomNumber
+            })});
         }
     }
 }

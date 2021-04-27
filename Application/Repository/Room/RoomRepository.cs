@@ -28,6 +28,11 @@ namespace Application.Repository
             return await _dbContext.Room.Include(m => m.RoomType).OrderByDescending(m => m.SysDate).ToListAsync();
         }
 
+        public async Task<List<Room>> GetRoomList(Guid roomTypeId)
+        {
+            return await _dbContext.Room.Where(m => m.RoomTypeId == roomTypeId).ToListAsync();
+        }
+
         public async Task<PaginatedList<Room>> GetRoomList(int pageNumber, int pageSize)
         {
             var query = _dbContext.Set<Room>().Include(m => m.RoomType).AsQueryable();
@@ -35,7 +40,7 @@ namespace Application.Repository
             query = query.OrderByDescending(m => m.SysDate);
 
             var list = await PaginatedList<Room>.CreateAsync(query, pageNumber, pageSize);
-            
+
             return list;
         }
 
@@ -82,5 +87,7 @@ namespace Application.Repository
         {
             return _dbContext.Room.Any(m => m.Id == id);
         }
+
+
     }
 }

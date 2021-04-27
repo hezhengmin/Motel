@@ -18,12 +18,26 @@
                         <span asp-validation-for="ReservationViewModel.RoomTypeId" class="text-danger"></span>
                     </div>
                 </div>
+                <div class="col-md-6" id="content">
+                    <div class="d-flex flex-column">
+                        <div class="mx-sm-2"><strong>平日價：</strong></div>
+                        <div class="mx-sm-2"><strong>假日價：</strong></div>
+                        <div class="mx-sm-2"><strong>休息價(元/3hr)：</strong></div>
+                        <div class="mx-sm-2"><strong>休息價(元/2hr)：</strong></div>
+                        <div class="mx-sm-2"><strong>房間面積：</strong></div>
+                        <div class="mx-sm-2"><strong>配備床數：</strong></div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
                         <label asp-for="ReservationViewModel.RoomId" class="control-label"></label>
                         <select asp-for="ReservationViewModel.RoomId" class="form-control" asp-items="Model.ReservationViewModel.RoomList"></select>
                         <span asp-validation-for="ReservationViewModel.RoomId" class="text-danger"></span>
                     </div>
+                </div>
+                <div class="col-md-6">
                 </div>
             </div>
             <div class="row">
@@ -59,7 +73,70 @@
         </form>
     </div>
 </div>
+<script>
+    $(function () {
 
+        getAllRoomType('@Model.ReservationViewModel.RoomTypeId');
+
+        $("#ReservationViewModel_RoomTypeId").on("change", function () {
+            let roomTypeId = $(this).val();
+
+            getAllRoomType(roomTypeId);
+            getRoom(roomTypeId);
+        });
+    });
+
+    getAllRoomType = (roomTypeId) => {
+        fetch(`/Reservation/GetRoomType/${roomTypeId}`)
+            .then(function (response) {
+                return response.json();
+            })
+            .catch(error => console.error("Error:", error))
+            .then(function (data) {
+
+                let array = [];
+
+                if (data.result !== "") {
+                    array.push(data.result.price);
+                    array.push(data.result.hprice);
+                    array.push(data.result.qkprice);
+                    array.push(data.result.qk2price);
+                    array.push(data.result.area);
+                    array.push(data.result.bedQuantity);
+                }
+                else {
+                    array = Array(6).fill("");
+                }
+
+                $("#content").html(`<div class="d-flex flex-column">
+                                        <div class="mx-sm-2"><strong>平日價：</strong>${array[0]}</div>
+                                        <div class="mx-sm-2"><strong>假日價：</strong>${array[1]}</div>
+                                        <div class="mx-sm-2"><strong>休息價(元/3hr)：</strong>${array[2]}</div>
+                                        <div class="mx-sm-2"><strong>休息價(元/2hr)：</strong>${array[3]}</div>
+                                        <div class="mx-sm-2"><strong>房間面積：</strong>${array[4]}</div>
+                                        <div class="mx-sm-2"><strong>配備床數：</strong>${array[5]}</div>
+                                    </div>`);
+            });
+    }
+
+    getRoom = (roomTypeId) => {
+        fetch(`/Reservation/GetRoom/${roomTypeId}`)
+            .then(function (response) {
+                return response.json();
+            })
+            .catch(error => console.error("Error:", error))
+            .then(function (data) {
+                //console.log(data);
+                $("#ReservationViewModel_RoomId").empty();
+
+                let items = "<option value=''>請選擇</option>";
+                $.each(data.result, function (i, room){
+                    items +=`<option value=${room.id}>${room.roomNumber}</option>`
+                });
+                $("#ReservationViewModel_RoomId").html(items);
+            });
+    }
+</script>
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

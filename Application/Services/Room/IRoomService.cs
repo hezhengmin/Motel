@@ -12,6 +12,7 @@ namespace Application.Services
         Task<CompoundRoomViewModel> GetAddOrEditRoom(Guid? id);
         Task<CompoundRoomViewModel> GetAddOrEditRoom(CompoundRoomViewModel compoundVM);
         Task<List<RoomViewModel>> GetRoomList();
+        Task<List<RoomViewModel>> GetRoomList(Guid roomTypeId);
         Task<RoomIndexViewModel> GetRoomList(int pageNumber, int pageSize);
         Task<RoomIndexViewModel> GetRoomList(FilterViewModel filterVM, int pageSize);
         Task<RoomIndexViewModel> GetRoomList(RoomDeleteViewModel RoomDeleteVM, int pageSize);
