@@ -10,6 +10,7 @@ namespace Application.Repository
     public interface IReservationRepository
     {
         Task<Reservation> GetReservation(Guid id);
+        Task<Reservation> GetMultipleEntitiesReservation(Guid id);
         Task<List<Reservation>> GetReservationList();
         Task<PaginatedList<Reservation>> GetReservationList(int pageNumber, int pageSize);
         Task<PaginatedList<Reservation>> GetReservationList(Guid customerId, int pageNumber, int pageSize);

@@ -28,6 +28,18 @@ namespace Application.Repository
             return await _dbContext.Room.Include(m => m.RoomType).OrderByDescending(m => m.SysDate).ToListAsync();
         }
 
+        public async Task<List<Room>> GetRoomList(Guid? roomTypeId)
+        {
+            var query = _dbContext.Set<Room>().AsQueryable();
+
+            if (roomTypeId.HasValue)
+            {
+                query = query.Where(m => m.RoomTypeId == roomTypeId.Value);
+            }
+
+            return await query.ToListAsync();
+        }
+
         public async Task<List<Room>> GetRoomList(Guid roomTypeId)
         {
             return await _dbContext.Room.Where(m => m.RoomTypeId == roomTypeId).ToListAsync();

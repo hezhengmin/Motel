@@ -229,8 +229,6 @@
 
             let $form = $(form).serializeObject();
 
-            console.log($form);
-
             let pageNumber = $("#navigationReservation li.active > a.page-link").text();
             if (pageNumber === "") pageNumber = 1;
 
@@ -246,11 +244,9 @@
                     BeginDate: $form["ReservationViewModel.BeginDate"],
                     Days: $form["ReservationViewModel.Days"],
                     CheckIn: $form["ReservationViewModel.CheckIn"],
+                    RoomTypeId: $form["ReservationViewModel.RoomTypeId"],
                 }
             };
-
-
-            console.log(model);
 
             try {
                 $.ajax({

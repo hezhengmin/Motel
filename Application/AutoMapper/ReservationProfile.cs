@@ -10,7 +10,8 @@ namespace Application.AutoMapper
     {
         public ReservationProfile()
         {
-            CreateMap<Reservation, ReservationViewModel>();
+            CreateMap<Reservation, ReservationViewModel>()
+                .ForMember(dest => dest.RoomTypeId, opt => opt.MapFrom(src => src.Room.RoomTypeId));
 
             CreateMap<Reservation, ReservationListViewModel>()
                 .ForMember(dest => dest.RoomTypeName, opt => opt.MapFrom(src => src.Room.RoomType.Name))

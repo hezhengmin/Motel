@@ -24,6 +24,11 @@ namespace Application.Repository
             return await _dbContext.Reservation.FirstOrDefaultAsync(m => m.Id == id);
         }
 
+        public async Task<Reservation> GetMultipleEntitiesReservation(Guid id)
+        {
+            return await _dbContext.Reservation.Include(m => m.Room).FirstOrDefaultAsync(m => m.Id == id);
+        }
+
         public async Task<List<Reservation>> GetReservationList()
         {
             return await _dbContext.Reservation.OrderByDescending(m => m.SysDate).ToListAsync();

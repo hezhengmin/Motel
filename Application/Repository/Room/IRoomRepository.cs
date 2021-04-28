@@ -11,6 +11,7 @@ namespace Application.Repository
     {
         Task<Room> GetRoom(Guid id);
         Task<List<Room>> GetRoomList();
+        Task<List<Room>> GetRoomList(Guid? roomTypeId);
         Task<List<Room>> GetRoomList(Guid roomTypeId);
         Task<PaginatedList<Room>> GetRoomList(int pageNumber, int pageSize);
         Task<PaginatedList<Room>> GetRoomList(string searchString, int pageNumber, int pageSize);
