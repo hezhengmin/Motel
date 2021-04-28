@@ -65,9 +65,12 @@ namespace Application.Services
             model.ReservationViewModel.RoomList = new List<SelectListItem>();
             model.ReservationViewModel.RoomList.Add(new SelectListItem("請選擇", ""));
 
-            foreach (var room in await _roomRepository.GetRoomList(model.ReservationViewModel.RoomTypeId))
+            if(model.ReservationViewModel.RoomTypeId != null)
             {
-                model.ReservationViewModel.RoomList.Add(new SelectListItem(room.RoomNumber, room.Id.ToString()));
+                foreach (var room in await _roomRepository.GetRoomList(model.ReservationViewModel.RoomTypeId))
+                {
+                    model.ReservationViewModel.RoomList.Add(new SelectListItem(room.RoomNumber, room.Id.ToString()));
+                }
             }
 
             return model;
