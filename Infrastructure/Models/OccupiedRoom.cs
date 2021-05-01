@@ -12,7 +12,6 @@ namespace Infrastructure.Models
         public Guid Id { get; set; }
         public Guid CustomerId { get; set; }
         public Guid RoomId { get; set; }
-        public string Number { get; set; }
         public DateTime BeginDate { get; set; }
         public DateTime? EndDate { get; set; }
         public DateTime PlanEndDate { get; set; }
@@ -20,7 +19,7 @@ namespace Infrastructure.Models
         public decimal? PrePay { get; set; }
         public decimal? Price { get; set; }
         public int? Days { get; set; }
-        public bool OccupyType { get; set; }
+        public bool Balance { get; set; }
         public DateTime SysDate { get; set; }
 
         public virtual Customer Customer { get; set; }

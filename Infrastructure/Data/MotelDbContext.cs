@@ -74,6 +74,8 @@ namespace Infrastructure.Data
             {
                 entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
 
+                entity.Property(e => e.Balance).HasComment("是否需補差額");
+
                 entity.Property(e => e.BeginDate)
                     .HasColumnType("datetime")
                     .HasComment("訂房時間");
@@ -83,14 +85,6 @@ namespace Infrastructure.Data
                 entity.Property(e => e.EndDate)
                     .HasColumnType("datetime")
                     .HasComment("實際退房時間");
-
-                entity.Property(e => e.Number)
-                    .IsRequired()
-                    .HasMaxLength(10)
-                    .IsUnicode(false)
-                    .HasComment("房間號");
-
-                entity.Property(e => e.OccupyType).HasComment("訂房type值");
 
                 entity.Property(e => e.Pay)
                     .HasColumnType("money")
