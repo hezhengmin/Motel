@@ -13,8 +13,8 @@ namespace Infrastructure.Models
         public Guid RoomId { get; set; }
         public Guid CustomerId { get; set; }
         public DateTime BeginDate { get; set; }
+        public DateTime EndDate { get; set; }
         public byte Days { get; set; }
-        public bool CheckIn { get; set; }
         public DateTime SysDate { get; set; }
 
         public virtual Customer Customer { get; set; }

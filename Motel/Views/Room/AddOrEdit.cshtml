@@ -81,18 +81,14 @@
                 if (data.result !== "") {
                     array.push(data.result.price);
                     array.push(data.result.hprice);
-                    array.push(data.result.qkprice);
-                    array.push(data.result.qk2price);
                 }
                 else {
-                    array = Array(5).fill("");
+                    array = Array(3).fill("");
                 }
 
                 $("#content").html(`<div class="d-flex flex-column">
                                         <div class="mx-sm-2"><strong>平日價：</strong>${array[0]}</div>
                                         <div class="mx-sm-2"><strong>假日價：</strong>${array[1]}</div>
-                                        <div class="mx-sm-2"><strong>休息價(元/3hr)：</strong>${array[2]}</div>
-                                        <div class="mx-sm-2"><strong>休息價(元/2hr)：</strong>${array[3]}</div>
                                     </div>`);
             });
     }

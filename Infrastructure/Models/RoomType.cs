@@ -20,8 +20,6 @@ namespace Infrastructure.Models
         public int BedQuantity { get; set; }
         public decimal Price { get; set; }
         public decimal Hprice { get; set; }
-        public decimal Qkprice { get; set; }
-        public decimal Qk2price { get; set; }
         public bool AirCondition { get; set; }
         public bool Tv { get; set; }
         public DateTime SysDate { get; set; }

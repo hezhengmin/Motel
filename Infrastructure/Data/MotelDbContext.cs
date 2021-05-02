@@ -125,11 +125,13 @@ namespace Infrastructure.Data
 
                 entity.Property(e => e.BeginDate)
                     .HasColumnType("datetime")
-                    .HasComment("預訂日期");
-
-                entity.Property(e => e.CheckIn).HasComment("");
+                    .HasComment("預訂入住日期");
 
                 entity.Property(e => e.Days).HasComment("天數");
+
+                entity.Property(e => e.EndDate)
+                    .HasColumnType("datetime")
+                    .HasComment("預訂退房時間");
 
                 entity.Property(e => e.RoomId).HasComment("");
 
@@ -223,16 +225,6 @@ namespace Infrastructure.Data
                 entity.Property(e => e.Price)
                     .HasColumnType("money")
                     .HasComment("平日價");
-
-                entity.Property(e => e.Qk2price)
-                    .HasColumnName("QK2Price")
-                    .HasColumnType("money")
-                    .HasComment("休息價(元/2hr)");
-
-                entity.Property(e => e.Qkprice)
-                    .HasColumnName("QKPrice")
-                    .HasColumnType("money")
-                    .HasComment("休息價(元/3hr)");
 
                 entity.Property(e => e.SysDate)
                     .HasColumnType("datetime")
