@@ -42,7 +42,8 @@ namespace Application.Services
                 {
                     Days = 1,
                     CustomerId = customerId,
-                    BeginDate = DateTime.Now
+                    BeginDate = DateTime.Now,
+                    EndDate = DateTime.Now
                 };
             }
             else

@@ -21,10 +21,16 @@ namespace Application.ViewModels.Reservation
         public Guid CustomerId { get; set; }
         
         [Required(ErrorMessage = "{0}必填")]
-        [Display(Name = "預訂日期")]
+        [Display(Name = "預訂開始日期")]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime? BeginDate { get; set; }
+
+        [Required(ErrorMessage = "{0}必填")]
+        [Display(Name = "預訂結束日期")]
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        public DateTime? EndDate { get; set; }
 
         [Range(1, 255)]
         [Required(ErrorMessage = "{0}必填")]
