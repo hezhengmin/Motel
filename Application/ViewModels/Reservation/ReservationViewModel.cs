@@ -10,7 +10,7 @@ using Newtonsoft.Json.Converters;
 
 namespace Application.ViewModels.Reservation
 {
-    public class ReservationViewModel
+    public class ReservationViewModel : IValidatableObject
     {
         [Key]
         public Guid Id { get; set; }
@@ -19,7 +19,7 @@ namespace Application.ViewModels.Reservation
         [Display(Name = "房間號碼")]
         public Guid? RoomId { get; set; }
         public Guid CustomerId { get; set; }
-        
+
         [Required(ErrorMessage = "{0}必填")]
         [Display(Name = "預訂開始日期")]
         [DataType(DataType.Date)]
@@ -44,5 +44,14 @@ namespace Application.ViewModels.Reservation
         public List<SelectListItem> RoomTypeList { get; set; }
         [Display(Name = "房間類型")]
         public Guid? RoomTypeId { get; set; }
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            if (BeginDate > EndDate)
+            {
+                yield return new ValidationResult("結束日期不能小於開始日期",
+                new[] { nameof(EndDate), nameof(BeginDate) });
+            }
+        }
     }
 }
