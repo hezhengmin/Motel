@@ -124,11 +124,25 @@ namespace Motel.Controllers
 
             var roomList = await _roomService.GetRoomList(id.Value);
 
-            return Json(new { result = roomList.Select(m => new
+            return Json(new
             {
-                m.Id,
-                 m.RoomNumber
-            })});
+                result = roomList.Select(m => new
+                {
+                    m.Id,
+                    m.RoomNumber
+                })
+            });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> GetExpense([FromBody] ReservationExpenseViewModel expenseViewModel)
+        {
+            var expense = await _reservationService.GetReservationExpense(expenseViewModel);
+
+            return Json(new
+            {
+                expense
+            });
         }
     }
 }

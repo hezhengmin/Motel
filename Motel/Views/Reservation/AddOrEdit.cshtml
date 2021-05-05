@@ -58,7 +58,7 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label asp-for="ReservationViewModel.Days" class="control-label"></label>
-                        <input asp-for="ReservationViewModel.Days" class="form-control" />
+                        <input asp-for="ReservationViewModel.Days" class="form-control" readonly />
                         <span asp-validation-for="ReservationViewModel.Days" class="text-danger"></span>
                     </div>
                 </div>
@@ -86,6 +86,35 @@
 
             getAllRoomType(roomTypeId);
             getRoom(roomTypeId);
+        });
+
+        $("#ReservationViewModel_BeginDate").on("change", function () {
+            console.log($(this).val());
+        });
+
+        $("#ReservationViewModel_EndDate").on("change", function () {
+            console.log($(this).val());
+
+            const model = {
+                BeginDate: $("#ReservationViewModel_BeginDate").val(),
+                EndDate: $(this).val(),
+                RoomTypeId: $("#ReservationViewModel_RoomTypeId option:selected").val()
+            };
+
+            console.log(model);
+
+            const options = {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(model)
+            }
+
+            fetch("/Reservation/GetExpense", options)
+                .then(res => res.json())
+                .catch(error => console.error("Error:", error))
+                .then(data => console.log("Success:", data));
         });
     });
 
@@ -125,7 +154,7 @@
             })
             .catch(error => console.error("Error:", error))
             .then(function (data) {
-                
+
                 $("#ReservationViewModel_RoomId").empty();
 
                 let items = "<option value=''>請選擇</option>";

@@ -178,6 +178,26 @@ namespace Application.Services
             return query;
         }
 
+        public async Task<int> GetReservationExpense(ReservationExpenseViewModel expenseViewModel)
+        {
+            if (!expenseViewModel.RoomTypeId.HasValue||
+                !expenseViewModel.BeginDate.HasValue||
+                !expenseViewModel.EndDate.HasValue)
+                return 0;
+
+            DateTime beginDate = expenseViewModel.BeginDate.Value;
+            DateTime endDate = expenseViewModel.EndDate.Value;
+
+            var comparison = endDate.CompareTo(beginDate);
+            if (comparison < 0) return 0;
+
+            var roomType = await _roomTypeRepository.GetRoomType(expenseViewModel.RoomTypeId.Value);
+
+            TimeSpan interval = endDate - beginDate;
+
+            return interval.Days;
+        }
+
         public async Task AddReservation(ReservationViewModel reservationVM)
         {
             var Reservation = _mapper.Map<Reservation>(reservationVM);

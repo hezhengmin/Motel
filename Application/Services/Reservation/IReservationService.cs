@@ -18,6 +18,7 @@ namespace Application.Services
         Task<ReservationIndexViewModel> GetReservationList(ReservationDeleteViewModel ReservationDeleteVM, int pageSize);
         Task<ReservationIndexViewModel> GetReservationList(ReservationIndexViewModel ReservationIndexVM, int pageSize);
         Task<ReservationIndexViewModel> GetReservationList(Guid customerId, ReservationIndexViewModel ReservationIndexVM, int pageSize);
+        Task<int> GetReservationExpense(ReservationExpenseViewModel expenseViewModel);
         Task AddReservation(ReservationViewModel ReservationVM);
         Task UpdateReservation(ReservationViewModel ReservationVM);
         Task RemoveReservation(Guid id);
