@@ -18,8 +18,8 @@ namespace Infrastructure.Models
         public string Name { get; set; }
         public double Area { get; set; }
         public int BedQuantity { get; set; }
-        public decimal Price { get; set; }
-        public decimal Hprice { get; set; }
+        public int Price { get; set; }
+        public int Hprice { get; set; }
         public bool AirCondition { get; set; }
         public bool Tv { get; set; }
         public DateTime SysDate { get; set; }

@@ -133,6 +133,8 @@ namespace Infrastructure.Data
                     .HasColumnType("datetime")
                     .HasComment("預訂退房時間");
 
+                entity.Property(e => e.Expense).HasComment("住宿費");
+
                 entity.Property(e => e.RoomId).HasComment("");
 
                 entity.Property(e => e.SysDate)
@@ -214,7 +216,6 @@ namespace Infrastructure.Data
 
                 entity.Property(e => e.Hprice)
                     .HasColumnName("HPrice")
-                    .HasColumnType("money")
                     .HasComment("假日價");
 
                 entity.Property(e => e.Name)
@@ -222,9 +223,7 @@ namespace Infrastructure.Data
                     .HasMaxLength(20)
                     .HasComment("類型名稱");
 
-                entity.Property(e => e.Price)
-                    .HasColumnType("money")
-                    .HasComment("平日價");
+                entity.Property(e => e.Price).HasComment("平日價");
 
                 entity.Property(e => e.SysDate)
                     .HasColumnType("datetime")

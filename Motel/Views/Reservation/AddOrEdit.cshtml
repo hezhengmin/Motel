@@ -63,10 +63,10 @@
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <div class="form-group form-check">
-                        <label class="form-check-label">
-                            <input class="form-check-input" asp-for="ReservationViewModel.CheckIn" /> @Html.DisplayNameFor(model => model.ReservationViewModel.CheckIn)
-                        </label>
+                    <div class="form-group">
+                        <label asp-for="ReservationViewModel.Expense" class="control-label"></label>
+                        <input asp-for="ReservationViewModel.Expense" class="form-control" readonly />
+                        <span asp-validation-for="ReservationViewModel.Expense" class="text-danger"></span>
                     </div>
                 </div>
             </div>
@@ -86,37 +86,49 @@
 
             getAllRoomType(roomTypeId);
             getRoom(roomTypeId);
+            getReservationExpense();
+
         });
 
         $("#ReservationViewModel_BeginDate").on("change", function () {
             console.log($(this).val());
+            getReservationExpense();
         });
 
         $("#ReservationViewModel_EndDate").on("change", function () {
             console.log($(this).val());
-
-            const model = {
-                BeginDate: $("#ReservationViewModel_BeginDate").val(),
-                EndDate: $(this).val(),
-                RoomTypeId: $("#ReservationViewModel_RoomTypeId option:selected").val()
-            };
-
-            console.log(model);
-
-            const options = {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(model)
-            }
-
-            fetch("/Reservation/GetExpense", options)
-                .then(res => res.json())
-                .catch(error => console.error("Error:", error))
-                .then(data => console.log("Success:", data));
+            getReservationExpense();
         });
     });
+
+    getReservationExpense = () => {
+        const model = {
+            BeginDate: $("#ReservationViewModel_BeginDate").val(),
+            EndDate: $("#ReservationViewModel_EndDate").val(),
+            RoomTypeId: $("#ReservationViewModel_RoomTypeId option:selected").val()
+        };
+
+        console.log(model);
+
+        const options = {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(model)
+        }
+
+        fetch("/Reservation/GetExpense", options)
+            .then(res => res.json())
+            .catch(error => console.error("Error:", error))
+            .then(data => {
+                console.log("Success:", data);
+                $("#ReservationViewModel_Expense").val(data.result.expense);
+                $("#ReservationViewModel_Days").val(data.result.days);
+            });
+    }
+
+
 
     getAllRoomType = (roomTypeId) => {
         fetch(`/Reservation/GetRoomType/${roomTypeId}`)

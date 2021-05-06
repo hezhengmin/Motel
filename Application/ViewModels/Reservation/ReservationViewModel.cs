@@ -32,13 +32,13 @@ namespace Application.ViewModels.Reservation
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime? EndDate { get; set; }
 
-        [Range(1, 255)]
         [Required(ErrorMessage = "{0}必填")]
         [Display(Name = "預訂天數")]
-        public byte Days { get; set; }
+        public int? Days { get; set; }
 
-        [Display(Name = "登記")]
-        public bool CheckIn { get; set; }
+        [Required(ErrorMessage = "{0}必填")]
+        [Display(Name = "住宿費")]
+        public int? Expense { get; set; }
 
         public List<SelectListItem> RoomList { get; set; }
         public List<SelectListItem> RoomTypeList { get; set; }

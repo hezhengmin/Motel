@@ -14,7 +14,8 @@ namespace Infrastructure.Models
         public Guid CustomerId { get; set; }
         public DateTime BeginDate { get; set; }
         public DateTime EndDate { get; set; }
-        public byte Days { get; set; }
+        public int Days { get; set; }
+        public int Expense { get; set; }
         public DateTime SysDate { get; set; }
 
         public virtual Customer Customer { get; set; }

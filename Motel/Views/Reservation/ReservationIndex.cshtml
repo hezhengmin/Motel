@@ -31,6 +31,9 @@
                 @Html.DisplayNameFor(model => model.ReservationViewModelList.FirstOrDefault().BeginDate)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.ReservationViewModelList.FirstOrDefault().EndDate)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.ReservationViewModelList.FirstOrDefault().RoomTypeName)
             </th>
             <th>
@@ -40,7 +43,7 @@
                 @Html.DisplayNameFor(model => model.ReservationViewModelList.FirstOrDefault().Days)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ReservationViewModelList.FirstOrDefault().CheckIn)
+                @Html.DisplayNameFor(model => model.ReservationViewModelList.FirstOrDefault().Expense)
             </th>
             <th style="width: 145px;">
 
@@ -57,6 +60,9 @@
                         @Html.DisplayFor(modelItem => item.BeginDate)
                     </td>
                     <td>
+                        @Html.DisplayFor(modelItem => item.EndDate)
+                    </td>
+                    <td>
                         @Html.DisplayFor(modelItem => item.RoomTypeName)
                     </td>
                     <td>
@@ -66,7 +72,7 @@
                         @Html.DisplayFor(modelItem => item.Days)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.CheckIn)
+                        @Html.DisplayFor(modelItem => item.Expense)
                     </td>
                     <td class="text-right">
                         <a onclick="showInPopup('@Url.Action("AddOrEdit","Reservation",new {id=@item.Id},Context.Request.Scheme)','編輯')" class="btn btn-success text-white">

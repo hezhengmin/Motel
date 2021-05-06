@@ -40,10 +40,11 @@ namespace Application.Services
             {
                 model.ReservationViewModel = new ReservationViewModel
                 {
-                    Days = 1,
                     CustomerId = customerId,
                     BeginDate = DateTime.Now,
-                    EndDate = DateTime.Now
+                    EndDate = DateTime.Now,
+                    Days = 1,
+                    Expense = 0,
                 };
             }
             else
@@ -66,7 +67,7 @@ namespace Application.Services
             model.ReservationViewModel.RoomList = new List<SelectListItem>();
             model.ReservationViewModel.RoomList.Add(new SelectListItem("請選擇", ""));
 
-            if(model.ReservationViewModel.RoomTypeId != null)
+            if (model.ReservationViewModel.RoomTypeId != null)
             {
                 foreach (var room in await _roomRepository.GetRoomList(model.ReservationViewModel.RoomTypeId))
                 {
@@ -92,9 +93,12 @@ namespace Application.Services
             compoundVM.ReservationViewModel.RoomList = new List<SelectListItem>();
             compoundVM.ReservationViewModel.RoomList.Add(new SelectListItem("請選擇", ""));
 
-            foreach (var room in await _roomRepository.GetRoomList(compoundVM.ReservationViewModel.RoomTypeId))
+            if (compoundVM.ReservationViewModel.RoomTypeId.HasValue)
             {
-                compoundVM.ReservationViewModel.RoomList.Add(new SelectListItem(room.RoomNumber, room.Id.ToString()));
+                foreach (var room in await _roomRepository.GetRoomList(compoundVM.ReservationViewModel.RoomTypeId.Value))
+                {
+                    compoundVM.ReservationViewModel.RoomList.Add(new SelectListItem(room.RoomNumber, room.Id.ToString()));
+                }
             }
 
             return compoundVM;
@@ -178,24 +182,39 @@ namespace Application.Services
             return query;
         }
 
-        public async Task<int> GetReservationExpense(ReservationExpenseViewModel expenseViewModel)
+        public async Task<ReservationViewModel> GetReservationExpense(ReservationExpenseViewModel expenseVM)
         {
-            if (!expenseViewModel.RoomTypeId.HasValue||
-                !expenseViewModel.BeginDate.HasValue||
-                !expenseViewModel.EndDate.HasValue)
-                return 0;
+            ReservationViewModel reservationVM = new ReservationViewModel();
+            reservationVM.Expense = 0;
+            reservationVM.Days = 0;
 
-            DateTime beginDate = expenseViewModel.BeginDate.Value;
-            DateTime endDate = expenseViewModel.EndDate.Value;
+            if (!expenseVM.RoomTypeId.HasValue ||
+                !expenseVM.BeginDate.HasValue ||
+                !expenseVM.EndDate.HasValue)
+                return reservationVM;
+
+            DateTime beginDate = expenseVM.BeginDate.Value;
+            DateTime endDate = expenseVM.EndDate.Value;
 
             var comparison = endDate.CompareTo(beginDate);
-            if (comparison < 0) return 0;
+            if (comparison < 0) return reservationVM;
 
-            var roomType = await _roomTypeRepository.GetRoomType(expenseViewModel.RoomTypeId.Value);
+            var roomType = await _roomTypeRepository.GetRoomType(expenseVM.RoomTypeId.Value);
+
+            var expense = 0;
+            foreach (var day in EachDay(beginDate, endDate))
+            {
+                if (day.DayOfWeek == DayOfWeek.Saturday) expense += roomType.Hprice;
+                else if (day.DayOfWeek == DayOfWeek.Sunday) expense += roomType.Hprice;
+                else expense += roomType.Price;
+            }
 
             TimeSpan interval = endDate - beginDate;
 
-            return interval.Days;
+            reservationVM.Expense = expense;
+            reservationVM.Days = interval.Days + 1;
+
+            return reservationVM;
         }
 
         public async Task AddReservation(ReservationViewModel reservationVM)
@@ -221,6 +240,14 @@ namespace Application.Services
         public bool GetReservationExists(Guid id)
         {
             return _reservationRepository.GetReservationExists(id);
+        }
+
+        private IEnumerable<DateTime> EachDay(DateTime from, DateTime thru)
+        {
+            for (var day = from.Date; day.Date <= thru.Date; day = day.AddDays(1))
+            {
+                yield return day;
+            }
         }
     }
 }

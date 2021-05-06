@@ -16,17 +16,18 @@ namespace Application.ViewModels.Reservation
         [Display(Name = "類型名稱")]
         public string RoomTypeName { get; set; }
 
-        [Required(ErrorMessage = "{0}必填")]
-        [Display(Name = "預訂日期")]
+        [Display(Name = "預訂開始日期")]
         [DataType(DataType.Date)]
         public DateTime BeginDate { get; set; }
 
-        [Range(1, 255)]
-        [Required(ErrorMessage = "{0}必填")]
-        [Display(Name = "預訂天數")]
-        public byte Days { get; set; }
+        [Display(Name = "預訂結束日期")]
+        [DataType(DataType.Date)]
+        public DateTime EndDate { get; set; }
 
-        [Display(Name = "登記")]
-        public bool CheckIn { get; set; }
+        [Display(Name = "預訂天數")]
+        public int Days { get; set; }
+  
+        [Display(Name = "住宿費")]
+        public int Expense { get; set; }
     }
 }

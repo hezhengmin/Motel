@@ -137,11 +137,15 @@ namespace Motel.Controllers
         [HttpPost]
         public async Task<IActionResult> GetExpense([FromBody] ReservationExpenseViewModel expenseViewModel)
         {
-            var expense = await _reservationService.GetReservationExpense(expenseViewModel);
+            var reservationVM = await _reservationService.GetReservationExpense(expenseViewModel);
 
             return Json(new
             {
-                expense
+                result = new
+                {
+                    expense = reservationVM.Expense,
+                    days = reservationVM.Days
+                }
             });
         }
     }
