@@ -5,7 +5,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
 
-namespace Application.ViewModels.Enums
+namespace Infrastructure.Enums
 {
     public enum GenderType
     {

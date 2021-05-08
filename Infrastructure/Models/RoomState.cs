@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Infrastructure.Enums;
+using System;
 using System.Collections.Generic;
 
 // Code scaffolded by EF Core assumes nullable reference types (NRTs) are not used or disabled.
@@ -10,10 +11,8 @@ namespace Infrastructure.Models
     public partial class RoomState
     {
         public Guid Id { get; set; }
-        public byte State { get; set; }
-        public bool Type { get; set; }
-        public DateTime SysDate { get; set; }
+        public StateType StateType { get; set; }
 
-        public virtual Room IdNavigation { get; set; }
+        public virtual Room Room { get; set; }
     }
 }

@@ -2,6 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Infrastructure.Models;
+using Infrastructure.Enums;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 // Code scaffolded by EF Core assumes nullable reference types (NRTs) are not used or disabled.
 // If you have enabled NRTs for your project, then un-comment the following line:
@@ -46,7 +48,13 @@ namespace Infrastructure.Data
                     .HasMaxLength(256)
                     .HasComment("客戶住址");
 
-                entity.Property(e => e.Gender).HasComment("性別");
+                var converterGenderType = new ValueConverter<GenderType, int>(
+                                v => (int)v,
+                                v => (GenderType)Enum.Parse(typeof(GenderType), v.ToString()));
+
+                entity.Property(e => e.Gender)
+                      .HasComment("性別")
+                      .HasConversion(converterGenderType);
 
                 entity.Property(e => e.IdentityNum)
                     .IsRequired()
@@ -72,35 +80,21 @@ namespace Infrastructure.Data
 
             modelBuilder.Entity<OccupiedRoom>(entity =>
             {
-                entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
+                entity.Property(e => e.Id).ValueGeneratedNever();
 
                 entity.Property(e => e.Balance).HasComment("是否需補差額");
 
-                entity.Property(e => e.BeginDate)
+                entity.Property(e => e.CheckInDate)
                     .HasColumnType("datetime")
-                    .HasComment("訂房時間");
+                    .HasComment("實際入住時間");
 
-                entity.Property(e => e.Days).HasComment("天數/小時");
-
-                entity.Property(e => e.EndDate)
+                entity.Property(e => e.CheckOutDate)
                     .HasColumnType("datetime")
                     .HasComment("實際退房時間");
 
-                entity.Property(e => e.Pay)
-                    .HasColumnType("money")
-                    .HasComment("結算金額");
+                entity.Property(e => e.Days).HasComment("天數/小時");
 
-                entity.Property(e => e.PlanEndDate)
-                    .HasColumnType("datetime")
-                    .HasComment("預計退房時間");
-
-                entity.Property(e => e.PrePay)
-                    .HasColumnType("money")
-                    .HasComment("已付金額");
-
-                entity.Property(e => e.Price)
-                    .HasColumnType("money")
-                    .HasComment("房間價格");
+                entity.Property(e => e.Pay).HasComment("結算金額");
 
                 entity.Property(e => e.SysDate)
                     .HasColumnType("datetime")
@@ -111,6 +105,12 @@ namespace Infrastructure.Data
                     .HasForeignKey(d => d.CustomerId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Occupy_Customer");
+
+                entity.HasOne(d => d.Reservation)
+                    .WithOne(p => p.OccupiedRoom)
+                    .HasForeignKey<OccupiedRoom>(d => d.Id)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_OccupiedRoom_Reservation");
 
                 entity.HasOne(d => d.Room)
                     .WithMany(p => p.OccupiedRoom)
@@ -187,17 +187,17 @@ namespace Infrastructure.Data
 
             modelBuilder.Entity<RoomState>(entity =>
             {
-                entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
+                entity.Property(e => e.Id).ValueGeneratedNever();
 
-                entity.Property(e => e.State).HasComment("狀態");
+                var converterStateType = new ValueConverter<StateType, int>(
+                                v => (int)v,
+                                v => (StateType)Enum.Parse(typeof(StateType), v.ToString()));
 
-                entity.Property(e => e.SysDate)
-                    .HasColumnType("datetime")
-                    .HasComment("系統日期");
+                entity.Property(e => e.StateType)
+                      .HasComment("房間狀態")
+                      .HasConversion(converterStateType);
 
-                entity.Property(e => e.Type).HasComment("種類");
-
-                entity.HasOne(d => d.IdNavigation)
+                entity.HasOne(d => d.Room)
                     .WithOne(p => p.RoomState)
                     .HasForeignKey<RoomState>(d => d.Id)
                     .OnDelete(DeleteBehavior.ClientSetNull)

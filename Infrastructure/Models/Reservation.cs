@@ -20,5 +20,6 @@ namespace Infrastructure.Models
 
         public virtual Customer Customer { get; set; }
         public virtual Room Room { get; set; }
+        public virtual OccupiedRoom OccupiedRoom { get; set; }
     }
 }

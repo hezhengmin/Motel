@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
-using Application.ViewModels.Enums;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;

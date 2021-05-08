@@ -12,17 +12,15 @@ namespace Infrastructure.Models
         public Guid Id { get; set; }
         public Guid CustomerId { get; set; }
         public Guid RoomId { get; set; }
-        public DateTime BeginDate { get; set; }
-        public DateTime? EndDate { get; set; }
-        public DateTime PlanEndDate { get; set; }
-        public decimal? Pay { get; set; }
-        public decimal? PrePay { get; set; }
-        public decimal? Price { get; set; }
+        public DateTime? CheckInDate { get; set; }
+        public DateTime? CheckOutDate { get; set; }
+        public int? Pay { get; set; }
         public int? Days { get; set; }
         public bool Balance { get; set; }
         public DateTime SysDate { get; set; }
 
         public virtual Customer Customer { get; set; }
+        public virtual Reservation Reservation { get; set; }
         public virtual Room Room { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Infrastructure.Enums;
+using System;
 using System.Collections.Generic;
 
 // Code scaffolded by EF Core assumes nullable reference types (NRTs) are not used or disabled.
@@ -17,7 +18,7 @@ namespace Infrastructure.Models
 
         public Guid Id { get; set; }
         public string IdentityNum { get; set; }
-        public int Gender { get; set; }
+        public GenderType Gender { get; set; }
         public string Name { get; set; }
         public string Address { get; set; }
         public string Tel { get; set; }
