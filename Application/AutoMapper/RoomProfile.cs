@@ -4,6 +4,7 @@ using Application.Paging;
 using Application.ViewModels.Room;
 using System.Linq;
 using Application.ViewModels.RoomType;
+using Application.ViewModels.RoomState;
 
 namespace Application.AutoMapper
 {
@@ -11,7 +12,12 @@ namespace Application.AutoMapper
     {
         public RoomProfile()
         {
-            CreateMap<Room, RoomViewModel>();
+            CreateMap<Room, RoomViewModel>()
+                .AfterMap((src, dest) => dest.RoomStateViewModel = new RoomStateViewModel
+            {
+                Id = src.RoomState.Id,
+                     StateType = src.RoomState.StateType
+                 });
 
             CreateMap<RoomViewModel, Room>();
 

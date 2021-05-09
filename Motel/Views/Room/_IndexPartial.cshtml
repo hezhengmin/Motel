@@ -39,6 +39,9 @@
                 @Html.DisplayNameFor(model => model.RoomViewModelList.FirstOrDefault().Position)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.RoomViewModelList.FirstOrDefault().RoomStateViewModel.StateType)
+            </th>
+            <th>
             </th>
         </tr>
     </thead>
@@ -47,32 +50,34 @@
         {
             @foreach (var item in Model.RoomViewModelList)
             {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.RoomNumber)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.RoomTypeViewModel.Name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.RoomTypeViewModel.Price)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.RoomTypeViewModel.Hprice)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Position)
-                    </td>
-
-                    <td class="text-right">
-                        <a onclick="showInPopup('@Url.Action("AddOrEdit","Room",new {id=@item.Id},Context.Request.Scheme)','編輯')" class="btn btn-success text-white">
-                            編輯
-                        </a>
-                        <a onclick="jQueryAjaxDelete('@Url.Action("Remove","Room",new {id=@item.Id},Context.Request.Scheme)', '@item.Id', '@Model.PageNumber')" class="btn btn-danger text-white">
-                            刪除
-                        </a>
-                    </td>
-                </tr>
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.RoomNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RoomTypeViewModel.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RoomTypeViewModel.Price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RoomTypeViewModel.Hprice)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Position)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RoomStateViewModel.StateType)
+            </td>
+            <td class="text-right">
+                <a onclick="showInPopup('@Url.Action("AddOrEdit","Room",new {id=@item.Id},Context.Request.Scheme)','編輯')" class="btn btn-success text-white">
+                    編輯
+                </a>
+                <a onclick="jQueryAjaxDelete('@Url.Action("Remove","Room",new {id=@item.Id},Context.Request.Scheme)', '@item.Id', '@Model.PageNumber')" class="btn btn-danger text-white">
+                    刪除
+                </a>
+            </td>
+        </tr>
             }
         }
     </tbody>

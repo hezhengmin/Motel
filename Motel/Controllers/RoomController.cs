@@ -12,14 +12,18 @@ namespace Motel.Controllers
     {
         private readonly IRoomService _roomService;
         private readonly IRoomTypeService _roomTypeService;
+        private readonly IRoomStateService _roomStateService;
+
 
         private int pageSize = 5;
 
         public RoomController(IRoomService roomService,
-                              IRoomTypeService roomTypeService)
+                              IRoomTypeService roomTypeService,
+                              IRoomStateService roomStateService)
         {
             _roomService = roomService;
             _roomTypeService = roomTypeService;
+            _roomStateService = roomStateService;
         }
 
         // GET: Room
@@ -64,12 +68,14 @@ namespace Motel.Controllers
                 if (compoundVM.RoomViewModel.Id == null || compoundVM.RoomViewModel.Id == Guid.Empty)
                 {
                     await _roomService.AddRoom(compoundVM.RoomViewModel);
+                    await _roomStateService.AddRoomState(compoundVM.RoomViewModel.RoomStateViewModel);
                     var model = await _roomService.GetRoomList(1, pageSize);
                     return Json(new { isValid = true, html = Helper.RenderRazorViewToString(this, "_IndexPartial", model) });
                 }
                 else
                 {
                     await _roomService.UpdateRoom(compoundVM.RoomViewModel);
+                    await _roomStateService.UpdateRoomState(compoundVM.RoomViewModel.RoomStateViewModel);
                     var model = await _roomService.GetRoomList(compoundVM.FilterViewModel, pageSize);
                     return Json(new { isValid = true, html = Helper.RenderRazorViewToString(this, "_IndexPartial", model) });
                 }

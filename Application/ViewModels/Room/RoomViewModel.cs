@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using Application.ViewModels.RoomState;
 using Application.ViewModels.RoomType;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
@@ -33,7 +34,7 @@ namespace Application.ViewModels.Room
         public string Position { get; set; }
 
         public List<SelectListItem> RoomTypeList { get; set; }
-
         public RoomTypeViewModel RoomTypeViewModel { get; set; }
+        public RoomStateViewModel RoomStateViewModel { get; set; }
     }
 }

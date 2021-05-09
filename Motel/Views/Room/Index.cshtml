@@ -130,6 +130,7 @@
         jQueryAjaxPost = form => {
 
             let $form = $(form).serializeObject();
+            console.log($form);
 
             let pageNumber = $("#navigation li.active > a.page-link").text();
             if (pageNumber === "") pageNumber = 1;
@@ -144,10 +145,16 @@
                     RoomNumber: $form["RoomViewModel.RoomNumber"],
                     RoomTypeId: $form["RoomViewModel.RoomTypeId"],
                     Describe: $form["RoomViewModel.Describe"],
-                    Position: $form["RoomViewModel.Position"]
+                    Position: $form["RoomViewModel.Position"],
+                    RoomStateViewModel: {
+                        Id: $form["RoomViewModel.Id"],
+                        StateType: $form["RoomViewModel.RoomStateViewModel.StateType"]
+                    }
                 }
             };
 
+            console.log(model);
+           
             try {
                 $.ajax({
                     type: "POST",

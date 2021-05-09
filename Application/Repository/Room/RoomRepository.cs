@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Infrastructure.Enums;
 
 namespace Application.Repository
 {
@@ -20,12 +21,16 @@ namespace Application.Repository
 
         public async Task<Room> GetRoom(Guid id)
         {
-            return await _dbContext.Room.Include(m => m.RoomType).FirstOrDefaultAsync(m => m.Id == id);
+            return await _dbContext.Room.Include(m => m.RoomType)
+                                        .Include(m=>m.RoomState)
+                                        .FirstOrDefaultAsync(m => m.Id == id);
         }
 
         public async Task<List<Room>> GetRoomList()
         {
-            return await _dbContext.Room.Include(m => m.RoomType).OrderByDescending(m => m.SysDate).ToListAsync();
+            return await _dbContext.Room.Include(m => m.RoomType)
+                                        .Include(m => m.RoomState)
+                                        .OrderByDescending(m => m.SysDate).ToListAsync();
         }
 
         public async Task<List<Room>> GetRoomList(Guid? roomTypeId)
@@ -47,7 +52,9 @@ namespace Application.Repository
 
         public async Task<PaginatedList<Room>> GetRoomList(int pageNumber, int pageSize)
         {
-            var query = _dbContext.Set<Room>().Include(m => m.RoomType).AsQueryable();
+            var query = _dbContext.Set<Room>().Include(m => m.RoomType)
+                                              .Include(m => m.RoomState)
+                                              .AsQueryable();
 
             query = query.OrderByDescending(m => m.SysDate);
 
@@ -58,7 +65,9 @@ namespace Application.Repository
 
         public async Task<PaginatedList<Room>> GetRoomList(string searchString, int pageNumber, int pageSize)
         {
-            var query = _dbContext.Set<Room>().Include(m => m.RoomType).AsQueryable();
+            var query = _dbContext.Set<Room>().Include(m => m.RoomType)
+                                              .Include(m => m.RoomState)
+                                              .AsQueryable();
 
             if (!string.IsNullOrEmpty(searchString))
             {
@@ -75,6 +84,7 @@ namespace Application.Repository
         public async Task AddRoom(Room Room)
         {
             Room.SysDate = DateTime.Now;
+
             _dbContext.Add(Room);
             await _dbContext.SaveChangesAsync();
         }
@@ -87,10 +97,13 @@ namespace Application.Repository
 
         public async Task RemoveRoom(Guid id)
         {
-            var Room = await GetRoom(id);
-            if (Room != null)
+            var room = await _dbContext.Set<Room>().Include(m => m.RoomState)
+                                                   .FirstOrDefaultAsync(m => m.Id == id);
+
+            if (room != null)
             {
-                _dbContext.Room.Remove(Room);
+                _dbContext.RoomState.Remove(room.RoomState);
+                _dbContext.Room.Remove(room);
                 await _dbContext.SaveChangesAsync();
             }
         }
