@@ -118,19 +118,19 @@ namespace Application.Services
             return query;
         }
 
-        public async Task AddRoom(RoomViewModel RoomVM)
+        public async Task AddRoom(RoomViewModel roomVM)
         {
-            var Room = _mapper.Map<Room>(RoomVM);
-            await _roomRepository.AddRoom(Room);
+            var room = _mapper.Map<Room>(roomVM);
+            await _roomRepository.AddRoom(room);
         }
 
-        public async Task UpdateRoom(RoomViewModel RoomVM)
+        public async Task UpdateRoom(RoomViewModel roomVM)
         {
-            var entity = await _roomRepository.GetRoom(RoomVM.Id);
+            var entity = await _roomRepository.GetRoom(roomVM.Id);
 
-            var Room = _mapper.Map(RoomVM, entity);
+            var room = _mapper.Map(roomVM, entity);
 
-            await _roomRepository.UpdateRoom(Room);
+            await _roomRepository.UpdateRoom(room);
         }
 
         public async Task RemoveRoom(Guid id)

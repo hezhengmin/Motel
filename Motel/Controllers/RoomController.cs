@@ -68,7 +68,6 @@ namespace Motel.Controllers
                 if (compoundVM.RoomViewModel.Id == null || compoundVM.RoomViewModel.Id == Guid.Empty)
                 {
                     await _roomService.AddRoom(compoundVM.RoomViewModel);
-                    await _roomStateService.AddRoomState(compoundVM.RoomViewModel.RoomStateViewModel);
                     var model = await _roomService.GetRoomList(1, pageSize);
                     return Json(new { isValid = true, html = Helper.RenderRazorViewToString(this, "_IndexPartial", model) });
                 }

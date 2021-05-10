@@ -112,7 +112,5 @@ namespace Application.Repository
         {
             return _dbContext.Room.Any(m => m.Id == id);
         }
-
-
     }
 }

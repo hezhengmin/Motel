@@ -14,12 +14,16 @@ namespace Application.AutoMapper
         {
             CreateMap<Room, RoomViewModel>()
                 .AfterMap((src, dest) => dest.RoomStateViewModel = new RoomStateViewModel
-            {
-                Id = src.RoomState.Id,
-                     StateType = src.RoomState.StateType
-                 });
+                {
+                    Id = src.RoomState.Id,
+                    StateType = src.RoomState.StateType
+                });
 
-            CreateMap<RoomViewModel, Room>();
+            CreateMap<RoomViewModel, Room>()
+                .AfterMap((src, dest) => dest.RoomState = new RoomState
+                {
+                     StateType = src.RoomStateViewModel.StateType
+                });
 
             CreateMap<PaginatedList<Room>, RoomIndexViewModel>()
                 .ForMember(dest => dest.RoomViewModelList, opt => opt.MapFrom(src => src.ToList()))
