@@ -47,7 +47,7 @@ namespace Application.Repository
 
         public async Task<List<Room>> GetRoomList(Guid roomTypeId)
         {
-            return await _dbContext.Room.Where(m => m.RoomTypeId == roomTypeId).ToListAsync();
+            return await _dbContext.Room.Include(m => m.RoomState).Where(m => m.RoomTypeId == roomTypeId).ToListAsync();
         }
 
         public async Task<PaginatedList<Room>> GetRoomList(int pageNumber, int pageSize)

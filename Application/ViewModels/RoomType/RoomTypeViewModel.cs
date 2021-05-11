@@ -25,11 +25,11 @@ namespace Application.ViewModels.RoomType
 
         [Required(ErrorMessage = "{0}必填")]
         [Display(Name = "平日價")]
-        public decimal? Price { get; set; }
+        public int? Price { get; set; }
 
         [Required(ErrorMessage = "{0}必填")]
         [Display(Name = "假日價")]
-        public decimal? Hprice { get; set; }
+        public int? Hprice { get; set; }
 
         [Required]
         [Display(Name = "是否有空調")]

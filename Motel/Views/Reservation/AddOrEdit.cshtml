@@ -8,6 +8,7 @@
     <div class="col-md-12">
         <form asp-action="AddOrEdit" asp-route-id="@Model.ReservationViewModel.Id" onsubmit="return jQueryAjaxPost(this);">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            @Html.ValidationMessage("TwoDateRangesOverlap", "", new { @class = "text-danger" })
             <input type="hidden" asp-for="ReservationViewModel.Id" />
             <input type="hidden" asp-for="ReservationViewModel.CustomerId" />
             <div class="row">
@@ -166,7 +167,8 @@
             })
             .catch(error => console.error("Error:", error))
             .then(function (data) {
-
+                console.log(data);
+                
                 $("#ReservationViewModel_RoomId").empty();
 
                 let items = "<option value=''>請選擇</option>";

@@ -17,7 +17,6 @@ namespace Motel.Controllers
         private readonly IRoomTypeService _roomTypeService;
         private readonly IRoomService _roomService;
 
-
         private int pageSize = 5;
 
         public ReservationController(ICustomerService customerService,
@@ -93,6 +92,13 @@ namespace Motel.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (_reservationService.GetReservationDateIsOverlapAsync(compoundVM.ReservationViewModel).Result)
+                {
+                    ModelState.AddModelError("TwoDateRangesOverlap", "日期有人預訂");
+                    compoundVM = await _reservationService.GetAddOrEditReservation(compoundVM);
+                    return Json(new { isValid = false, html = Helper.RenderRazorViewToString(this, "AddOrEdit", compoundVM) });
+                }
+
                 var model = await _reservationService.GetReservationList(compoundVM, pageSize);
                 return Json(new { isValid = true, html = Helper.RenderRazorViewToString(this, "ReservationIndex", model) });
             }

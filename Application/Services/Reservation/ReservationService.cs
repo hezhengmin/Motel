@@ -217,6 +217,28 @@ namespace Application.Services
             return reservationVM;
         }
 
+        public async Task<bool> GetReservationDateIsOverlapAsync(ReservationViewModel reservationVM)
+        {
+
+            Guid roomId = reservationVM.RoomId.Value;
+            DateTime beginDate = reservationVM.BeginDate.Value;
+            DateTime endDate = reservationVM.EndDate.Value;
+
+            bool isOverlap = false;
+
+            if (reservationVM.Id == null || reservationVM.Id == Guid.Empty)
+            {
+                isOverlap = await _reservationRepository.GetReservationDateIsOverlap(roomId, beginDate, endDate);
+            }
+            else
+            {
+                isOverlap = await _reservationRepository.GetReservationDateIsOverlap(reservationVM.Id, roomId, beginDate, endDate);
+            }
+
+            return isOverlap;
+        }
+
+
         public async Task AddReservation(ReservationViewModel reservationVM)
         {
             var Reservation = _mapper.Map<Reservation>(reservationVM);

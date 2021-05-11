@@ -19,6 +19,7 @@ namespace Application.Services
         Task<ReservationIndexViewModel> GetReservationList(ReservationIndexViewModel ReservationIndexVM, int pageSize);
         Task<ReservationIndexViewModel> GetReservationList(Guid customerId, ReservationIndexViewModel ReservationIndexVM, int pageSize);
         Task<ReservationViewModel> GetReservationExpense(ReservationExpenseViewModel expenseViewModel);
+        Task<bool> GetReservationDateIsOverlapAsync(ReservationViewModel reservationVM);
         Task AddReservation(ReservationViewModel ReservationVM);
         Task UpdateReservation(ReservationViewModel ReservationVM);
         Task RemoveReservation(Guid id);

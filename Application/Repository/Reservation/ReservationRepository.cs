@@ -99,6 +99,24 @@ namespace Application.Repository
             return list;
         }
 
+        public async Task<bool> GetReservationDateIsOverlap(Guid roomId, DateTime beginDate, DateTime endDate)
+        {
+            var query = _dbContext.Set<Reservation>().AsQueryable();
+            bool result = await query.Where(m => m.RoomId == roomId).AnyAsync(m => (m.EndDate >= beginDate && m.BeginDate <= endDate));
+
+            return result;
+        }
+
+        public async Task<bool> GetReservationDateIsOverlap(Guid id, Guid roomId, DateTime beginDate, DateTime endDate)
+        {
+            var query = _dbContext.Set<Reservation>().AsQueryable();
+            query = query.Where(m => m.Id != id);
+
+            bool result = await query.Where(m => m.RoomId == roomId).AnyAsync(m => (m.EndDate >= beginDate && m.BeginDate <= endDate));
+
+            return result;
+        }
+
         public async Task AddReservation(Reservation reservation)
         {
             reservation.SysDate = DateTime.Now;

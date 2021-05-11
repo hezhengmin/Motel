@@ -16,6 +16,8 @@ namespace Application.Repository
         Task<PaginatedList<Reservation>> GetReservationList(Guid customerId, int pageNumber, int pageSize);
         Task<PaginatedList<Reservation>> GetReservationList(string searchString, int pageNumber, int pageSize);
         Task<PaginatedList<Reservation>> GetReservationList(Guid customerId, string searchString, int pageNumber, int pageSize);
+        Task<bool> GetReservationDateIsOverlap(Guid roomId, DateTime beginDate, DateTime endDate);
+        Task<bool> GetReservationDateIsOverlap(Guid id,Guid roomId, DateTime beginDate, DateTime endDate);
         Task AddReservation(Reservation Reservation);
         Task UpdateReservation(Reservation Reservation);
         Task RemoveReservation(Guid id);
