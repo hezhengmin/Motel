@@ -8,7 +8,6 @@
     <div class="col-md-12">
         <form asp-action="AddOrEdit" asp-route-id="@Model.ReservationViewModel.Id" onsubmit="return jQueryAjaxPost(this);">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            @Html.ValidationMessage("TwoDateRangesOverlap", "", new { @class = "text-danger" })
             <input type="hidden" asp-for="ReservationViewModel.Id" />
             <input type="hidden" asp-for="ReservationViewModel.CustomerId" />
             <div class="row">
@@ -37,6 +36,7 @@
                     </div>
                 </div>
                 <div class="col-md-6">
+                    @Html.ValidationMessage("TwoDateRangesOverlap", "", new { @class = "text-danger" })
                 </div>
             </div>
             <div class="row">
@@ -88,7 +88,6 @@
             getAllRoomType(roomTypeId);
             getRoom(roomTypeId);
             getReservationExpense();
-
         });
 
         $("#ReservationViewModel_BeginDate").on("change", function () {

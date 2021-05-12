@@ -1,4 +1,5 @@
 ﻿using Application.Paging;
+using Application.Repository.ReservationEnums;
 using Infrastructure.Data;
 using Infrastructure.Models;
 using Microsoft.EntityFrameworkCore;
@@ -52,7 +53,10 @@ namespace Application.Repository
         {
             var query = _dbContext.Set<Reservation>().AsQueryable();
 
-            query = query.OrderByDescending(m => m.SysDate);
+            query = query.Include(m => m.Room)
+                         .ThenInclude(m => m.RoomType);
+
+            query = query.OrderByDescending(m => m.BeginDate).ThenByDescending(m => m.SysDate);
 
             var list = await PaginatedList<Reservation>.CreateAsync(query, pageNumber, pageSize);
 
@@ -99,6 +103,37 @@ namespace Application.Repository
             return list;
         }
 
+        public async Task<PaginatedList<Reservation>> GetReservationList(ReservationSearchField searchField, string searchString, int pageNumber, int pageSize)
+        {
+            var query = _dbContext.Set<Reservation>().AsQueryable();
+
+            query = query.Include(m => m.Customer)
+                         .Include(m => m.Room)
+                         .ThenInclude(m => m.RoomType);
+
+
+            switch (searchField)
+            {
+                case ReservationSearchField.RoomNumber:
+                    if (!string.IsNullOrEmpty(searchString))
+                    {
+                        query = query.Where(m => m.Room.RoomNumber.Contains(searchString));
+                    }
+                    break;
+                case ReservationSearchField.CustomerName:
+                    if (!string.IsNullOrEmpty(searchString))
+                    {
+                        query = query.Where(m => m.Customer.Name.Contains(searchString));
+                    }
+                    break;
+            }
+
+            query = query.OrderByDescending(m => m.BeginDate).ThenByDescending(m => m.SysDate);
+
+            var list = await PaginatedList<Reservation>.CreateAsync(query, pageNumber, pageSize);
+
+            return list;
+        }
         public async Task<bool> GetReservationDateIsOverlap(Guid roomId, DateTime beginDate, DateTime endDate)
         {
             var query = _dbContext.Set<Reservation>().AsQueryable();

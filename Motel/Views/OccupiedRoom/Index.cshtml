@@ -1,4 +1,4 @@
-﻿@model Application.ViewModels.Customer.CustomerIndexViewModel
+﻿@model Application.ViewModels.Reservation.ReservationIndexViewModel
 
 @{
     ViewData["Title"] = "Index";
@@ -10,7 +10,24 @@
     @await Html.PartialAsync("_IndexPartial", Model)
 </div>
 
-<div class="modal fade" tabindex="-1" role="dialog" id="modal">
+@*ReservationList*@
+<div class="modal fade" tabindex="-1" role="dialog" id="stack1">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+            </div>
+        </div>
+    </div>
+</div>
+
+@*AddOrEdit*@
+<div class="modal fade" tabindex="-1" role="dialog" id="stack2">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -28,18 +45,24 @@
 @section Scripts{
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 
-<script>
+    <script>
         const $view = $("#view");
-        const $modal = $("#modal");
-        const $modalTitle = $("#modal .modal-title");
-        const $modalBoby = $("#modal .modal-body");
-        const $modalDialog = $("#modal .modal-dialog");
+        const $modal = $("#stack1");
+        const $modalTitle = $("#stack1 .modal-title");
+        const $modalBoby = $("#stack1 .modal-body");
+        const $modalDialog = $("#stack1 .modal-dialog");
+
+        //預訂
+        const $modalReserve = $("#stack2");
+        const $modalReserveTitle = $("#stack2 .modal-title");
+        const $modalReserveBoby = $("#stack2 .modal-body");
+        const $modalReserveDialog = $("#stack2 .modal-dialog");
 
         $(function () {
 
         });
 
-        //分頁
+        //客戶分頁
         jQueryAjaxPagePost = (pageNumber) => {
 
             let model = {
@@ -51,13 +74,9 @@
                 CustomerViewModelList: []
             };
 
-            //console.log("model", model);
-            //console.log("JSON.stringify(model)", JSON.stringify(model));
-
-
             $.ajax({
                 type: "POST",
-                url: "/Customer/Index",
+                url: "/Reservation/Index",
                 dataType: "json",
                 contentType: "application/json; charset=utf-8",
                 data: JSON.stringify(model),
@@ -75,9 +94,46 @@
             });
         }
 
+        //預訂分頁
+        jQueryAjaxReservationPagePost = (pageNumber, customerId) => {
 
-        showInPopup = (url, title) => {
+            console.log(pageNumber, customerId);
 
+            let model = {
+                CustomerId: customerId,
+                ReservationSearchString: $("#ReservationSearchString").val(),
+                PageNumber: pageNumber,
+                TotalPages: undefined,
+                HasPreviousPage: undefined,
+                HasNextPage: undefined,
+                ReservationViewModelList: []
+            };
+
+            console.log(model);
+
+            $.ajax({
+                type: "POST",
+                url: "/OccupiedRoom/ReservationIndex",
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(model),
+                processData: false,
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("X-XSRF-TOKEN",
+                        $('input:hidden[name="__RequestVerificationToken"]').val());
+                }
+            }).done(function (res) {
+                if (res.isValid) {
+                    $modalBoby.html(res.html)
+                }
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                console.log(jqXHR, textStatus, errorThrown);
+            });
+        }
+
+
+        //預訂列表
+        showListPopup = (url, title) => {
             $.ajax({
                 type: "GET",
                 url: url
@@ -90,8 +146,46 @@
             });
         }
 
+
+        showInPopup = (url, title) => {
+
+            $.ajax({
+                type: "GET",
+                url: url
+            }).done(function (res) {
+                $modalReserveBoby.html(res.html);
+                $modalReserveTitle.html(title);
+                $modalReserve.modal("show");
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                console.log(jqXHR, textStatus, errorThrown);
+            });
+        }
+
         //搜尋
         jQueryAjaxSearchPost = form => {
+
+            try {
+                $.ajax({
+                    type: "POST",
+                    url: form.action,
+                    data: new FormData(form),
+                    contentType: false,
+                    processData: false
+                }).done(function (res) {
+                    if (res.isValid) {
+                        $view.html(res.html)
+                    }
+                }).fail(function (jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR, textStatus, errorThrown);
+                });
+                //to prevent default form submit event
+                return false;
+            } catch (ex) {
+                console.log(ex)
+            }
+        }
+
+        jQueryAjaxReservationSearchPost = form => {
 
             try {
                 $.ajax({
@@ -117,12 +211,12 @@
         $.fn.serializeObject = function () {
             var o = {};
             var a = this.serializeArray();
+
             $.each(a, function () {
                 if (o[this.name]) {
-                    if (!o[this.name].push) {
+                    if (!o[this.name].push && o[this.name].length == 0) {
                         o[this.name] = [o[this.name]];
                     }
-                    o[this.name].push(this.value || '');
                 } else {
                     o[this.name] = this.value || '';
                 }
@@ -135,23 +229,30 @@
 
             let $form = $(form).serializeObject();
 
-            let pageNumber = $("#navigation li.active > a.page-link").text();
+            console.log("$form", $form);
+
+
+            let pageNumber = $("#navigationReservation li.active > a.page-link").text();
             if (pageNumber === "") pageNumber = 1;
 
             let model = {
                 FilterViewModel: {
-                    SearchString: $("#SearchString").val(),
+                    SearchString: $("#ReservationSearchString").val(),
                     PageNumber: pageNumber
                 },
-                CustomerViewModel: {
-                    Id: $form["CustomerViewModel.Id"],
-                    IdentityNum: $form["CustomerViewModel.IdentityNum"],
-                    Gender: $form["CustomerViewModel.Gender"],
-                    Name: $form["CustomerViewModel.Name"],
-                    Address: $form["CustomerViewModel.Address"],
-                    Tel: $form["CustomerViewModel.Tel"],
+                ReservationViewModel: {
+                    Id: $form["ReservationViewModel.Id"],
+                    RoomId: $form["ReservationViewModel.RoomId"],
+                    CustomerId: $form["ReservationViewModel.CustomerId"],
+                    BeginDate: $form["ReservationViewModel.BeginDate"],
+                    EndDate: $form["ReservationViewModel.EndDate"],
+                    Days: $form["ReservationViewModel.Days"],
+                    Expense: $form["ReservationViewModel.Expense"],
+                    RoomTypeId: $form["ReservationViewModel.RoomTypeId"],
                 }
             };
+
+            console.log("model", model);
 
             try {
                 $.ajax({
@@ -167,13 +268,13 @@
                     }
                 }).done(function (res) {
                     if (res.isValid) {
-                        $view.html(res.html)
-                        $modalBoby.html("");
-                        $modalTitle.html("");
-                        $modal.modal("hide");
+                        $modalBoby.html(res.html)
+                        $modalReserveBoby.html("");
+                        $modalReserveTitle.html("");
+                        $modalReserve.modal("hide");
                     }
                     else
-                        $modalBoby.html(res.html);
+                        $modalReserveBoby.html(res.html);
                 }).fail(function (jqXHR, textStatus, errorThrown) {
                     console.log(jqXHR, textStatus, errorThrown);
                 });
@@ -185,12 +286,13 @@
         }
 
         //刪除
-        jQueryAjaxDelete = (url, id, pageNumber) => {
+        jQueryAjaxDelete = (url, id, pageNumber, customerId) => {
 
             let model = {
-                "Id": id,
-                "PageNumber": pageNumber,
-                "SearchString": $("#SearchString").val()
+                Id: id,
+                CustomerId: customerId,
+                PageNumber: pageNumber,
+                ReservationSearchString: $("#ReservationSearchString").val()
             };
 
             if (confirm("你確定要刪除嗎?")) {
@@ -202,7 +304,7 @@
                         contentType: "application/json; charset=utf-8",
                         data: JSON.stringify(model)
                     }).done(function (res) {
-                        $view.html(res.html);
+                        $modalBoby.html(res.html);
                     }).fail(function (jqXHR, textStatus, errorThrown) {
                         console.log(jqXHR, textStatus, errorThrown);
                     });
@@ -213,5 +315,5 @@
 
             return false;
         }
-</script>
+    </script>
 }

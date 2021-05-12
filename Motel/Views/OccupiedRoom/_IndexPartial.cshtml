@@ -1,0 +1,110 @@
+﻿@model Application.ViewModels.Reservation.ReservationIndexViewModel
+
+@{
+    Layout = null;
+}
+
+<div class="row">
+    <div class="col-auto mr-auto">
+        <form class="form-inline" asp-action="ReservationSearch" onsubmit="return jQueryAjaxReservationSearchPost(this);">
+            @*<input type="hidden" asp-for="@Model.CustomerId" />*@
+            <div class="form-group mx-sm-3 mb-2">
+                <label asp-for="ReservationSearchString" class="mr-3">
+                    房間號碼
+                </label>
+                <input asp-for="ReservationSearchString" class="form-control" />
+            </div>
+            <button type="submit" class="btn btn-primary mb-2">搜尋</button>
+        </form>
+    </div>
+    <div class="col-auto mr-3">
+        @*<a onclick="showInPopup('@Url.Action("AddOrEdit","Reservation", new { id = Guid.Empty, customerId = Model.CustomerId} ,Context.Request.Scheme)','新增')" class="btn btn-primary text-white">
+            新增
+        </a>*@
+    </div>
+</div>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ReservationViewModelList.FirstOrDefault().BeginDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ReservationViewModelList.FirstOrDefault().EndDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ReservationViewModelList.FirstOrDefault().RoomTypeName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ReservationViewModelList.FirstOrDefault().RoomNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ReservationViewModelList.FirstOrDefault().Days)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ReservationViewModelList.FirstOrDefault().Expense)
+            </th>
+            <th style="width: 145px;">
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.ReservationViewModelList != null && Model.ReservationViewModelList.Count > 0)
+        {
+            @foreach (var item in Model.ReservationViewModelList)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.BeginDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EndDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RoomTypeName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RoomNumber)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Days)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Expense)
+                    </td>
+                    <td class="text-right">
+                        <a onclick="showInPopup('@Url.Action("AddOrEdit","Reservation",new {id=@item.Id},Context.Request.Scheme)','編輯')" class="btn btn-success text-white">
+                            編輯
+                        </a>
+                        <a onclick="jQueryAjaxDelete('@Url.Action("Remove","Reservation",new {id=@item.Id},Context.Request.Scheme)', '@item.Id', '@Model.PageNumber', '@Model.CustomerId')" class="btn btn-danger text-white">
+                            刪除
+                        </a>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+@{
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+    var customerId = Model.CustomerId;
+}
+
+
+@Model.PageNumber / @Model.TotalPages
+
+<nav aria-label="Page navigation" id="navigationReservation">
+    <ul class="pagination justify-content-center">
+        <li class="page-item @prevDisabled" data-num="@(Model.PageNumber - 1)"><a class="page-link" href="javascript:void(0);" onclick="jQueryAjaxReservationPagePost(@(Model.PageNumber - 1),'@customerId')">上一頁</a></li>
+        @for (var i = 1; i <= Model.TotalPages; i++)
+        {
+            <li class="page-item @(Model.PageNumber ==i ? "active" : "")"><a class="page-link" href="javascript:void(0)" onclick="jQueryAjaxReservationPagePost(@i, '@customerId')">@i</a></li>
+        }
+        <li class="page-item @nextDisabled" data-num="@(Model.PageNumber + 1)"><a class="page-link" href="javascript:void(0)" onclick="jQueryAjaxReservationPagePost(@(Model.PageNumber + 1),'@customerId')">下一頁</a></li>
+    </ul>
+</nav>
+
+@Html.AntiForgeryToken()

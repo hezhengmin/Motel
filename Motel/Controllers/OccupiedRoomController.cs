@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Application.Repository.ReservationEnums;
+using Application.Services;
+using Application.ViewModels.Reservation;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -9,79 +12,45 @@ namespace Motel.Controllers
 {
     public class OccupiedRoomController : Controller
     {
-        // GET: OccupiedRoomController
-        public ActionResult Index()
+        private readonly ICustomerService _customerService;
+        private readonly IReservationService _reservationService;
+        private readonly IRoomTypeService _roomTypeService;
+        private readonly IRoomService _roomService;
+
+        private int pageSize = 5;
+
+        public OccupiedRoomController(ICustomerService customerService,
+                                     IReservationService reservationService,
+                                     IRoomTypeService roomTypeService,
+                                     IRoomService roomService)
         {
-            return View();
+            _customerService = customerService;
+            _reservationService = reservationService;
+            _roomTypeService = roomTypeService;
+            _roomService = roomService;
         }
 
-        // GET: OccupiedRoomController/Details/5
-        public ActionResult Details(int id)
+        public async Task<IActionResult> Index()
         {
-            return View();
+            int pageNumber = 1;
+            var model = await _reservationService.GetReservationList(pageNumber, pageSize);
+            return View(model);
         }
 
-        // GET: OccupiedRoomController/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: OccupiedRoomController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public async Task<IActionResult> Index([FromForm] ReservationIndexViewModel reservationIndexVM)
         {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            var model = await _reservationService.GetReservationList(reservationIndexVM, pageSize);
+            return Json(new { isValid = true, html = Helper.RenderRazorViewToString(this, "_IndexPartial", model) });
         }
 
-        // GET: OccupiedRoomController/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        // POST: OccupiedRoomController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<IActionResult> ReservationSearch([FromForm] ReservationIndexViewModel reservationIndexVM)
         {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: OccupiedRoomController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: OccupiedRoomController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            var model = await _reservationService.GetReservationList(ReservationSearchField.RoomNumber, reservationIndexVM, pageSize);
+            return Json(new { isValid = true, html = Helper.RenderRazorViewToString(this, "_IndexPartial", model) });
         }
     }
 }

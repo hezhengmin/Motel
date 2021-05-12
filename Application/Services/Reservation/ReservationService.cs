@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Application.Repository.ReservationEnums;
 
 namespace Application.Services
 {
@@ -109,6 +110,11 @@ namespace Application.Services
             return _mapper.Map<List<ReservationViewModel>>(await _reservationRepository.GetReservationList());
         }
 
+        public async Task<ReservationIndexViewModel> GetReservationList(int pageNumber, int pageSize)
+        {
+            return _mapper.Map<ReservationIndexViewModel>(await _reservationRepository.GetReservationList(pageNumber, pageSize));
+        }
+
         public async Task<ReservationIndexViewModel> GetReservationList(Guid customerId, int pageNumber, int pageSize)
         {
             var query = _mapper.Map<ReservationIndexViewModel>(await _reservationRepository.GetReservationList(customerId, pageNumber, pageSize));
@@ -165,6 +171,19 @@ namespace Application.Services
                 query.ReservationSearchString = ReservationIndexVM.ReservationSearchString;
             if (ReservationIndexVM.CustomerId != null)
                 query.CustomerId = ReservationIndexVM.CustomerId;
+
+            return query;
+        }
+
+        public async Task<ReservationIndexViewModel> GetReservationList(ReservationSearchField searchField, ReservationIndexViewModel reservationIndexVM, int pageSize)
+        {
+            var pageNumber = reservationIndexVM.PageNumber == 0 ? 1 : reservationIndexVM.PageNumber;
+            var query = _mapper.Map<ReservationIndexViewModel>(await _reservationRepository.GetReservationList(searchField, reservationIndexVM.ReservationSearchString, pageNumber, pageSize));
+
+            if (!string.IsNullOrEmpty(reservationIndexVM.ReservationSearchString))
+                query.ReservationSearchString = reservationIndexVM.ReservationSearchString;
+            if (reservationIndexVM.CustomerId != null)
+                query.CustomerId = reservationIndexVM.CustomerId;
 
             return query;
         }

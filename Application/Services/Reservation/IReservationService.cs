@@ -1,4 +1,5 @@
-﻿using Application.ViewModels.Reservation;
+﻿using Application.Repository.ReservationEnums;
+using Application.ViewModels.Reservation;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -12,11 +13,13 @@ namespace Application.Services
         Task<CompoundReservationViewModel> GetAddOrEditReservation(Guid? id, Guid customerId);
         Task<CompoundReservationViewModel> GetAddOrEditReservation(CompoundReservationViewModel compoundVM);
         Task<List<ReservationViewModel>> GetReservationList();
+        Task<ReservationIndexViewModel> GetReservationList(int pageNumber, int pageSize);
         Task<ReservationIndexViewModel> GetReservationList(Guid customerId, int pageNumber, int pageSize);
         Task<ReservationIndexViewModel> GetReservationList(Guid customerId, FilterViewModel filterVM, int pageSize);
         Task<ReservationIndexViewModel> GetReservationList(CompoundReservationViewModel compoundVM, int pageSize);
         Task<ReservationIndexViewModel> GetReservationList(ReservationDeleteViewModel ReservationDeleteVM, int pageSize);
         Task<ReservationIndexViewModel> GetReservationList(ReservationIndexViewModel ReservationIndexVM, int pageSize);
+        Task<ReservationIndexViewModel> GetReservationList(ReservationSearchField searchField, ReservationIndexViewModel reservationIndexVM, int pageSize);
         Task<ReservationIndexViewModel> GetReservationList(Guid customerId, ReservationIndexViewModel ReservationIndexVM, int pageSize);
         Task<ReservationViewModel> GetReservationExpense(ReservationExpenseViewModel expenseViewModel);
         Task<bool> GetReservationDateIsOverlapAsync(ReservationViewModel reservationVM);
