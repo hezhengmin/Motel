@@ -59,7 +59,6 @@ namespace Motel.Controllers
                 model.CustomerViewModel = customerVM;
                 return Json(new { html = Helper.RenderRazorViewToString(this, "AddOrEdit", model) });
             }
-
         }
 
         // POST: Customer/AddOrEdit

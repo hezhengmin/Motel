@@ -39,9 +39,9 @@ namespace Motel.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Index([FromForm] ReservationIndexViewModel reservationIndexVM)
+        public async Task<IActionResult> Index([FromBody] ReservationIndexViewModel reservationIndexVM)
         {
-            var model = await _reservationService.GetReservationList(reservationIndexVM, pageSize);
+            var model = await _reservationService.GetReservationList(ReservationSearchField.RoomNumber, reservationIndexVM, pageSize);
             return Json(new { isValid = true, html = Helper.RenderRazorViewToString(this, "_IndexPartial", model) });
         }
 
@@ -51,6 +51,13 @@ namespace Motel.Controllers
         {
             var model = await _reservationService.GetReservationList(ReservationSearchField.RoomNumber, reservationIndexVM, pageSize);
             return Json(new { isValid = true, html = Helper.RenderRazorViewToString(this, "_IndexPartial", model) });
+        }
+
+        // GET: Reservation/AddOrEdit
+        public async Task<IActionResult> AddOrEdit(Guid? id, Guid customerId)
+        {
+            var compoundVM = await _reservationService.GetAddOrEditReservation(id, customerId);
+            return Json(new { html = Helper.RenderRazorViewToString(this, "AddOrEdit", compoundVM) });
         }
     }
 }

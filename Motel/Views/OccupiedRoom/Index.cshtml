@@ -63,38 +63,38 @@
         });
 
         //客戶分頁
-        jQueryAjaxPagePost = (pageNumber) => {
+        //jQueryAjaxPagePost = (pageNumber) => {
 
-            let model = {
-                SearchString: $("#SearchString").val(),
-                PageNumber: pageNumber,
-                TotalPages: undefined,
-                HasPreviousPage: undefined,
-                HasNextPage: undefined,
-                CustomerViewModelList: []
-            };
+        //    let model = {
+        //        SearchString: $("#SearchString").val(),
+        //        PageNumber: pageNumber,
+        //        TotalPages: undefined,
+        //        HasPreviousPage: undefined,
+        //        HasNextPage: undefined,
+        //        CustomerViewModelList: []
+        //    };
 
-            $.ajax({
-                type: "POST",
-                url: "/Reservation/Index",
-                dataType: "json",
-                contentType: "application/json; charset=utf-8",
-                data: JSON.stringify(model),
-                processData: false,
-                beforeSend: function (xhr) {
-                    xhr.setRequestHeader("X-XSRF-TOKEN",
-                        $('input:hidden[name="__RequestVerificationToken"]').val());
-                }
-            }).done(function (res) {
-                if (res.isValid) {
-                    $view.html(res.html)
-                }
-            }).fail(function (jqXHR, textStatus, errorThrown) {
-                console.log(jqXHR, textStatus, errorThrown);
-            });
-        }
+        //    $.ajax({
+        //        type: "POST",
+        //        url: "/Reservation/Index",
+        //        dataType: "json",
+        //        contentType: "application/json; charset=utf-8",
+        //        data: JSON.stringify(model),
+        //        processData: false,
+        //        beforeSend: function (xhr) {
+        //            xhr.setRequestHeader("X-XSRF-TOKEN",
+        //                $('input:hidden[name="__RequestVerificationToken"]').val());
+        //        }
+        //    }).done(function (res) {
+        //        if (res.isValid) {
+        //            $view.html(res.html)
+        //        }
+        //    }).fail(function (jqXHR, textStatus, errorThrown) {
+        //        console.log(jqXHR, textStatus, errorThrown);
+        //    });
+        //}
 
-        //預訂分頁
+        //排房與入住分頁
         jQueryAjaxReservationPagePost = (pageNumber, customerId) => {
 
             console.log(pageNumber, customerId);
@@ -113,7 +113,7 @@
 
             $.ajax({
                 type: "POST",
-                url: "/OccupiedRoom/ReservationIndex",
+                url: "/OccupiedRoom/Index",
                 dataType: "json",
                 contentType: "application/json; charset=utf-8",
                 data: JSON.stringify(model),
@@ -124,7 +124,7 @@
                 }
             }).done(function (res) {
                 if (res.isValid) {
-                    $modalBoby.html(res.html)
+                    $view.html(res.html)
                 }
             }).fail(function (jqXHR, textStatus, errorThrown) {
                 console.log(jqXHR, textStatus, errorThrown);
@@ -133,57 +133,57 @@
 
 
         //預訂列表
-        showListPopup = (url, title) => {
-            $.ajax({
-                type: "GET",
-                url: url
-            }).done(function (res) {
-                $modalBoby.html(res.html);
-                $modalTitle.html(title);
-                $modal.modal("show");
-            }).fail(function (jqXHR, textStatus, errorThrown) {
-                console.log(jqXHR, textStatus, errorThrown);
-            });
-        }
+        //showListPopup = (url, title) => {
+        //    $.ajax({
+        //        type: "GET",
+        //        url: url
+        //    }).done(function (res) {
+        //        $modalBoby.html(res.html);
+        //        $modalTitle.html(title);
+        //        $modal.modal("show");
+        //    }).fail(function (jqXHR, textStatus, errorThrown) {
+        //        console.log(jqXHR, textStatus, errorThrown);
+        //    });
+        //}
 
 
-        showInPopup = (url, title) => {
+        //showInPopup = (url, title) => {
 
-            $.ajax({
-                type: "GET",
-                url: url
-            }).done(function (res) {
-                $modalReserveBoby.html(res.html);
-                $modalReserveTitle.html(title);
-                $modalReserve.modal("show");
-            }).fail(function (jqXHR, textStatus, errorThrown) {
-                console.log(jqXHR, textStatus, errorThrown);
-            });
-        }
+        //    $.ajax({
+        //        type: "GET",
+        //        url: url
+        //    }).done(function (res) {
+        //        $modalReserveBoby.html(res.html);
+        //        $modalReserveTitle.html(title);
+        //        $modalReserve.modal("show");
+        //    }).fail(function (jqXHR, textStatus, errorThrown) {
+        //        console.log(jqXHR, textStatus, errorThrown);
+        //    });
+        //}
 
         //搜尋
-        jQueryAjaxSearchPost = form => {
+        //jQueryAjaxSearchPost = form => {
 
-            try {
-                $.ajax({
-                    type: "POST",
-                    url: form.action,
-                    data: new FormData(form),
-                    contentType: false,
-                    processData: false
-                }).done(function (res) {
-                    if (res.isValid) {
-                        $view.html(res.html)
-                    }
-                }).fail(function (jqXHR, textStatus, errorThrown) {
-                    console.log(jqXHR, textStatus, errorThrown);
-                });
-                //to prevent default form submit event
-                return false;
-            } catch (ex) {
-                console.log(ex)
-            }
-        }
+        //    try {
+        //        $.ajax({
+        //            type: "POST",
+        //            url: form.action,
+        //            data: new FormData(form),
+        //            contentType: false,
+        //            processData: false
+        //        }).done(function (res) {
+        //            if (res.isValid) {
+        //                $view.html(res.html)
+        //            }
+        //        }).fail(function (jqXHR, textStatus, errorThrown) {
+        //            console.log(jqXHR, textStatus, errorThrown);
+        //        });
+        //        //to prevent default form submit event
+        //        return false;
+        //    } catch (ex) {
+        //        console.log(ex)
+        //    }
+        //}
 
         jQueryAjaxReservationSearchPost = form => {
 
@@ -225,95 +225,95 @@
         };
 
         //新增或編輯
-        jQueryAjaxPost = form => {
+        //jQueryAjaxPost = form => {
 
-            let $form = $(form).serializeObject();
+        //    let $form = $(form).serializeObject();
 
-            console.log("$form", $form);
+        //    console.log("$form", $form);
 
 
-            let pageNumber = $("#navigationReservation li.active > a.page-link").text();
-            if (pageNumber === "") pageNumber = 1;
+        //    let pageNumber = $("#navigationReservation li.active > a.page-link").text();
+        //    if (pageNumber === "") pageNumber = 1;
 
-            let model = {
-                FilterViewModel: {
-                    SearchString: $("#ReservationSearchString").val(),
-                    PageNumber: pageNumber
-                },
-                ReservationViewModel: {
-                    Id: $form["ReservationViewModel.Id"],
-                    RoomId: $form["ReservationViewModel.RoomId"],
-                    CustomerId: $form["ReservationViewModel.CustomerId"],
-                    BeginDate: $form["ReservationViewModel.BeginDate"],
-                    EndDate: $form["ReservationViewModel.EndDate"],
-                    Days: $form["ReservationViewModel.Days"],
-                    Expense: $form["ReservationViewModel.Expense"],
-                    RoomTypeId: $form["ReservationViewModel.RoomTypeId"],
-                }
-            };
+        //    let model = {
+        //        FilterViewModel: {
+        //            SearchString: $("#ReservationSearchString").val(),
+        //            PageNumber: pageNumber
+        //        },
+        //        ReservationViewModel: {
+        //            Id: $form["ReservationViewModel.Id"],
+        //            RoomId: $form["ReservationViewModel.RoomId"],
+        //            CustomerId: $form["ReservationViewModel.CustomerId"],
+        //            BeginDate: $form["ReservationViewModel.BeginDate"],
+        //            EndDate: $form["ReservationViewModel.EndDate"],
+        //            Days: $form["ReservationViewModel.Days"],
+        //            Expense: $form["ReservationViewModel.Expense"],
+        //            RoomTypeId: $form["ReservationViewModel.RoomTypeId"],
+        //        }
+        //    };
 
-            console.log("model", model);
+        //    console.log("model", model);
 
-            try {
-                $.ajax({
-                    type: "POST",
-                    url: form.action,
-                    dataType: "json",
-                    contentType: "application/json; charset=utf-8",
-                    data: JSON.stringify(model),
-                    processData: false,
-                    beforeSend: function (xhr) {
-                        xhr.setRequestHeader("X-XSRF-TOKEN",
-                            $('input:hidden[name="__RequestVerificationToken"]').val());
-                    }
-                }).done(function (res) {
-                    if (res.isValid) {
-                        $modalBoby.html(res.html)
-                        $modalReserveBoby.html("");
-                        $modalReserveTitle.html("");
-                        $modalReserve.modal("hide");
-                    }
-                    else
-                        $modalReserveBoby.html(res.html);
-                }).fail(function (jqXHR, textStatus, errorThrown) {
-                    console.log(jqXHR, textStatus, errorThrown);
-                });
-                //to prevent default form submit event
-                return false;
-            } catch (ex) {
-                console.log(ex)
-            }
-        }
+        //    try {
+        //        $.ajax({
+        //            type: "POST",
+        //            url: form.action,
+        //            dataType: "json",
+        //            contentType: "application/json; charset=utf-8",
+        //            data: JSON.stringify(model),
+        //            processData: false,
+        //            beforeSend: function (xhr) {
+        //                xhr.setRequestHeader("X-XSRF-TOKEN",
+        //                    $('input:hidden[name="__RequestVerificationToken"]').val());
+        //            }
+        //        }).done(function (res) {
+        //            if (res.isValid) {
+        //                $modalBoby.html(res.html)
+        //                $modalReserveBoby.html("");
+        //                $modalReserveTitle.html("");
+        //                $modalReserve.modal("hide");
+        //            }
+        //            else
+        //                $modalReserveBoby.html(res.html);
+        //        }).fail(function (jqXHR, textStatus, errorThrown) {
+        //            console.log(jqXHR, textStatus, errorThrown);
+        //        });
+        //        //to prevent default form submit event
+        //        return false;
+        //    } catch (ex) {
+        //        console.log(ex)
+        //    }
+        //}
 
         //刪除
-        jQueryAjaxDelete = (url, id, pageNumber, customerId) => {
+        //jQueryAjaxDelete = (url, id, pageNumber, customerId) => {
 
-            let model = {
-                Id: id,
-                CustomerId: customerId,
-                PageNumber: pageNumber,
-                ReservationSearchString: $("#ReservationSearchString").val()
-            };
+        //    let model = {
+        //        Id: id,
+        //        CustomerId: customerId,
+        //        PageNumber: pageNumber,
+        //        ReservationSearchString: $("#ReservationSearchString").val()
+        //    };
 
-            if (confirm("你確定要刪除嗎?")) {
-                try {
-                    $.ajax({
-                        type: "Delete",
-                        url: url,
-                        dataType: "json",
-                        contentType: "application/json; charset=utf-8",
-                        data: JSON.stringify(model)
-                    }).done(function (res) {
-                        $modalBoby.html(res.html);
-                    }).fail(function (jqXHR, textStatus, errorThrown) {
-                        console.log(jqXHR, textStatus, errorThrown);
-                    });
-                } catch (ex) {
-                    console.log(ex)
-                }
-            }
+        //    if (confirm("你確定要刪除嗎?")) {
+        //        try {
+        //            $.ajax({
+        //                type: "Delete",
+        //                url: url,
+        //                dataType: "json",
+        //                contentType: "application/json; charset=utf-8",
+        //                data: JSON.stringify(model)
+        //            }).done(function (res) {
+        //                $modalBoby.html(res.html);
+        //            }).fail(function (jqXHR, textStatus, errorThrown) {
+        //                console.log(jqXHR, textStatus, errorThrown);
+        //            });
+        //        } catch (ex) {
+        //            console.log(ex)
+        //        }
+        //    }
 
-            return false;
-        }
+        //    return false;
+        //}
     </script>
 }
