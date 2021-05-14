@@ -30,6 +30,51 @@ namespace Application.Repository
             return await _dbContext.Reservation.Include(m => m.Room).FirstOrDefaultAsync(m => m.Id == id);
         }
 
+        public async Task<ReservationDetailDTO> GetReservationDetailDTO(Guid id)
+        {
+            ReservationDetailDTO reservationDetailDTO = new ReservationDetailDTO();
+            var query = _dbContext.Set<Reservation>().AsQueryable();
+            var queryRoom = _dbContext.Set<Room>().AsQueryable();
+            var queryRoomType = _dbContext.Set<RoomType>().AsQueryable();
+            var queryCustomer = _dbContext.Set<Customer>().AsQueryable();
+            var queryOccupiedRoom = _dbContext.Set<OccupiedRoom>().AsQueryable();
+
+            reservationDetailDTO = await query.GroupJoin(queryOccupiedRoom, 
+                                                         reservation => reservation.Id, 
+                                                         occupiedRoom => occupiedRoom.Id, 
+                                                        (reservation, occupiedRoom) => new { Reservation = reservation, OccupiedRoom = occupiedRoom })
+                                              .SelectMany(combination => combination.OccupiedRoom.DefaultIfEmpty(),
+                                                         (parent, occupiedRoom) => new { Reservation = parent.Reservation, OccupiedRoom = occupiedRoom })
+                                              .Join(queryRoom,
+                                                    parent => parent.Reservation.RoomId,
+                                                    room => room.Id,
+                                                   (parent, room) => new { Reservation = parent.Reservation, OccupiedRoom = parent.OccupiedRoom, Room = room })
+                                              .Join(queryRoomType,
+                                                    parent => parent.Room.RoomTypeId,
+                                                    roomType => roomType.Id,
+                                                   (parent, roomType) => new { Reservation = parent.Reservation, OccupiedRoom = parent.OccupiedRoom, Room = parent.Room, RoomType = roomType })
+                                              .Join(queryCustomer,
+                                                    parent => parent.Reservation.CustomerId,
+                                                    customer => customer.Id,
+                                                   (parent, customer) => new { Reservation = parent.Reservation, OccupiedRoom = parent.OccupiedRoom, Room = parent.Room, RoomType = parent.RoomType, Customer = customer })
+                                              .Select(m => new ReservationDetailDTO
+                                              {
+                                                  Id = m.Reservation.Id,
+                                                  CustomerId = m.Customer.Id,
+                                                  RoomId = m.Room.Id,
+                                                  RoomNumber = m.Room.RoomNumber,
+                                                  RoomTypeName = m.RoomType.Name,
+                                                  CustomerName = m.Customer.Name,
+                                                  CheckInDate = m.OccupiedRoom.CheckInDate,
+                                                  CheckOutDate = m.OccupiedRoom.CheckOutDate,
+                                                  Pay = m.OccupiedRoom.Pay,
+                                                  Days = m.OccupiedRoom.Days,
+                                                  Balance = m.OccupiedRoom.Balance
+                                              }).FirstOrDefaultAsync(m => m.Id == id);
+
+            return reservationDetailDTO;
+        }
+
         public async Task<List<Reservation>> GetReservationList()
         {
             return await _dbContext.Reservation.OrderByDescending(m => m.SysDate).ToListAsync();

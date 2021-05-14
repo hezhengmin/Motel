@@ -6,7 +6,8 @@ namespace Application.ViewModels.OccupiedRoom
 {
     public class CompoundOccupiedRoomViewModel
     {
-        public OccupiedRoomViewModel OccupiedRoomViewModel { get; set; }
+        //public OccupiedRoomViewModel OccupiedRoomViewModel { get; set; }
+        public OccupiedRoomDetailViewModel OccupiedRoomDetailViewModel { get; set; }
         public FilterViewModel FilterViewModel { get; set; }
     }
 }

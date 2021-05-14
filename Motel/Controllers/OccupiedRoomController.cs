@@ -12,22 +12,16 @@ namespace Motel.Controllers
 {
     public class OccupiedRoomController : Controller
     {
-        private readonly ICustomerService _customerService;
         private readonly IReservationService _reservationService;
-        private readonly IRoomTypeService _roomTypeService;
-        private readonly IRoomService _roomService;
+        private readonly IOccupiedRoomService _occupiedRoomService;
 
         private int pageSize = 5;
 
-        public OccupiedRoomController(ICustomerService customerService,
-                                     IReservationService reservationService,
-                                     IRoomTypeService roomTypeService,
-                                     IRoomService roomService)
+        public OccupiedRoomController(IReservationService reservationService,
+                                      IOccupiedRoomService occupiedRoomService)
         {
-            _customerService = customerService;
             _reservationService = reservationService;
-            _roomTypeService = roomTypeService;
-            _roomService = roomService;
+            _occupiedRoomService = occupiedRoomService;
         }
 
         public async Task<IActionResult> Index()
@@ -53,10 +47,10 @@ namespace Motel.Controllers
             return Json(new { isValid = true, html = Helper.RenderRazorViewToString(this, "_IndexPartial", model) });
         }
 
-        // GET: Reservation/AddOrEdit
-        public async Task<IActionResult> AddOrEdit(Guid? id, Guid customerId)
+        // GET: OccupiedRoom/AddOrEdit
+        public async Task<IActionResult> AddOrEdit(Guid id)
         {
-            var compoundVM = await _reservationService.GetAddOrEditReservation(id, customerId);
+            var compoundVM = await _occupiedRoomService.GetAddOrEditOccupiedRoomDetail(id);
             return Json(new { html = Helper.RenderRazorViewToString(this, "AddOrEdit", compoundVM) });
         }
     }

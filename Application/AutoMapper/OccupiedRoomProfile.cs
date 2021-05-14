@@ -3,6 +3,7 @@ using Infrastructure.Models;
 using Application.Paging;
 using Application.ViewModels.OccupiedRoom;
 using System.Linq;
+using Application.Repository;
 
 namespace Application.AutoMapper
 {
@@ -16,6 +17,8 @@ namespace Application.AutoMapper
 
             CreateMap<PaginatedList<OccupiedRoom>, OccupiedRoomIndexViewModel>()
                 .ForMember(dest => dest.OccupiedRoomViewModelList, opt => opt.MapFrom(src => src.ToList()));
+
+            CreateMap<ReservationDetailDTO, OccupiedRoomDetailViewModel>();
         }
     }
 }

@@ -16,6 +16,7 @@ namespace Motel.Configurations
             services.AddAutoMapper(typeof(RoomProfile));
             services.AddAutoMapper(typeof(ReservationProfile));
             services.AddAutoMapper(typeof(RoomStateProfile));
+            services.AddAutoMapper(typeof(OccupiedRoomProfile));
         }
     }
 }

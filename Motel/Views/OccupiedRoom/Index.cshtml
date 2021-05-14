@@ -11,23 +11,7 @@
 </div>
 
 @*ReservationList*@
-<div class="modal fade" tabindex="-1" role="dialog" id="stack1">
-    <div class="modal-dialog modal-xl" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title"></h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-            </div>
-        </div>
-    </div>
-</div>
-
-@*AddOrEdit*@
-<div class="modal fade" tabindex="-1" role="dialog" id="stack2">
+<div class="modal fade" tabindex="-1" role="dialog" id="modal">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -42,21 +26,37 @@
     </div>
 </div>
 
+@*AddOrEdit*@
+@*<div class="modal fade" tabindex="-1" role="dialog" id="stack2">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+            </div>
+        </div>
+    </div>
+</div>*@
+
 @section Scripts{
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 
     <script>
         const $view = $("#view");
-        const $modal = $("#stack1");
-        const $modalTitle = $("#stack1 .modal-title");
-        const $modalBoby = $("#stack1 .modal-body");
-        const $modalDialog = $("#stack1 .modal-dialog");
+        const $modal = $("#modal");
+        const $modalTitle = $("#modal .modal-title");
+        const $modalBoby = $("#modal .modal-body");
+        const $modalDialog = $("#modal .modal-dialog");
 
         //預訂
-        const $modalReserve = $("#stack2");
-        const $modalReserveTitle = $("#stack2 .modal-title");
-        const $modalReserveBoby = $("#stack2 .modal-body");
-        const $modalReserveDialog = $("#stack2 .modal-dialog");
+        //const $modalReserve = $("#stack2");
+        //const $modalReserveTitle = $("#stack2 .modal-title");
+        //const $modalReserveBoby = $("#stack2 .modal-body");
+        //const $modalReserveDialog = $("#stack2 .modal-dialog");
 
         $(function () {
 
@@ -95,12 +95,12 @@
         //}
 
         //排房與入住分頁
-        jQueryAjaxReservationPagePost = (pageNumber, customerId) => {
+        jQueryAjaxReservationPagePost = (pageNumber) => {
 
-            console.log(pageNumber, customerId);
+            console.log(pageNumber);
 
             let model = {
-                CustomerId: customerId,
+                CustomerId: undefined,
                 ReservationSearchString: $("#ReservationSearchString").val(),
                 PageNumber: pageNumber,
                 TotalPages: undefined,
@@ -147,19 +147,20 @@
         //}
 
 
-        //showInPopup = (url, title) => {
+        showInPopup = (url, title) => {
 
-        //    $.ajax({
-        //        type: "GET",
-        //        url: url
-        //    }).done(function (res) {
-        //        $modalReserveBoby.html(res.html);
-        //        $modalReserveTitle.html(title);
-        //        $modalReserve.modal("show");
-        //    }).fail(function (jqXHR, textStatus, errorThrown) {
-        //        console.log(jqXHR, textStatus, errorThrown);
-        //    });
-        //}
+            $.ajax({
+                type: "GET",
+                url: url
+            }).done(function (res) {
+                console.log(res);
+                $modalBoby.html(res.html);
+                $modalTitle.html(title);
+                $modal.modal("show");
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                console.log(jqXHR, textStatus, errorThrown);
+            });
+        }
 
         //搜尋
         //jQueryAjaxSearchPost = form => {
