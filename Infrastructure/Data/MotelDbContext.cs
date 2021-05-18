@@ -82,8 +82,6 @@ namespace Infrastructure.Data
             {
                 entity.Property(e => e.Id).ValueGeneratedNever();
 
-                entity.Property(e => e.Balance).HasComment("是否需補差額");
-
                 entity.Property(e => e.CheckInDate)
                     .HasColumnType("datetime")
                     .HasComment("實際入住時間");
@@ -92,12 +90,11 @@ namespace Infrastructure.Data
                     .HasColumnType("datetime")
                     .HasComment("實際退房時間");
 
-                entity.Property(e => e.Days).HasComment("天數/小時");
-
                 entity.Property(e => e.Pay).HasComment("結算金額");
 
                 entity.Property(e => e.SysDate)
                     .HasColumnType("datetime")
+                    .HasDefaultValueSql("(sysdatetime())")
                     .HasComment("系統日期");
 
                 entity.HasOne(d => d.Customer)

@@ -13,20 +13,14 @@ namespace Application.Services
     {
         private readonly IMapper _mapper;
         private readonly IReservationRepository _reservationRepository;
-        private readonly IRoomRepository _roomRepository;
-        private readonly IRoomTypeRepository _roomTypeRepository;
         private readonly IOccupiedRoomRepository _occupiedRoomRepository;
 
         public OccupiedRoomService(IMapper mapper,
                                   IReservationRepository reservationRepository,
-                                  IRoomRepository roomRepository,
-                                  IRoomTypeRepository roomTypeRepository,
                                   IOccupiedRoomRepository occupiedRoomRepository)
         {
             _mapper = mapper;
             _reservationRepository = reservationRepository;
-            _roomRepository = roomRepository;
-            _roomTypeRepository = roomTypeRepository;
             _occupiedRoomRepository = occupiedRoomRepository;
         }
 
@@ -37,7 +31,7 @@ namespace Application.Services
 
         public async Task<OccupiedRoomDetailViewModel> GetOccupiedRoomDetail(Guid id)
         {
-            return _mapper.Map<OccupiedRoomDetailViewModel>(await _reservationRepository.GetReservationDetailDTO(id));
+            return _mapper.Map<OccupiedRoomDetailViewModel>(await _occupiedRoomRepository.GetOccupiedRoomDetailDTO(id));
         }
 
         public async Task<CompoundOccupiedRoomViewModel> GetAddOrEditOccupiedRoomDetail(Guid id)
@@ -46,7 +40,29 @@ namespace Application.Services
 
             model.OccupiedRoomDetailViewModel = await this.GetOccupiedRoomDetail(id);
 
+            //入住
+            if (model.OccupiedRoomDetailViewModel.CheckInDate == null)
+            {
+                model.OccupiedRoomDetailViewModel.CheckInDate = DateTime.Now;
+            }
+
             return model;
+        }
+
+        public async Task<OccupiedRoomIndexViewModel> GetOccupiedRoomList(int pageNumber, int pageSize)
+        {
+            return _mapper.Map<OccupiedRoomIndexViewModel>(await _occupiedRoomRepository.GetOccupiedRoomList(pageNumber, pageSize));
+        }
+
+        public async Task<OccupiedRoomIndexViewModel> GetOccupiedRoomList(OccupiedRoomIndexViewModel occupiedRoomIndexVM, int pageSize)
+        {
+            var pageNumber = occupiedRoomIndexVM.PageNumber == 0 ? 1 : occupiedRoomIndexVM.PageNumber;
+            var query = _mapper.Map<OccupiedRoomIndexViewModel>(await _reservationRepository.GetReservationList(occupiedRoomIndexVM.SearchString,pageNumber, pageSize));
+
+            if (!string.IsNullOrEmpty(occupiedRoomIndexVM.SearchString))
+                query.SearchString = occupiedRoomIndexVM.SearchString;
+
+            return query;
         }
 
         public async Task AddOccupiedRoom(OccupiedRoomViewModel occupiedRoomVM)

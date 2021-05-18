@@ -25,12 +25,5 @@ namespace Application.ViewModels.OccupiedRoom
 
         [Display(Name = "結算金額")]
         public int? Pay { get; set; }
-
-        [Display(Name = "住宿天數")]
-        public int? Days { get; set; }
-
-        [Required(ErrorMessage = "{0}必填")]
-        [Display(Name = "是否需補差額")]
-        public bool Balance { get; set; }
     }
 }

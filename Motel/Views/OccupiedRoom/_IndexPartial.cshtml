@@ -1,4 +1,4 @@
-﻿@model Application.ViewModels.Reservation.ReservationIndexViewModel
+﻿@model Application.ViewModels.OccupiedRoom.OccupiedRoomIndexViewModel
 
 @{
     Layout = null;
@@ -8,10 +8,10 @@
     <div class="col-auto mr-auto">
         <form class="form-inline" asp-action="ReservationSearch" onsubmit="return jQueryAjaxReservationSearchPost(this);">
             <div class="form-group mx-sm-3 mb-2">
-                <label asp-for="ReservationSearchString" class="mr-3">
+                <label asp-for="SearchString" class="mr-3">
                     房間號碼
                 </label>
-                <input asp-for="ReservationSearchString" class="form-control" />
+                <input asp-for="SearchString" class="form-control" />
             </div>
             <button type="submit" class="btn btn-primary mb-2">搜尋</button>
         </form>
@@ -24,33 +24,36 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.ReservationViewModelList.FirstOrDefault().BeginDate)
+                @Html.DisplayNameFor(model => model.OccupiedRoomViewModelList.FirstOrDefault().RoomNumber)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ReservationViewModelList.FirstOrDefault().EndDate)
+                @Html.DisplayNameFor(model => model.OccupiedRoomViewModelList.FirstOrDefault().BeginDate)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ReservationViewModelList.FirstOrDefault().RoomTypeName)
+                @Html.DisplayNameFor(model => model.OccupiedRoomViewModelList.FirstOrDefault().EndDate)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ReservationViewModelList.FirstOrDefault().RoomNumber)
+                @Html.DisplayNameFor(model => model.OccupiedRoomViewModelList.FirstOrDefault().RoomTypeName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ReservationViewModelList.FirstOrDefault().Days)
+                @Html.DisplayNameFor(model => model.OccupiedRoomViewModelList.FirstOrDefault().Days)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ReservationViewModelList.FirstOrDefault().Expense)
+                @Html.DisplayNameFor(model => model.OccupiedRoomViewModelList.FirstOrDefault().Expense)
             </th>
             <th style="width: 145px;">
             </th>
         </tr>
     </thead>
     <tbody>
-        @if (Model.ReservationViewModelList != null && Model.ReservationViewModelList.Count > 0)
+        @if (Model.OccupiedRoomViewModelList != null && Model.OccupiedRoomViewModelList.Count > 0)
         {
-            @foreach (var item in Model.ReservationViewModelList)
+            @foreach (var item in Model.OccupiedRoomViewModelList)
             {
                 <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RoomNumber)
+                    </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.BeginDate)
                     </td>
@@ -60,9 +63,7 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.RoomTypeName)
                     </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.RoomNumber)
-                    </td>
+
                     <td>
                         @Html.DisplayFor(modelItem => item.Days)
                     </td>
@@ -74,8 +75,8 @@
                             入住
                         </a>
                         @*<a onclick="jQueryAjaxDelete('@Url.Action("Remove","Reservation",new {id=@item.Id},Context.Request.Scheme)', '@item.Id', '@Model.PageNumber', '@Model.CustomerId')" class="btn btn-danger text-white">
-                            刪除
-                        </a>*@
+                                刪除
+                            </a>*@
                     </td>
                 </tr>
             }

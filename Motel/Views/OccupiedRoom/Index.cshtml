@@ -1,4 +1,4 @@
-﻿@model Application.ViewModels.Reservation.ReservationIndexViewModel
+﻿@model Application.ViewModels.OccupiedRoom.OccupiedRoomIndexViewModel
 
 @{
     ViewData["Title"] = "Index";
@@ -100,13 +100,12 @@
             console.log(pageNumber);
 
             let model = {
-                CustomerId: undefined,
-                ReservationSearchString: $("#ReservationSearchString").val(),
+                SearchString: $("#SearchString").val(),
                 PageNumber: pageNumber,
                 TotalPages: undefined,
                 HasPreviousPage: undefined,
                 HasNextPage: undefined,
-                ReservationViewModelList: []
+                OccupiedRoomViewModelList: []
             };
 
             console.log(model);

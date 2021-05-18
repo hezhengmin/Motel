@@ -15,8 +15,6 @@ namespace Infrastructure.Models
         public DateTime? CheckInDate { get; set; }
         public DateTime? CheckOutDate { get; set; }
         public int? Pay { get; set; }
-        public int? Days { get; set; }
-        public bool Balance { get; set; }
         public DateTime SysDate { get; set; }
 
         public virtual Customer Customer { get; set; }

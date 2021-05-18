@@ -13,6 +13,7 @@ namespace Application.Repository
         Task<List<OccupiedRoom>> GetOccupiedRoomList();
         Task<PaginatedList<OccupiedRoom>> GetOccupiedRoomList(int pageNumber, int pageSize);
         Task<PaginatedList<OccupiedRoom>> GetOccupiedRoomList(string searchString, int pageNumber, int pageSize);
+        Task<OccupiedRoomDetailDTO> GetOccupiedRoomDetailDTO(Guid id);
         Task AddOccupiedRoom(OccupiedRoom OccupiedRoom);
         Task UpdateOccupiedRoom(OccupiedRoom OccupiedRoom);
         Task RemoveOccupiedRoom(Guid id);

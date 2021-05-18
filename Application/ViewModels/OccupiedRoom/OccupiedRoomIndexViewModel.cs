@@ -13,6 +13,6 @@ namespace Application.ViewModels.OccupiedRoom
         public int TotalPages { get; set; }
         public bool HasPreviousPage { get; set; }
         public bool HasNextPage { get; set; }
-        public PaginatedList<OccupiedRoomViewModel> OccupiedRoomViewModelList { get; set; }
+        public PaginatedList<OccupiedRoomListViewModel> OccupiedRoomViewModelList { get; set; }
     }
 }
