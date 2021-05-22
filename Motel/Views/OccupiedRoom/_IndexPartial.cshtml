@@ -6,7 +6,7 @@
 
 <div class="row">
     <div class="col-auto mr-auto">
-        <form class="form-inline" asp-action="ReservationSearch" onsubmit="return jQueryAjaxReservationSearchPost(this);">
+        <form class="form-inline" asp-action="ReservationSearch" onsubmit="return jQueryAjaxSearchPost(this);">
             <div class="form-group mx-sm-3 mb-2">
                 <label asp-for="SearchString" class="mr-3">
                     房間號碼
@@ -74,9 +74,6 @@
                         <a onclick="showInPopup('@Url.Action("AddOrEdit","OccupiedRoom",new {id=@item.Id},Context.Request.Scheme)','入住')" class="btn btn-success text-white">
                             入住
                         </a>
-                        @*<a onclick="jQueryAjaxDelete('@Url.Action("Remove","Reservation",new {id=@item.Id},Context.Request.Scheme)', '@item.Id', '@Model.PageNumber', '@Model.CustomerId')" class="btn btn-danger text-white">
-                                刪除
-                            </a>*@
                     </td>
                 </tr>
             }
@@ -92,14 +89,14 @@
 
 @Model.PageNumber / @Model.TotalPages
 
-<nav aria-label="Page navigation" id="navigationReservation">
+<nav aria-label="Page navigation" id="navigation">
     <ul class="pagination justify-content-center">
-        <li class="page-item @prevDisabled" data-num="@(Model.PageNumber - 1)"><a class="page-link" href="javascript:void(0);" onclick="jQueryAjaxReservationPagePost(@(Model.PageNumber - 1))">上一頁</a></li>
+        <li class="page-item @prevDisabled" data-num="@(Model.PageNumber - 1)"><a class="page-link" href="javascript:void(0);" onclick="jQueryAjaxPagePost(@(Model.PageNumber - 1))">上一頁</a></li>
         @for (var i = 1; i <= Model.TotalPages; i++)
         {
-            <li class="page-item @(Model.PageNumber ==i ? "active" : "")"><a class="page-link" href="javascript:void(0)" onclick="jQueryAjaxReservationPagePost(@i)">@i</a></li>
+            <li class="page-item @(Model.PageNumber ==i ? "active" : "")"><a class="page-link" href="javascript:void(0)" onclick="jQueryAjaxPagePost(@i)">@i</a></li>
         }
-        <li class="page-item @nextDisabled" data-num="@(Model.PageNumber + 1)"><a class="page-link" href="javascript:void(0)" onclick="jQueryAjaxReservationPagePost(@(Model.PageNumber + 1))">下一頁</a></li>
+        <li class="page-item @nextDisabled" data-num="@(Model.PageNumber + 1)"><a class="page-link" href="javascript:void(0)" onclick="jQueryAjaxPagePost(@(Model.PageNumber + 1))">下一頁</a></li>
     </ul>
 </nav>
 

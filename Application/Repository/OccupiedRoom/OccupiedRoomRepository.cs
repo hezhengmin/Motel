@@ -91,8 +91,8 @@ namespace Application.Repository
                                                .Select(m => new OccupiedRoomDetailDTO
                                                {
                                                    Id = m.OccupiedRoom.Id,
-                                                   CustomerId = m.OccupiedRoom.Id,
-                                                   RoomId = m.OccupiedRoom.Id,
+                                                   CustomerId = m.OccupiedRoom.CustomerId,
+                                                   RoomId = m.OccupiedRoom.RoomId,
                                                    RoomNumber = m.Room.RoomNumber,
                                                    RoomTypeName = m.RoomType.Name,
                                                    BeginDate = m.Reservation.BeginDate,

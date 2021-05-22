@@ -12,15 +12,12 @@ namespace Application.Services
     public class OccupiedRoomService : IOccupiedRoomService
     {
         private readonly IMapper _mapper;
-        private readonly IReservationRepository _reservationRepository;
         private readonly IOccupiedRoomRepository _occupiedRoomRepository;
 
         public OccupiedRoomService(IMapper mapper,
-                                  IReservationRepository reservationRepository,
                                   IOccupiedRoomRepository occupiedRoomRepository)
         {
             _mapper = mapper;
-            _reservationRepository = reservationRepository;
             _occupiedRoomRepository = occupiedRoomRepository;
         }
 
@@ -57,10 +54,21 @@ namespace Application.Services
         public async Task<OccupiedRoomIndexViewModel> GetOccupiedRoomList(OccupiedRoomIndexViewModel occupiedRoomIndexVM, int pageSize)
         {
             var pageNumber = occupiedRoomIndexVM.PageNumber == 0 ? 1 : occupiedRoomIndexVM.PageNumber;
-            var query = _mapper.Map<OccupiedRoomIndexViewModel>(await _reservationRepository.GetReservationList(occupiedRoomIndexVM.SearchString,pageNumber, pageSize));
+            var query = _mapper.Map<OccupiedRoomIndexViewModel>(await _occupiedRoomRepository.GetOccupiedRoomList(occupiedRoomIndexVM.SearchString, pageNumber, pageSize));
 
             if (!string.IsNullOrEmpty(occupiedRoomIndexVM.SearchString))
                 query.SearchString = occupiedRoomIndexVM.SearchString;
+
+            return query;
+        }
+
+        public async Task<OccupiedRoomIndexViewModel> GetOccupiedRoomList(FilterViewModel filterVM, int pageSize)
+        {
+            var pageNumber = filterVM.PageNumber == 0 ? 1 : filterVM.PageNumber;
+            var query = _mapper.Map<OccupiedRoomIndexViewModel>(await _occupiedRoomRepository.GetOccupiedRoomList(filterVM.SearchString, pageNumber, pageSize));
+
+            if (!string.IsNullOrEmpty(filterVM.SearchString))
+                query.SearchString = filterVM.SearchString;
 
             return query;
         }
@@ -71,13 +79,21 @@ namespace Application.Services
             await _occupiedRoomRepository.AddOccupiedRoom(occupiedRoom);
         }
 
+        public async Task UpdateOccupiedRoom(OccupiedRoomDetailViewModel occupiedRoomDetailVM)
+        {
+            var entity = await _occupiedRoomRepository.GetOccupiedRoom(occupiedRoomDetailVM.Id);
+
+            var occupiedRoom = _mapper.Map(occupiedRoomDetailVM, entity);
+
+            await _occupiedRoomRepository.UpdateOccupiedRoom(occupiedRoom);
+        }
         public async Task UpdateOccupiedRoom(OccupiedRoomViewModel occupiedRoomVM)
         {
             var entity = await _occupiedRoomRepository.GetOccupiedRoom(occupiedRoomVM.Id);
 
-            var OccupiedRoom = _mapper.Map(occupiedRoomVM, entity);
+            var occupiedRoom = _mapper.Map(occupiedRoomVM, entity);
 
-            await _occupiedRoomRepository.UpdateOccupiedRoom(OccupiedRoom);
+            await _occupiedRoomRepository.UpdateOccupiedRoom(occupiedRoom);
         }
 
         public async Task RemoveOccupiedRoom(Guid id)

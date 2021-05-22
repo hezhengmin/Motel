@@ -13,8 +13,10 @@ namespace Application.Services
         Task<CompoundOccupiedRoomViewModel> GetAddOrEditOccupiedRoomDetail(Guid id);
         Task<OccupiedRoomIndexViewModel> GetOccupiedRoomList(int pageNumber, int pageSize);
         Task<OccupiedRoomIndexViewModel> GetOccupiedRoomList(OccupiedRoomIndexViewModel occupiedRoomIndexVM, int pageSize);
+        Task<OccupiedRoomIndexViewModel> GetOccupiedRoomList(FilterViewModel filterVM, int pageSize);
         Task AddOccupiedRoom(OccupiedRoomViewModel occupiedRoomVM);
         Task UpdateOccupiedRoom(OccupiedRoomViewModel occupiedRoomVM);
+        Task UpdateOccupiedRoom(OccupiedRoomDetailViewModel occupiedRoomDetailVM);
         Task RemoveOccupiedRoom(Guid id);
     }
 }

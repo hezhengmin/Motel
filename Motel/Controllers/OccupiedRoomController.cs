@@ -1,6 +1,5 @@
 ﻿using Application.Services;
 using Application.ViewModels.OccupiedRoom;
-using Application.ViewModels.Reservation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -12,15 +11,12 @@ namespace Motel.Controllers
 {
     public class OccupiedRoomController : Controller
     {
-        private readonly IReservationService _reservationService;
         private readonly IOccupiedRoomService _occupiedRoomService;
 
         private int pageSize = 5;
 
-        public OccupiedRoomController(IReservationService reservationService,
-                                      IOccupiedRoomService occupiedRoomService)
+        public OccupiedRoomController(IOccupiedRoomService occupiedRoomService)
         {
-            _reservationService = reservationService;
             _occupiedRoomService = occupiedRoomService;
         }
 
@@ -54,18 +50,18 @@ namespace Motel.Controllers
             return Json(new { html = Helper.RenderRazorViewToString(this, "AddOrEdit", compoundVM) });
         }
 
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> AddOrEdit([FromBody] CompoundOccupiedRoomViewModel compoundVM)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        var model = await _reservationService.GetReservationList(compoundVM, pageSize);
-        //        return Json(new { isValid = true, html = Helper.RenderRazorViewToString(this, "_IndexPartial", model) });
-        //    }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddOrEdit([FromBody] CompoundOccupiedRoomViewModel compoundVM)
+        {
+            if (ModelState.IsValid)
+            {
+                await _occupiedRoomService.UpdateOccupiedRoom(compoundVM.OccupiedRoomDetailViewModel);
+                var model = await _occupiedRoomService.GetOccupiedRoomList(compoundVM.FilterViewModel, pageSize);
+                return Json(new { isValid = true, html = Helper.RenderRazorViewToString(this, "_IndexPartial", model) });
+            }
 
-        //    compoundVM = await _reservationService.GetAddOrEditReservation(compoundVM);
-        //    return Json(new { isValid = false, html = Helper.RenderRazorViewToString(this, "AddOrEdit", compoundVM) });
-        //}
+            return Json(new { isValid = false, html = Helper.RenderRazorViewToString(this, "AddOrEdit", compoundVM) });
+        }
     }
 }

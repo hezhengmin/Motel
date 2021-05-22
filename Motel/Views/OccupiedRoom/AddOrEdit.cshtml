@@ -11,6 +11,12 @@
             <input type="hidden" asp-for="OccupiedRoomDetailViewModel.Id" />
             <input type="hidden" asp-for="OccupiedRoomDetailViewModel.CustomerId" />
             <input type="hidden" asp-for="OccupiedRoomDetailViewModel.RoomId" />
+            <input type="hidden" asp-for="OccupiedRoomDetailViewModel.BeginDate" />
+            <input type="hidden" asp-for="OccupiedRoomDetailViewModel.EndDate" />
+            <input type="hidden" asp-for="OccupiedRoomDetailViewModel.CustomerName" />
+            <input type="hidden" asp-for="OccupiedRoomDetailViewModel.Expense" />
+            <input type="hidden" asp-for="OccupiedRoomDetailViewModel.RoomNumber" />
+            <input type="hidden" asp-for="OccupiedRoomDetailViewModel.RoomTypeName" />
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
@@ -81,107 +87,6 @@
         </form>
     </div>
 </div>
-@*<script>
-        $(function () {
-
-            getAllRoomType('@Model.OccupiedRoomDetailViewModel.RoomTypeId');
-
-            $("#OccupiedRoomDetailViewModel_RoomTypeId").on("change", function () {
-                let roomTypeId = $(this).val();
-
-                getAllRoomType(roomTypeId);
-                getRoom(roomTypeId);
-                getReservationExpense();
-            });
-
-            $("#OccupiedRoomDetailViewModel_BeginDate").on("change", function () {
-                console.log($(this).val());
-                getReservationExpense();
-            });
-
-            $("#OccupiedRoomDetailViewModel_EndDate").on("change", function () {
-                console.log($(this).val());
-                getReservationExpense();
-            });
-        });
-
-        getReservationExpense = () => {
-            const model = {
-                BeginDate: $("#OccupiedRoomDetailViewModel_BeginDate").val(),
-                EndDate: $("#OccupiedRoomDetailViewModel_EndDate").val(),
-                RoomTypeId: $("#OccupiedRoomDetailViewModel_RoomTypeId option:selected").val()
-            };
-
-            console.log(model);
-
-            const options = {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(model)
-            }
-
-            fetch("/Reservation/GetExpense", options)
-                .then(res => res.json())
-                .catch(error => console.error("Error:", error))
-                .then(data => {
-                    console.log("Success:", data);
-                    $("#OccupiedRoomDetailViewModel_Expense").val(data.result.expense);
-                    $("#OccupiedRoomDetailViewModel_Days").val(data.result.days);
-                });
-        }
-
-
-
-        getAllRoomType = (roomTypeId) => {
-            fetch(`/Reservation/GetRoomType/${roomTypeId}`)
-                .then(function (response) {
-                    return response.json();
-                })
-                .catch(error => console.error("Error:", error))
-                .then(function (data) {
-
-                    let array = [];
-
-                    if (data.result !== "") {
-                        array.push(data.result.price);
-                        array.push(data.result.hprice);
-                        array.push(data.result.area);
-                        array.push(data.result.bedQuantity);
-                    }
-                    else {
-                        array = Array(5).fill("");
-                    }
-
-                    $("#content").html(`<div class="d-flex flex-column">
-                                            <div class="mx-sm-2"><strong>平日價：</strong>${array[0]}</div>
-                                            <div class="mx-sm-2"><strong>假日價：</strong>${array[1]}</div>
-                                            <div class="mx-sm-2"><strong>房間面積：</strong>${array[2]}</div>
-                                            <div class="mx-sm-2"><strong>配備床數：</strong>${array[3]}</div>
-                                        </div>`);
-                });
-        }
-
-        getRoom = (roomTypeId) => {
-            fetch(`/Reservation/GetRoom/${roomTypeId}`)
-                .then(function (response) {
-                    return response.json();
-                })
-                .catch(error => console.error("Error:", error))
-                .then(function (data) {
-                    console.log(data);
-
-                    $("#OccupiedRoomDetailViewModel_RoomId").empty();
-
-                    let items = "<option value=''>請選擇</option>";
-                    $.each(data.result, function (i, room){
-                        items +=`<option value=${room.id}>${room.roomNumber}</option>`
-                    });
-                    $("#OccupiedRoomDetailViewModel_RoomId").html(items);
-                });
-        }
-    </script>*@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

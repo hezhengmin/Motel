@@ -27,6 +27,8 @@ namespace Application.AutoMapper
                 .ForMember(dest => dest.OccupiedRoomViewModelList, opt => opt.MapFrom(src => src.ToList()));
 
             CreateMap<OccupiedRoomDetailDTO, OccupiedRoomDetailViewModel>();
+
+            CreateMap<OccupiedRoomDetailViewModel, OccupiedRoom>();
         }
     }
 }

@@ -37,12 +37,13 @@ namespace Application.ViewModels.OccupiedRoom
         [Required(ErrorMessage = "{0}必填")]
         [Display(Name = "入住日期")]
         [DataType(DataType.DateTime)]
-        [DisplayFormat(DataFormatString = "{0:yyyy-MM-ddTHH:mm:ss}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-ddTHH:mm}", ApplyFormatInEditMode = true)]
         public DateTime? CheckInDate { get; set; } //OccupiedRoom
 
+        [Required(ErrorMessage = "{0}必填")]
         [Display(Name = "退房日期")]
         [DataType(DataType.DateTime)]
-        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd HH:mm:ss.fff}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-ddTHH:mm}", ApplyFormatInEditMode = true)]
         public DateTime? CheckOutDate { get; set; } //OccupiedRoom
 
         [Display(Name = "結算金額")]

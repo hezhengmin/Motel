@@ -10,7 +10,6 @@
     @await Html.PartialAsync("_IndexPartial", Model)
 </div>
 
-@*ReservationList*@
 <div class="modal fade" tabindex="-1" role="dialog" id="modal">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -26,22 +25,6 @@
     </div>
 </div>
 
-@*AddOrEdit*@
-@*<div class="modal fade" tabindex="-1" role="dialog" id="stack2">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title"></h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-            </div>
-        </div>
-    </div>
-</div>*@
-
 @section Scripts{
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 
@@ -51,51 +34,9 @@
         const $modalTitle = $("#modal .modal-title");
         const $modalBoby = $("#modal .modal-body");
         const $modalDialog = $("#modal .modal-dialog");
-
-        //預訂
-        //const $modalReserve = $("#stack2");
-        //const $modalReserveTitle = $("#stack2 .modal-title");
-        //const $modalReserveBoby = $("#stack2 .modal-body");
-        //const $modalReserveDialog = $("#stack2 .modal-dialog");
-
-        $(function () {
-
-        });
-
-        //客戶分頁
-        //jQueryAjaxPagePost = (pageNumber) => {
-
-        //    let model = {
-        //        SearchString: $("#SearchString").val(),
-        //        PageNumber: pageNumber,
-        //        TotalPages: undefined,
-        //        HasPreviousPage: undefined,
-        //        HasNextPage: undefined,
-        //        CustomerViewModelList: []
-        //    };
-
-        //    $.ajax({
-        //        type: "POST",
-        //        url: "/Reservation/Index",
-        //        dataType: "json",
-        //        contentType: "application/json; charset=utf-8",
-        //        data: JSON.stringify(model),
-        //        processData: false,
-        //        beforeSend: function (xhr) {
-        //            xhr.setRequestHeader("X-XSRF-TOKEN",
-        //                $('input:hidden[name="__RequestVerificationToken"]').val());
-        //        }
-        //    }).done(function (res) {
-        //        if (res.isValid) {
-        //            $view.html(res.html)
-        //        }
-        //    }).fail(function (jqXHR, textStatus, errorThrown) {
-        //        console.log(jqXHR, textStatus, errorThrown);
-        //    });
-        //}
-
+       
         //排房與入住分頁
-        jQueryAjaxReservationPagePost = (pageNumber) => {
+        jQueryAjaxPagePost = (pageNumber) => {
 
             console.log(pageNumber);
 
@@ -130,22 +71,6 @@
             });
         }
 
-
-        //預訂列表
-        //showListPopup = (url, title) => {
-        //    $.ajax({
-        //        type: "GET",
-        //        url: url
-        //    }).done(function (res) {
-        //        $modalBoby.html(res.html);
-        //        $modalTitle.html(title);
-        //        $modal.modal("show");
-        //    }).fail(function (jqXHR, textStatus, errorThrown) {
-        //        console.log(jqXHR, textStatus, errorThrown);
-        //    });
-        //}
-
-
         showInPopup = (url, title) => {
 
             $.ajax({
@@ -162,30 +87,8 @@
         }
 
         //搜尋
-        //jQueryAjaxSearchPost = form => {
 
-        //    try {
-        //        $.ajax({
-        //            type: "POST",
-        //            url: form.action,
-        //            data: new FormData(form),
-        //            contentType: false,
-        //            processData: false
-        //        }).done(function (res) {
-        //            if (res.isValid) {
-        //                $view.html(res.html)
-        //            }
-        //        }).fail(function (jqXHR, textStatus, errorThrown) {
-        //            console.log(jqXHR, textStatus, errorThrown);
-        //        });
-        //        //to prevent default form submit event
-        //        return false;
-        //    } catch (ex) {
-        //        console.log(ex)
-        //    }
-        //}
-
-        jQueryAjaxReservationSearchPost = form => {
+        jQueryAjaxSearchPost = form => {
 
             try {
                 $.ajax({
@@ -225,95 +128,66 @@
         };
 
         //新增或編輯
-        //jQueryAjaxPost = form => {
+        jQueryAjaxPost = form => {
 
-        //    let $form = $(form).serializeObject();
+            let $form = $(form).serializeObject();
+            console.log($form);
 
-        //    console.log("$form", $form);
+            let pageNumber = $("#navigation li.active > a.page-link").text();
+            if (pageNumber === "") pageNumber = 1;
 
+            let model = {
+                FilterViewModel: {
+                    SearchString: $("#SearchString").val(),
+                    PageNumber: pageNumber
+                },
+                OccupiedRoomDetailViewModel: {
+                    Id: $form["OccupiedRoomDetailViewModel.Id"],
+                    CustomerId: $form["OccupiedRoomDetailViewModel.CustomerId"],
+                    RoomId: $form["OccupiedRoomDetailViewModel.RoomId"],
+                    RoomNumber: $form["OccupiedRoomDetailViewModel.RoomNumber"],
+                    RoomTypeName: $form["OccupiedRoomDetailViewModel.RoomTypeName"],
+                    CustomerName: $form["OccupiedRoomDetailViewModel.CustomerName"],
+                    BeginDate: $form["OccupiedRoomDetailViewModel.BeginDate"],
+                    EndDate: $form["OccupiedRoomDetailViewModel.EndDate"],
+                    Expense: $form["OccupiedRoomDetailViewModel.Expense"],
+                    CheckInDate: $form["OccupiedRoomDetailViewModel.CheckInDate"],
+                    CheckOutDate: $form["OccupiedRoomDetailViewModel.CheckOutDate"],
+                    Pay: $form["OccupiedRoomDetailViewModel.Pay"]
+                }
+            };
 
-        //    let pageNumber = $("#navigationReservation li.active > a.page-link").text();
-        //    if (pageNumber === "") pageNumber = 1;
+            console.log(model);
 
-        //    let model = {
-        //        FilterViewModel: {
-        //            SearchString: $("#ReservationSearchString").val(),
-        //            PageNumber: pageNumber
-        //        },
-        //        ReservationViewModel: {
-        //            Id: $form["ReservationViewModel.Id"],
-        //            RoomId: $form["ReservationViewModel.RoomId"],
-        //            CustomerId: $form["ReservationViewModel.CustomerId"],
-        //            BeginDate: $form["ReservationViewModel.BeginDate"],
-        //            EndDate: $form["ReservationViewModel.EndDate"],
-        //            Days: $form["ReservationViewModel.Days"],
-        //            Expense: $form["ReservationViewModel.Expense"],
-        //            RoomTypeId: $form["ReservationViewModel.RoomTypeId"],
-        //        }
-        //    };
-
-        //    console.log("model", model);
-
-        //    try {
-        //        $.ajax({
-        //            type: "POST",
-        //            url: form.action,
-        //            dataType: "json",
-        //            contentType: "application/json; charset=utf-8",
-        //            data: JSON.stringify(model),
-        //            processData: false,
-        //            beforeSend: function (xhr) {
-        //                xhr.setRequestHeader("X-XSRF-TOKEN",
-        //                    $('input:hidden[name="__RequestVerificationToken"]').val());
-        //            }
-        //        }).done(function (res) {
-        //            if (res.isValid) {
-        //                $modalBoby.html(res.html)
-        //                $modalReserveBoby.html("");
-        //                $modalReserveTitle.html("");
-        //                $modalReserve.modal("hide");
-        //            }
-        //            else
-        //                $modalReserveBoby.html(res.html);
-        //        }).fail(function (jqXHR, textStatus, errorThrown) {
-        //            console.log(jqXHR, textStatus, errorThrown);
-        //        });
-        //        //to prevent default form submit event
-        //        return false;
-        //    } catch (ex) {
-        //        console.log(ex)
-        //    }
-        //}
-
-        //刪除
-        //jQueryAjaxDelete = (url, id, pageNumber, customerId) => {
-
-        //    let model = {
-        //        Id: id,
-        //        CustomerId: customerId,
-        //        PageNumber: pageNumber,
-        //        ReservationSearchString: $("#ReservationSearchString").val()
-        //    };
-
-        //    if (confirm("你確定要刪除嗎?")) {
-        //        try {
-        //            $.ajax({
-        //                type: "Delete",
-        //                url: url,
-        //                dataType: "json",
-        //                contentType: "application/json; charset=utf-8",
-        //                data: JSON.stringify(model)
-        //            }).done(function (res) {
-        //                $modalBoby.html(res.html);
-        //            }).fail(function (jqXHR, textStatus, errorThrown) {
-        //                console.log(jqXHR, textStatus, errorThrown);
-        //            });
-        //        } catch (ex) {
-        //            console.log(ex)
-        //        }
-        //    }
-
-        //    return false;
-        //}
+            try {
+                $.ajax({
+                    type: "POST",
+                    url: form.action,
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify(model),
+                    processData: false,
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader("X-XSRF-TOKEN",
+                            $('input:hidden[name="__RequestVerificationToken"]').val());
+                    }
+                }).done(function (res) {
+                    if (res.isValid) {
+                        $view.html(res.html)
+                        $modalBoby.html("");
+                        $modalTitle.html("");
+                        $modal.modal("hide");
+                    }
+                    else
+                        $modalBoby.html(res.html);
+                }).fail(function (jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR, textStatus, errorThrown);
+                });
+                //to prevent default form submit event
+                return false;
+            } catch (ex) {
+                console.log(ex)
+            }
+        }
     </script>
 }
