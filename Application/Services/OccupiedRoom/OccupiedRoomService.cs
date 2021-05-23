@@ -38,10 +38,10 @@ namespace Application.Services
             model.OccupiedRoomDetailViewModel = await this.GetOccupiedRoomDetail(id);
 
             //入住
-            if (model.OccupiedRoomDetailViewModel.CheckInDate == null)
-            {
-                model.OccupiedRoomDetailViewModel.CheckInDate = DateTime.Now;
-            }
+            //if (model.OccupiedRoomDetailViewModel.CheckInDate == null)
+            //{
+            //    model.OccupiedRoomDetailViewModel.CheckInDate = DateTime.Now;
+            //}
 
             return model;
         }

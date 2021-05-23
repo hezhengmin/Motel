@@ -28,13 +28,13 @@
 @section Scripts{
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 
-    <script>
+<script>
         const $view = $("#view");
         const $modal = $("#modal");
         const $modalTitle = $("#modal .modal-title");
         const $modalBoby = $("#modal .modal-body");
         const $modalDialog = $("#modal .modal-dialog");
-       
+
         //排房與入住分頁
         jQueryAjaxPagePost = (pageNumber) => {
 
@@ -128,7 +128,7 @@
         };
 
         //新增或編輯
-        jQueryAjaxPost = form => {
+        @*jQueryAjaxPost = form => {
 
             let $form = $(form).serializeObject();
             console.log($form);
@@ -148,8 +148,8 @@
                     RoomNumber: $form["OccupiedRoomDetailViewModel.RoomNumber"],
                     RoomTypeName: $form["OccupiedRoomDetailViewModel.RoomTypeName"],
                     CustomerName: $form["OccupiedRoomDetailViewModel.CustomerName"],
-                    BeginDate: $form["OccupiedRoomDetailViewModel.BeginDate"],
-                    EndDate: $form["OccupiedRoomDetailViewModel.EndDate"],
+                    BeginDate: @Model.OccupiedRoomDetailViewModel.BeginDate.ToString("yyyy-MM-dd"),
+                    EndDate: @Model.OccupiedRoomDetailViewModel.EndDate.ToString("yyyy-MM-dd"),
                     Expense: $form["OccupiedRoomDetailViewModel.Expense"],
                     CheckInDate: $form["OccupiedRoomDetailViewModel.CheckInDate"],
                     CheckOutDate: $form["OccupiedRoomDetailViewModel.CheckOutDate"],
@@ -188,6 +188,6 @@
             } catch (ex) {
                 console.log(ex)
             }
-        }
-    </script>
+        }*@
+</script>
 }
