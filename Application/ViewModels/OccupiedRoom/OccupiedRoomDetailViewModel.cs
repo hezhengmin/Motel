@@ -18,6 +18,8 @@ namespace Application.ViewModels.OccupiedRoom
         [Display(Name = "房間類型：")]
         public string RoomTypeName { get; set; } //RoomType
 
+        public Guid RoomTypeId { get; set; } //RoomType
+
         [Display(Name = "客戶姓名：")]
         public string CustomerName { get; set; } //Customer
 
@@ -40,7 +42,6 @@ namespace Application.ViewModels.OccupiedRoom
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-ddTHH:mm}", ApplyFormatInEditMode = true)]
         public DateTime? CheckInDate { get; set; } //OccupiedRoom
 
-        [Required(ErrorMessage = "{0}必填")]
         [Display(Name = "退房日期")]
         [DataType(DataType.DateTime)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-ddTHH:mm}", ApplyFormatInEditMode = true)]

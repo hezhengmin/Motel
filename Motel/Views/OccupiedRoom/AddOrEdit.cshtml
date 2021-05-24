@@ -89,10 +89,46 @@
     </div>
 </div>
 <script>
+
+    $(function () {
+        $("#OccupiedRoomDetailViewModel_CheckInDate").on("change", function () {
+            console.log($(this).val());
+            getOccupiedExpense();
+        });
+
+        $("#OccupiedRoomDetailViewModel_CheckOutDate").on("change", function () {
+            console.log($(this).val());
+            getOccupiedExpense();
+        });
+    });
+
+    getOccupiedExpense = () => {
+        const model = {
+            CheckInDate: $("#OccupiedRoomDetailViewModel_CheckInDate").val(),
+            CheckOutDate: $("#OccupiedRoomDetailViewModel_CheckOutDate").val(),
+            RoomTypeId: '@Model.OccupiedRoomDetailViewModel.RoomTypeId'
+        };
+
+        const options = {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(model)
+        }
+
+        fetch("/OccupiedRoom/GetPay", options)
+            .then(res => res.json())
+            .catch(error => console.error("Error:", error))
+            .then(data => {
+                console.log("Success:", data);
+                $("#OccupiedRoomDetailViewModel_Pay").val(data.result.pay);
+            });
+    }
+
     jQueryAjaxPost = form => {
 
             let $form = $(form).serializeObject();
-            console.log($form);
 
             let pageNumber = $("#navigation li.active > a.page-link").text();
             if (pageNumber === "") pageNumber = 1;
@@ -117,8 +153,6 @@
                     Pay: $form["OccupiedRoomDetailViewModel.Pay"]
                 }
             };
-
-            console.log(model);
 
             try {
                 $.ajax({

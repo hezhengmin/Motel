@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Util;
 
 namespace Application.Services
 {
@@ -220,7 +221,7 @@ namespace Application.Services
             var roomType = await _roomTypeRepository.GetRoomType(expenseVM.RoomTypeId.Value);
 
             var expense = 0;
-            foreach (var day in EachDay(beginDate, endDate))
+            foreach (var day in MyDateHelper.EachDay(beginDate, endDate))
             {
                 if (day.DayOfWeek == DayOfWeek.Saturday) expense += roomType.Hprice;
                 else if (day.DayOfWeek == DayOfWeek.Sunday) expense += roomType.Hprice;
@@ -280,14 +281,6 @@ namespace Application.Services
         public bool GetReservationExists(Guid id)
         {
             return _reservationRepository.GetReservationExists(id);
-        }
-
-        private IEnumerable<DateTime> EachDay(DateTime from, DateTime thru)
-        {
-            for (var day = from.Date; day.Date <= thru.Date; day = day.AddDays(1))
-            {
-                yield return day;
-            }
         }
     }
 }

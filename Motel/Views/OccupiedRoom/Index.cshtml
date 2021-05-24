@@ -38,8 +38,6 @@
         //排房與入住分頁
         jQueryAjaxPagePost = (pageNumber) => {
 
-            console.log(pageNumber);
-
             let model = {
                 SearchString: $("#SearchString").val(),
                 PageNumber: pageNumber,
@@ -48,8 +46,6 @@
                 HasNextPage: undefined,
                 OccupiedRoomViewModelList: []
             };
-
-            console.log(model);
 
             $.ajax({
                 type: "POST",
@@ -77,7 +73,6 @@
                 type: "GET",
                 url: url
             }).done(function (res) {
-                console.log(res);
                 $modalBoby.html(res.html);
                 $modalTitle.html(title);
                 $modal.modal("show");
@@ -126,68 +121,5 @@
             });
             return o;
         };
-
-        //新增或編輯
-        @*jQueryAjaxPost = form => {
-
-            let $form = $(form).serializeObject();
-            console.log($form);
-
-            let pageNumber = $("#navigation li.active > a.page-link").text();
-            if (pageNumber === "") pageNumber = 1;
-
-            let model = {
-                FilterViewModel: {
-                    SearchString: $("#SearchString").val(),
-                    PageNumber: pageNumber
-                },
-                OccupiedRoomDetailViewModel: {
-                    Id: $form["OccupiedRoomDetailViewModel.Id"],
-                    CustomerId: $form["OccupiedRoomDetailViewModel.CustomerId"],
-                    RoomId: $form["OccupiedRoomDetailViewModel.RoomId"],
-                    RoomNumber: $form["OccupiedRoomDetailViewModel.RoomNumber"],
-                    RoomTypeName: $form["OccupiedRoomDetailViewModel.RoomTypeName"],
-                    CustomerName: $form["OccupiedRoomDetailViewModel.CustomerName"],
-                    BeginDate: @Model.OccupiedRoomDetailViewModel.BeginDate.ToString("yyyy-MM-dd"),
-                    EndDate: @Model.OccupiedRoomDetailViewModel.EndDate.ToString("yyyy-MM-dd"),
-                    Expense: $form["OccupiedRoomDetailViewModel.Expense"],
-                    CheckInDate: $form["OccupiedRoomDetailViewModel.CheckInDate"],
-                    CheckOutDate: $form["OccupiedRoomDetailViewModel.CheckOutDate"],
-                    Pay: $form["OccupiedRoomDetailViewModel.Pay"]
-                }
-            };
-
-            console.log(model);
-
-            try {
-                $.ajax({
-                    type: "POST",
-                    url: form.action,
-                    dataType: "json",
-                    contentType: "application/json; charset=utf-8",
-                    data: JSON.stringify(model),
-                    processData: false,
-                    beforeSend: function (xhr) {
-                        xhr.setRequestHeader("X-XSRF-TOKEN",
-                            $('input:hidden[name="__RequestVerificationToken"]').val());
-                    }
-                }).done(function (res) {
-                    if (res.isValid) {
-                        $view.html(res.html)
-                        $modalBoby.html("");
-                        $modalTitle.html("");
-                        $modal.modal("hide");
-                    }
-                    else
-                        $modalBoby.html(res.html);
-                }).fail(function (jqXHR, textStatus, errorThrown) {
-                    console.log(jqXHR, textStatus, errorThrown);
-                });
-                //to prevent default form submit event
-                return false;
-            } catch (ex) {
-                console.log(ex)
-            }
-        }*@
 </script>
 }

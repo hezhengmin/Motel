@@ -14,6 +14,7 @@ namespace Application.Services
         Task<OccupiedRoomIndexViewModel> GetOccupiedRoomList(int pageNumber, int pageSize);
         Task<OccupiedRoomIndexViewModel> GetOccupiedRoomList(OccupiedRoomIndexViewModel occupiedRoomIndexVM, int pageSize);
         Task<OccupiedRoomIndexViewModel> GetOccupiedRoomList(FilterViewModel filterVM, int pageSize);
+        Task<OccupiedRoomViewModel> GetOccupiedRoomPay(OccupiedRoomPayViewModel payVM);
         Task AddOccupiedRoom(OccupiedRoomViewModel occupiedRoomVM);
         Task UpdateOccupiedRoom(OccupiedRoomViewModel occupiedRoomVM);
         Task UpdateOccupiedRoom(OccupiedRoomDetailViewModel occupiedRoomDetailVM);

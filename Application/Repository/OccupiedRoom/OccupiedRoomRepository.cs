@@ -95,6 +95,7 @@ namespace Application.Repository
                                                    RoomId = m.OccupiedRoom.RoomId,
                                                    RoomNumber = m.Room.RoomNumber,
                                                    RoomTypeName = m.RoomType.Name,
+                                                   RoomTypeId = m.RoomType.Id,
                                                    BeginDate = m.Reservation.BeginDate,
                                                    EndDate = m.Reservation.EndDate,
                                                    CustomerName = m.Customer.Name,

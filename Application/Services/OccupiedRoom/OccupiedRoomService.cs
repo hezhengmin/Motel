@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using Util;
 
 namespace Application.Services
 {
@@ -13,11 +14,14 @@ namespace Application.Services
     {
         private readonly IMapper _mapper;
         private readonly IOccupiedRoomRepository _occupiedRoomRepository;
+        private readonly IRoomTypeRepository _roomTypeRepository;
 
         public OccupiedRoomService(IMapper mapper,
-                                  IOccupiedRoomRepository occupiedRoomRepository)
+                                   IRoomTypeRepository roomTypeRepository,
+                                   IOccupiedRoomRepository occupiedRoomRepository)
         {
             _mapper = mapper;
+            _roomTypeRepository = roomTypeRepository;
             _occupiedRoomRepository = occupiedRoomRepository;
         }
 
@@ -36,12 +40,6 @@ namespace Application.Services
             var model = new CompoundOccupiedRoomViewModel();
 
             model.OccupiedRoomDetailViewModel = await this.GetOccupiedRoomDetail(id);
-
-            //入住
-            //if (model.OccupiedRoomDetailViewModel.CheckInDate == null)
-            //{
-            //    model.OccupiedRoomDetailViewModel.CheckInDate = DateTime.Now;
-            //}
 
             return model;
         }
@@ -72,13 +70,41 @@ namespace Application.Services
 
             return query;
         }
+        public async Task<OccupiedRoomViewModel> GetOccupiedRoomPay(OccupiedRoomPayViewModel payVM)
+        {
+            OccupiedRoomViewModel occupiedRoomVM = new OccupiedRoomViewModel();
+            occupiedRoomVM.Pay = 0;
 
+            if (!payVM.RoomTypeId.HasValue ||
+                !payVM.CheckInDate.HasValue ||
+                !payVM.CheckOutDate.HasValue)
+                return occupiedRoomVM;
+
+            DateTime checkInDate = payVM.CheckInDate.Value;
+            DateTime checkOutDate = payVM.CheckOutDate.Value;
+
+            var comparison = checkOutDate.CompareTo(checkInDate);
+            if (comparison < 0) return occupiedRoomVM;
+
+            var roomType = await _roomTypeRepository.GetRoomType(payVM.RoomTypeId.Value);
+
+            var pay = 0;
+            foreach (var day in MyDateHelper.EachDay(checkInDate, checkOutDate))
+            {
+                if (day.DayOfWeek == DayOfWeek.Saturday) pay += roomType.Hprice;
+                else if (day.DayOfWeek == DayOfWeek.Sunday) pay += roomType.Hprice;
+                else pay += roomType.Price;
+            }
+
+            occupiedRoomVM.Pay = pay;
+
+            return occupiedRoomVM;
+        }
         public async Task AddOccupiedRoom(OccupiedRoomViewModel occupiedRoomVM)
         {
             var occupiedRoom = _mapper.Map<OccupiedRoom>(occupiedRoomVM);
             await _occupiedRoomRepository.AddOccupiedRoom(occupiedRoom);
         }
-
         public async Task UpdateOccupiedRoom(OccupiedRoomDetailViewModel occupiedRoomDetailVM)
         {
             var entity = await _occupiedRoomRepository.GetOccupiedRoom(occupiedRoomDetailVM.Id);
@@ -95,7 +121,6 @@ namespace Application.Services
 
             await _occupiedRoomRepository.UpdateOccupiedRoom(occupiedRoom);
         }
-
         public async Task RemoveOccupiedRoom(Guid id)
         {
             await _occupiedRoomRepository.RemoveOccupiedRoom(id);

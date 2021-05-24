@@ -63,5 +63,19 @@ namespace Motel.Controllers
 
             return Json(new { isValid = false, html = Helper.RenderRazorViewToString(this, "AddOrEdit", compoundVM) });
         }
+
+        [HttpPost]
+        public async Task<IActionResult> GetPay([FromBody] OccupiedRoomPayViewModel payViewModel)
+        {
+            var model = await _occupiedRoomService.GetOccupiedRoomPay(payViewModel);
+
+            return Json(new
+            {
+                result = new
+                {
+                    pay = model.Pay,
+                }
+            });
+        }
     }
 }
