@@ -37,7 +37,6 @@ namespace Motel.Controllers
 
                 TempData["Customers"] = JsonConvert.SerializeObject(customers);
             }
-
             
             return RedirectToAction(nameof(Index));
         }
