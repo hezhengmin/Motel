@@ -1,9 +1,11 @@
 # 汽車旅館管理系統
+> 汽車旅館管理系統是使用 ASP.NET 技術（C#語言），搭配資料庫(MSSQL)建立的 Web 應用程式，可以作為小型旅館或汽車旅館的櫃台管理系統，專案目前按照官網教學中的[ASP.NET Core MVC 使用者入門](https://docs.microsoft.com/zh-tw/aspnet/core/tutorials/first-mvc-app/start-mvc?view=aspnetcore-3.1&tabs=visual-studio)來做網頁程式開發，最終部署到Azure平台上。
 
 網站連結：https://motel.azurewebsites.net
 
-## 使用技術
+![Azure網站房間截圖](https://user-images.githubusercontent.com/17740845/120481294-89642900-c3e2-11eb-94b1-aee8a876ffe0.jpg)
 
+## 使用技術
 * Html、CSS
 * Bootstrap 4
 * JavaScript / jQuery
@@ -25,24 +27,18 @@
 ![Diagram_Motel](https://user-images.githubusercontent.com/17740845/120467312-a42ea180-c3d2-11eb-94ee-9b3a7c4f7bea.jpg)
 
 ## 備註 
-#### Infrastructure類別庫，NuGet安裝
-1. Microsoft.EntityFrameworkCore.SqlServer
-2. Microsoft.EntityFrameworkCore.Tools
-
-#### Application類別庫，NuGet安裝     
-1. AutoMapper.Extensions.Microsoft.DependencyInjection
-
-[工具] > [NuGet 套件管理員] > [套件管理器主控台] 
-#### 新增特定資料表
+#### ASP.NET Core 3.1 如何使用 Database First
+> [工具] > [NuGet 套件管理員] > [套件管理器主控台] ，若資料庫有更新，則後面可以加上`-Force`
 ``` C#
-Scaffold-DbContext "Data Source=DESKTOP-D1CFQGS\SQLEXPRESS;Initial Catalog=Motel;User ID=sa;Password=123456" Microsoft.EntityFrameworkCore.SqlServer -contextdir Data -outputdir Models -context MotelDbContext -tables Customer, Room, OccupiedRoom, RoomState, Reservation, RoomType
-```
-
-
-#### 強制更新特定資料表
-    PM> Scaffold-DbContext "Data Source=DESKTOP-D1CFQGS\SQLEXPRESS;Initial Catalog=Motel;User ID=sa;Password=123456" Microsoft.EntityFrameworkCore.SqlServer -contextdir Data -outputdir Models -context MotelDbContext -tables Customer, Room, OccupiedRoom, RoomState, User, Reservation, RoomType -Force
-
-#### 建立第一個移轉
-Add-Migration InitialCreate
-#### 移轉結構描述
-Update-Database
+Scaffold-DbContext "Data Source=DESKTOP-D1CFQGS\SQLEXPRESS;Initial Catalog=Motel;User ID=sa;Password=123456" Microsoft.EntityFrameworkCore.SqlServer -contextdir Data -outputdir Models -context MotelDbContext -tables Customer, Room, OccupiedRoom, RoomState, User, Reservation, RoomType
+```    
+#### EF Core migrations feature
+| EF Core 移轉功能 | Commands |
+| ------------- | -----:|
+| 建立第一個移轉 | Add-Migration InitialCreate |
+| 移轉結構描述 | Update-Database |
+## 參考
+1. https://github.com/EduardoPires/EquinoxProject 
+2. https://github.com/AutoMapper/AutoMapper
+3. 資料庫系統理論與實務(第四版)
+4. [ASP.NET Core 文件](https://docs.microsoft.com/zh-tw/aspnet/core/introduction-to-aspnet-core?view=aspnetcore-3.1)
