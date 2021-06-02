@@ -42,3 +42,4 @@ Scaffold-DbContext "Data Source=DESKTOP-D1CFQGS\SQLEXPRESS;Initial Catalog=Motel
 2. https://github.com/AutoMapper/AutoMapper
 3. 資料庫系統理論與實務(第四版)
 4. [ASP.NET Core 文件](https://docs.microsoft.com/zh-tw/aspnet/core/introduction-to-aspnet-core?view=aspnetcore-3.1)
+5. [jQuery Ajax CRUD Operations with Asp.NET Core Mvc](https://github.com/CodAffection/jQuery-Ajax-with-ASP.NET-Core-MVC-using-Modal-PopUp)
