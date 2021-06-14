@@ -1,5 +1,5 @@
 # 汽車旅館管理系統
-> 汽車旅館管理系統是使用 ASP.NET 技術（C#語言），搭配資料庫(MSSQL)建立的 Web 應用程式，可以作為小型旅館或汽車旅館的櫃台管理系統，專案目前按照官網教學中的[ASP.NET Core MVC 使用者入門](https://docs.microsoft.com/zh-tw/aspnet/core/tutorials/first-mvc-app/start-mvc?view=aspnetcore-3.1&tabs=visual-studio)來做網頁程式開發，最終部署到Azure平台上。
+> 汽車旅館管理系統是使用 ASP.NET 技術（C#語言），以EF Core這套ORM工具直接用程式碼存取資料，搭配資料庫(MSSQL)來建立的 Web 應用程式，可以作為小型旅館或汽車旅館的櫃台管理系統，專案目前按照官網教學中的[ASP.NET Core MVC 使用者入門](https://docs.microsoft.com/zh-tw/aspnet/core/tutorials/first-mvc-app/start-mvc?view=aspnetcore-3.1&tabs=visual-studio)來做網頁程式開發，最終部署到Azure平台上。
 
 網站連結：https://motel.azurewebsites.net
 
