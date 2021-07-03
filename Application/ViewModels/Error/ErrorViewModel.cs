@@ -16,6 +16,7 @@ namespace Application.ViewModels
         public override void Show()
         {
             Message = "ErrorViewModel";
+            num = 0;
         }
     }
 }
